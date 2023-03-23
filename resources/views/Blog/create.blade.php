@@ -72,7 +72,7 @@
 
         </div>
         <!-- // END drawer-layout__content -->
-{{-- @extends('common.sidebare') --}}
+
   
 
     </div>

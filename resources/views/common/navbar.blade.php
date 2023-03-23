@@ -44,41 +44,6 @@
                                                     <div class="tab-content" id="notifications-tabs">
                                                 <div class="tab-pane fade show active" id="notifications"
                                                     role="tabpanel" aria-labelledby="notifications-tab">
-                                                    <ul class="list-group list-group-flush">
-                                                        @php 
-                                                            use App\Models\Notification;
-                                                            $notification = Notification::where('status', 'on')->get()->reverse()->values();
-                                                        @endphp
-                                                        @if($notification != null && count($notification) > 0)
-                                                         @foreach($notification as $notifications)
-                                                            <li class="list-group-item">
-                                                                <div class="w-100">
-                                                                    <br>
-                                                                    <a>{{ $notifications->type }}</a>
-                                                                    <a href="{{ route('update_status', ['id' => $notifications->id]) }}"><i class="material-icons cancel-icon" style="margin-left:160px;">cancel</i></a>
-                                                                    <br><br>
-                                                                </div>
-                                                                @php
-                                                                    $date = $notifications->created_at->format('m/d/Y');
-                                                                    $today = \Carbon\Carbon::now()->format('m/d/Y');
-                                                                    if ($date == $today) {
-                                                                        $date2 = $notifications->created_at->format('h:i A');
-                                                                    } else {
-                                                                        $date2 = $notifications->created_at->format('m/d/Y');
-                                                                    }
-                                                                @endphp
-                                                                <div class="w-100 text-muted">{{ $date2 }}</div>
-                                                            </li>
-                                                        @endforeach
-
-                                                        @else
-                                                           <li class="list-group-item">
-                                                              <div class="w-100">
-                                                                 <a style="margin-left:80px;"><i class="material-icons">not_interested</i> no notification</a>
-                                                              </div>
-                                                           </li>
-                                                        @endif
-                                                    </ul>
                                                     </div>
                                                     <div class="tab-pane fade" id="alerts" role="tabpanel" aria-labelledby="alerts-tab">
                                                     <ul class="list-group list-group-flush">
