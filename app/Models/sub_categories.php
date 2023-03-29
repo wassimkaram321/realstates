@@ -11,11 +11,15 @@ class sub_categories extends Model
     use HasFactory;
     use HasTranslations;
 
-    public $translatable  = ['id','cat_id','name'];
+    public $translatable  = ['name'];
     protected $fillable = ['id','cat_id','name'];
 
-    public function categories()
+    public function category()
     {
-        return $this->hasMany(categories::class);
+        return $this->belongsTo(categories::class, 'cat_id');
+    }
+    public function child()
+    {
+        return $this->hasMany(Childcategory::class);
     }
 }

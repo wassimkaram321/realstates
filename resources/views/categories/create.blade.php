@@ -23,6 +23,7 @@
                                 <ol class="breadcrumb m-0 mr-auto">
                                     <li class="breadcrumb-item active"><a href="home">Dashboard</a></li>
                                     <li class="breadcrumb-item">category</li>
+                                    <li class="breadcrumb-item">create</li>
                                 </ol>
                             </div>
                         </div>
@@ -52,7 +53,7 @@
                                         </div>
                                     </div>
                                     <div class="box-footer text-center">
-                                        <a href="{{url('project')}}"><span class="btn btn-default">Back</span></a>
+                                        <a href="{{url('category')}}"><span class="btn btn-default">Back</span></a>
                                         <button type="submit" class="btn btn-info" name="submit" value="submit"> Create </button>
                                     </div>
                                 </form>

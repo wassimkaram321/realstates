@@ -4,26 +4,26 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubCategoriesTable extends Migration
+class CreateCitiesTable extends Migration
 {
     /**
      * Run the migrations.
      *
      * @return void
      */
-
     public function up()
     {
-        Schema::create('sub_categories', function (Blueprint $table) {
+        Schema::create('cities', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('cat_id');
+            $table->unsignedBigInteger('state_id');
             $table->timestamps();
 
-            $table->foreign('cat_id')
-                ->references('id')
-                ->on('categories')
-                ->onDelete('cascade');
+            $table->foreign('state_id')
+            ->references('id')
+            ->on('states')
+            ->onDelete('cascade');
+ 
         });
     }
 
@@ -34,6 +34,6 @@ class CreateSubCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sub_categories');
+        Schema::dropIfExists('cities');
     }
 }

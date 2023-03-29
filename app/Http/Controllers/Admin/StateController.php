@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\categories;
-use App\Models\sub_categories;
+use App\Models\State;
 use Illuminate\Http\Request;
 
-class SubCategoriesController extends Controller
+class StateController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,7 +25,7 @@ class SubCategoriesController extends Controller
      */
     public function create()
     {
-        return view('categories.create');
+        //
     }
 
     /**
@@ -38,8 +37,7 @@ class SubCategoriesController extends Controller
     public function store(Request $request)
     {
         $rules = array(
-            'name_en'  => 'required',
-            'cat_id'   => 'required',
+            'name_en'         => 'required',
         );
 
         $validator = validator($request->all(), $rules);
@@ -49,29 +47,17 @@ class SubCategoriesController extends Controller
                 'status_message' => $validator->messages()->first()
             ]);
         }
-       
-        $sub_category = new sub_categories;
-        
-        $array1 = $request->name_en;
-        $array2 = $request->name_ar;
-
-        for($i = 0;  $i< count($array1);$i++)
-        {
-            for($j = 0;  $j< count($array2); $j++)
-            {
-                $sub_category->setTranslation('name', 'en', $array1[$i]);
-                $sub_category->setTranslation('name', 'ar', $array2[$j]);
-                $sub_category->cat_id = $request->input('cat_id');
-                $sub_category->save();
-            }
-        }
+        $state = new State;
+        $state->setTranslation('name', 'en', $request->input('name_en'));
+        $state->setTranslation('name', 'ar', $request->input('name_ar'));
+        $state->save();
         return response()->json(['error' => 'false', "message" => "success", 'data' => []]);
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\sub_categories  $sub_categories
+     * @param  \App\Models\State  $state
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
@@ -87,49 +73,46 @@ class SubCategoriesController extends Controller
                 'status_message' => $validator->messages()->first()
             ]);
         }
-        $sub_categorys = sub_categories::get();
+        $states = State::get();
+        
         if ($request->lang == 'ar') {
-            foreach ($sub_categorys as $sub_category) {
+            foreach ($states as $state) {
                 $data[] = array(
-                    'id'           => $sub_category->id,
-                    'name'         => $sub_category->getTranslation('name', 'ar') ?? '',
-                    'category'     => $sub_category->category->getTranslation('name', 'ar')
+                    'id'           => $state->id,
+                    'name'         => $state->getTranslation('name', 'ar') ?? '',
                 );
             }
             return response()->json(['error' => 'false', "message" => "success", 'data' => $data]);
         } else {
-            foreach ($sub_categorys as $sub_category) {
+            foreach ($states as $state) {
                 $data[] = array(
-                    'id'           => $sub_category->id,
-                    'name'         => $sub_category->getTranslation('name', 'en') ?? '',
-                    'category'     => $sub_category->category->getTranslation('name', 'en')
+                    'id'           => $state->id,
+                    'name'         => $state->getTranslation('name', 'en') ?? '',
                 );
             }
             return response()->json(['error' => 'false', "message" => "success", 'data' => $data]);
         }
-    }
+}
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\sub_categories  $sub_categories
+     * @param  \App\Models\State  $state
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function edit(State $state)
     {
-        $sub_category = sub_categories::find($request->id);
-        $category     = categories::get();
-        return view('sub_category.edit',compact('sub_category'));
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\sub_categories  $sub_categories
+     * @param  \App\Models\State  $state
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, sub_categories $sub_categories)
+    public function update(Request $request, State $state)
     {
         $rules = array(
             'id'         => 'required',
@@ -142,16 +125,13 @@ class SubCategoriesController extends Controller
                 'status_message' => $validator->messages()->first()
             ]);
         }
-        $category = sub_categories::find($request->id);
+        $category = State::find($request->id);
 
         if ($request->input('name_en') != null) {
             $category->setTranslation('name', 'en', $request->input('name_en'));
         }
         if ($request->input('name_ar') != null) {
             $category->setTranslation('name', 'ar', $request->input('name_ar'));
-        }
-        if ($request->input('cat_id') != null) {
-            $category->cat_id = $request->cat_id;
         }
         $category->save();
 
@@ -161,7 +141,7 @@ class SubCategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\sub_categories  $sub_categories
+     * @param  \App\Models\State  $state
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
@@ -177,9 +157,8 @@ class SubCategoriesController extends Controller
                 'status_message' => $validator->messages()->first()
             ]);
         }
-        $categorys = sub_categories::find($request->id);
+        $categorys = State::find($request->id);
         $categorys->delete();
         return response()->json(['error' => 'false', "message" => "success", 'data' => []]);
     }
 }
-

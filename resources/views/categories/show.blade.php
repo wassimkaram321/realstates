@@ -32,7 +32,7 @@
                                     Default
                                 </h4> --}}
                                 <h2 class="float-right">
-                                    <a href="#" class="btn btn-info" > Create </a>
+                                    <a href="{{route('category_create')}}" class="btn btn-info" > Create </a>
                                    
                                 </h2>
                             </div>
@@ -50,10 +50,14 @@
                                          @foreach ($categorys as $category)
                                             <tr>
                                                <th class="align-middle text-center" scope="row">{{$category->id}}</th>
-                                                <td class="align-middle text-center">{{ $category->getTranslation('name','ar') }} </td>
+                                                @if($lang == 'ar')
+                                                 <td class="align-middle text-center">{{ $category->getTranslation('name','ar') }} </td>
+                                                @else
+                                                 <td class="align-middle text-center">{{ $category->getTranslation('name','en') }} </td>
+                                                @endif
                                                 <td class="align-middle text-center">
-                                                 <a href="{{ url('delete_hero', $category->id) }}" class="action-icon "><i class="material-icons">delete</i> </a>
-                                                 <a href="{{ url('edit_hero', $category->id) }}"><i class="material-icons">edit</i> </a>
+                                                 <a href="{{ url('category_delete', $category->id) }}" class="action-icon "><i class="material-icons">delete</i> </a>
+                                                 <a href="{{ url('category_edit', $category->id) }}"><i class="material-icons">edit</i> </a>
                                                 </td> 
                                             </tr>
                                           @endforeach 
@@ -64,10 +68,9 @@
                                 </div>
                             </div>
                         </div>
-                       
-                        
-          
+
                 </div>
+
             </div>
            
            @include('common.footer')
@@ -101,13 +104,13 @@
                                         </span>
 
                                         <span class="align-middle d-none d-sm-inline-block">
-                                            <option value="">English</option>
+                                            <option value="{{ route('category', ['lang' => 'en']) }}">English</option>
                                         </span>
                                         <i class="mdi mdi-chevron-down d-none d-sm-inline-block align-middle">
                                         </i>
                                         <!-- item-->
                                         <span class="align-middle">
-                                            <option value="">Arabic</option>
+                                            <option value="{{ route('category', ['lang' => 'ar']) }}">Arabic</option>
                                         </span>
                                     </div>
                                 </select>

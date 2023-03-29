@@ -3,11 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\categories;
-use App\Models\sub_categories;
+use App\Models\City;
 use Illuminate\Http\Request;
 
-class SubCategoriesController extends Controller
+class CityController extends Controller
 {
     /**
      * Display a listing of the resource.
@@ -26,7 +25,7 @@ class SubCategoriesController extends Controller
      */
     public function create()
     {
-        return view('categories.create');
+        //
     }
 
     /**
@@ -38,8 +37,8 @@ class SubCategoriesController extends Controller
     public function store(Request $request)
     {
         $rules = array(
-            'name_en'  => 'required',
-            'cat_id'   => 'required',
+            'name_en'    => 'required',
+            'state_id'   => 'required',
         );
 
         $validator = validator($request->all(), $rules);
@@ -50,7 +49,7 @@ class SubCategoriesController extends Controller
             ]);
         }
        
-        $sub_category = new sub_categories;
+        $city = new City;
         
         $array1 = $request->name_en;
         $array2 = $request->name_ar;
@@ -59,10 +58,10 @@ class SubCategoriesController extends Controller
         {
             for($j = 0;  $j< count($array2); $j++)
             {
-                $sub_category->setTranslation('name', 'en', $array1[$i]);
-                $sub_category->setTranslation('name', 'ar', $array2[$j]);
-                $sub_category->cat_id = $request->input('cat_id');
-                $sub_category->save();
+                $city->setTranslation('name', 'en', $array1[$i]);
+                $city->setTranslation('name', 'ar', $array2[$j]);
+                $city->state_id = $request->input('state_id');
+                $city->save();
             }
         }
         return response()->json(['error' => 'false', "message" => "success", 'data' => []]);
@@ -71,7 +70,7 @@ class SubCategoriesController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\sub_categories  $sub_categories
+     * @param  \App\Models\City  $city
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
@@ -87,22 +86,22 @@ class SubCategoriesController extends Controller
                 'status_message' => $validator->messages()->first()
             ]);
         }
-        $sub_categorys = sub_categories::get();
+        $citys = City::get();
         if ($request->lang == 'ar') {
-            foreach ($sub_categorys as $sub_category) {
+            foreach ($citys as $city) {
                 $data[] = array(
-                    'id'           => $sub_category->id,
-                    'name'         => $sub_category->getTranslation('name', 'ar') ?? '',
-                    'category'     => $sub_category->category->getTranslation('name', 'ar')
+                    'id'           => $city->id,
+                    'name'         => $city->getTranslation('name', 'ar') ?? '',
+                    'state'        => $city->state->getTranslation('name', 'ar') ?? '',
                 );
             }
             return response()->json(['error' => 'false', "message" => "success", 'data' => $data]);
         } else {
-            foreach ($sub_categorys as $sub_category) {
+            foreach ($citys as $city) {
                 $data[] = array(
-                    'id'           => $sub_category->id,
-                    'name'         => $sub_category->getTranslation('name', 'en') ?? '',
-                    'category'     => $sub_category->category->getTranslation('name', 'en')
+                    'id'           => $city->id,
+                    'name'         => $city->getTranslation('name', 'en') ?? '',
+                    'state'        => $city->state->getTranslation('name', 'en') ?? '',
                 );
             }
             return response()->json(['error' => 'false', "message" => "success", 'data' => $data]);
@@ -112,24 +111,22 @@ class SubCategoriesController extends Controller
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\sub_categories  $sub_categories
+     * @param  \App\Models\City  $city
      * @return \Illuminate\Http\Response
      */
-    public function edit(Request $request)
+    public function edit(City $city)
     {
-        $sub_category = sub_categories::find($request->id);
-        $category     = categories::get();
-        return view('sub_category.edit',compact('sub_category'));
+        //
     }
 
     /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\sub_categories  $sub_categories
+     * @param  \App\Models\City  $city
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, sub_categories $sub_categories)
+    public function update(Request $request, City $city)
     {
         $rules = array(
             'id'         => 'required',
@@ -142,18 +139,18 @@ class SubCategoriesController extends Controller
                 'status_message' => $validator->messages()->first()
             ]);
         }
-        $category = sub_categories::find($request->id);
+        $city = City::find($request->id);
 
         if ($request->input('name_en') != null) {
-            $category->setTranslation('name', 'en', $request->input('name_en'));
+            $city->setTranslation('name', 'en', $request->input('name_en'));
         }
         if ($request->input('name_ar') != null) {
-            $category->setTranslation('name', 'ar', $request->input('name_ar'));
+            $city->setTranslation('name', 'ar', $request->input('name_ar'));
         }
-        if ($request->input('cat_id') != null) {
-            $category->cat_id = $request->cat_id;
+        if ($request->input('state_id') != null) {
+            $city->state_id = $request->state_id;
         }
-        $category->save();
+        $city->save();
 
         return response()->json(['error' => 'false', "message" => "success", 'data' => []]);
     }
@@ -161,7 +158,7 @@ class SubCategoriesController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\sub_categories  $sub_categories
+     * @param  \App\Models\City  $city
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
@@ -177,9 +174,8 @@ class SubCategoriesController extends Controller
                 'status_message' => $validator->messages()->first()
             ]);
         }
-        $categorys = sub_categories::find($request->id);
-        $categorys->delete();
+        $City = City::find($request->id);
+        $City->delete();
         return response()->json(['error' => 'false', "message" => "success", 'data' => []]);
     }
 }
-

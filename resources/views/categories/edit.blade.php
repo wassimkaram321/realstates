@@ -24,33 +24,18 @@
                                 <h4 class="card-title">Edit Form </h4>
                             </div>
                             <div class="card-body">
-                                <form method="POST" action="{{ route('update_blog',$blog->id) }}" enctype="multipart/form-data">
+                                <form method="POST" action="{{ route('category_update',$category->id) }}" enctype="multipart/form-data">
                                     @csrf
-                                        <div class="form-group">
-                                            <label class="form-control-label" for="formGroupExampleInput">Blog image</label>
-                                            <img style="max-width: 200px; max-height: 200px"src="{{ asset('public/blog/' . $blog->image) }}">
-                                            <br><br>
-                                            <input type="file" name="image" class="form-control" id="formGroupExampleInput" placeholder="Enter title">
-                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-control-label" for="formGroupExampleInput2">Tirle in english</label>
-                                            <input type="text" name="title_en" class="form-control" value="{{$blog->title_en}}" placeholder="" >
-                                       </div>
-                                        <div class="form-group">
-                                            <label class="form-control-label" for="formGroupExampleInput2">Text in english</label>
-                                            <textarea name="text_en" class="form-control"  >{{$blog->text_en}}</textarea>
+                                       <div class="form-group">
+                                            <label class="form-control-label" for="formGroupExampleInput2">Name (English)</label>
+                                            <input type="text" class="form-control" value="{{$category->getTranslation('name', 'en')}}" name="name[en]" id="name.en">
                                        </div>
                                        <div class="form-group">
-                                            <label class="form-control-label" for="formGroupExampleInput2">Title in arabic</label>
-                                            <input type="text" name="title_ar" class="form-control" value="{{$blog->title_ar}}" placeholder="" >
+                                            <label class="form-control-label" for="formGroupExampleInput2">Name (Arabic)</label>
+                                            <input type="text" class="form-control" value="{{$category->getTranslation('name', 'ar')}}" name="name[ar]" id="name.ar">
                                        </div>
-                                        <div class="form-group">
-                                            <label class="form-control-label" for="formGroupExampleInput2">Text in arabic</label>
-                                            <textarea name="text_ar" class="form-control" >{{$blog->text_ar}}</textarea>
-                                       </div>
-
                                     <div class="text-center">
-                                     <a href = "{{url('blog')}}"><span class="btn btn-default">Back</span></a>
+                                     <a href = "{{url('category')}}"><span class="btn btn-default">Back</span></a>
                                      <button type="submit" class="btn btn-success" name="submit" value="submit">Submit</button>
                                     </div>
                                 </form>
