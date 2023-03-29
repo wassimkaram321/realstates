@@ -18,21 +18,21 @@
                     <!-- main content -->
                     <div class="container-fluid">
                         <div class="d-flex justify-content-between align-items-center">
-                            <h2>Blog</h2>
+                            <h2>Category</h2>
                             <div class="d-flex">
                                 <ol class="breadcrumb m-0 mr-auto">
                                     <li class="breadcrumb-item active"><a href="home">Dashboard</a></li>
-                                    <li class="breadcrumb-item">blog</li>
+                                    <li class="breadcrumb-item">category</li>
                                 </ol>
                             </div>
                         </div>
-                        <div class="card">
+                        <div class="card card-shadow">
                             <div class="card-header">
                                 {{-- <h4 class="card-title">
                                     Default
                                 </h4> --}}
                                 <h2 class="float-right">
-                                    <a href="#" class="btn btn-info" > Create </a>
+                                    <a href="{{route('category_create')}}" class="btn btn-info" > Create </a>
                                    
                                 </h2>
                             </div>
@@ -42,17 +42,25 @@
                                         <thead>
                                             <tr>
                                                 <th scope="col" class="text-center">#</th>
-                                                <th scope="col" class="text-center">Image</th>
-                                                <th scope="col" class="text-center">Title</th>
-                                                <th scope="col" class="text-center">Text</th>
+                                                <th scope="col" class="text-center">Name</th>
                                                 <th scope="col" class="text-center">Action</th>
                                             </tr>
                                         </thead>
                                         <tbody>
+                                         @foreach ($categorys as $category)
                                             <tr>
-                                               
+                                               <th class="align-middle text-center" scope="row">{{$category->id}}</th>
+                                                @if($lang == 'ar')
+                                                 <td class="align-middle text-center">{{ $category->getTranslation('name','ar') }} </td>
+                                                @else
+                                                 <td class="align-middle text-center">{{ $category->getTranslation('name','en') }} </td>
+                                                @endif
+                                                <td class="align-middle text-center">
+                                                 <a href="{{ url('category_delete', $category->id) }}" class="action-icon "><i class="material-icons">delete</i> </a>
+                                                 <a href="{{ url('category_edit', $category->id) }}"><i class="material-icons">edit</i> </a>
+                                                </td> 
                                             </tr>
-                                           
+                                          @endforeach 
                                         </tbody>
                                     </table>
                                     <div style="margin-left: 1000px;">
@@ -60,10 +68,9 @@
                                 </div>
                             </div>
                         </div>
-                       
-                        
-          
+
                 </div>
+
             </div>
            
            @include('common.footer')
@@ -97,13 +104,13 @@
                                         </span>
 
                                         <span class="align-middle d-none d-sm-inline-block">
-                                            <option value="">English</option>
+                                            <option value="{{ route('category', ['lang' => 'en']) }}">English</option>
                                         </span>
                                         <i class="mdi mdi-chevron-down d-none d-sm-inline-block align-middle">
                                         </i>
                                         <!-- item-->
                                         <span class="align-middle">
-                                            <option value="">Arabic</option>
+                                            <option value="{{ route('category', ['lang' => 'ar']) }}">Arabic</option>
                                         </span>
                                     </div>
                                 </select>

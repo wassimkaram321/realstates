@@ -24,7 +24,10 @@
                                                     <div class="tab-content" id="notifications-tabs">
                                                 <div class="tab-pane fade show active" id="notifications"
                                                     role="tabpanel" aria-labelledby="notifications-tab">
+<<<<<<< HEAD
                                                   
+=======
+>>>>>>> 35fab9322f603a8f7d72f6cbb074d627a3b33e58
                                                     </div>
                                                     <div class="tab-pane fade" id="alerts" role="tabpanel" aria-labelledby="alerts-tab">
                                                     <ul class="list-group list-group-flush">

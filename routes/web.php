@@ -3,6 +3,9 @@
 use App\Http\Controllers\Admin\UserController;
 use Illuminate\Support\Facades\Route;
 
+use App\Http\Controllers\Admin\CategoriesController;
+use App\Http\Controllers\Admin\SubCategoriesController;
+use App\Http\Controllers\Admin\ChildcategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -23,4 +26,4 @@ Route::resource('users', UserController::class);
 
 Auth::routes();
 
-Route::get('/', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
