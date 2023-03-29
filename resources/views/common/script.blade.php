@@ -1,6 +1,6 @@
  <!-- jQuery -->
     <script src="{{asset('dashboard/assets/vendor/jquery.min.js')}}"></script>
-
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@8"></script>
     <!-- Bootstrap -->
     <script src="{{asset('dashboard/assets/vendor/popper.js')}}"></script>
     <script src="{{asset('dashboard/assets/vendor/bootstrap.min.js')}}"></script>
@@ -140,4 +140,34 @@
 <!--     </script>-->
 
   
-    
+<script>
+    function showDeleteConfirmation(id, route) {
+        Swal.fire({
+            title: 'Are you sure?',
+            text: "You won't be able to revert this!",
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Yes, delete it!'
+        }).then((result) => {
+            if (result.value) {
+                $.ajax({
+                    type: 'DELETE',
+                    url: route,
+                    data: {
+                        '_token': "{{ csrf_token() }}"
+                    },
+                    success: function(data) {
+                        Swal.fire(
+                            'Deleted!',
+                            'Your file has been deleted.',
+                            'success'
+                        );
+                        location.reload();
+                    }
+                });
+            }
+        });
+    }
+</script>

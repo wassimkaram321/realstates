@@ -17,7 +17,7 @@
                 <div class="mdk-header-layout__content top-navbar mdk-header-layout__content--scrollable h-100">
                     <!-- main content -->
                     <div class="container-fluid">
-                        <h2>Blog</h2>
+                        <h2>{{__('Blog')}}</h2>
                         
                         {{-- <p class="lead">
                             Basic and custom tables.

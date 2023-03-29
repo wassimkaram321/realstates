@@ -21,6 +21,14 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role_id',
+        'real_state_id',
+        'comapany_id',
+        'city_id',
+        'phone',
+        'device_id',
+        'status',
+        'image',
     ];
 
     /**
@@ -41,4 +49,16 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+    public function company()
+    {
+        return $this->belongsTo('App\Models\Company');
+    }
+    public function real_states()
+    {
+        return $this->hasMany('App\Models\RealState');
+    }
+    public function city()
+    {
+        return $this->belongsTo('App\Models\City');
+    }
 }

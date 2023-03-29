@@ -9,27 +9,7 @@
                             
                             <div class="collapse navbar-collapse" id="mainNavbar">
                                 <ul class="navbar-nav ml-auto align-items-center">
-                                    <!-- <li class="nav-item dropdown nav-language d-flex align-items-center">-->
-                                    <!--    <a href="#" class="nav-link dropdown-toggle" data-toggle="dropdown"-->
-                                    <!--        aria-expanded="false">-->
-                                    <!--        EN-->
-                                    <!--    </a>-->
-                                    <!--     <div class="dropdown-menu dropdown-menu-right ">-->
-                                    <!--        <ul class="list-unstyled">-->
-                                    <!--            <li>-->
-                                    <!--                <a href="account.html" class="dropdown-item active">-->
-                                    <!--                    <img src="{{asset('dashboard/assets/img/us_flag.png')}}" style="width: 25px; vertical-align: middle" alt="English"> English-->
-                                    <!--                </a>-->
-                                    <!--            </li>-->
-                                    <!--            <li>-->
-                                    <!--                <a href="account.html" class="dropdown-item">-->
-                                    <!--                    <img src="{{asset('dashboard/assets/img/ar_flag.png')}}" style="width: 25px; vertical-align: middle" alt="French"> Arabic-->
-                                    <!--                </a>-->
-                                    <!--            </li>-->
-                                        
-                                    <!--        </ul>-->
-                                    <!--    </div>-->
-                                    <!--</li>-->
+                                 
                                     <li class="nav-item dropdown notifications d-flex align-self-center align-items-center" id="navbarNotifications">
                                         <a href="#" class="nav-link dropdown-toggle notifications--active" data-toggle="dropdown" aria-expanded="false">
                                             <i class="material-icons align-middle">notifications</i>
@@ -44,41 +24,7 @@
                                                     <div class="tab-content" id="notifications-tabs">
                                                 <div class="tab-pane fade show active" id="notifications"
                                                     role="tabpanel" aria-labelledby="notifications-tab">
-                                                    <ul class="list-group list-group-flush">
-                                                        @php 
-                                                            use App\Models\Notification;
-                                                            $notification = Notification::where('status', 'on')->get()->reverse()->values();
-                                                        @endphp
-                                                        @if($notification != null && count($notification) > 0)
-                                                         @foreach($notification as $notifications)
-                                                            <li class="list-group-item">
-                                                                <div class="w-100">
-                                                                    <br>
-                                                                    <a>{{ $notifications->type }}</a>
-                                                                    <a href="{{ route('update_status', ['id' => $notifications->id]) }}"><i class="material-icons cancel-icon" style="margin-left:160px;">cancel</i></a>
-                                                                    <br><br>
-                                                                </div>
-                                                                @php
-                                                                    $date = $notifications->created_at->format('m/d/Y');
-                                                                    $today = \Carbon\Carbon::now()->format('m/d/Y');
-                                                                    if ($date == $today) {
-                                                                        $date2 = $notifications->created_at->format('h:i A');
-                                                                    } else {
-                                                                        $date2 = $notifications->created_at->format('m/d/Y');
-                                                                    }
-                                                                @endphp
-                                                                <div class="w-100 text-muted">{{ $date2 }}</div>
-                                                            </li>
-                                                        @endforeach
-
-                                                        @else
-                                                           <li class="list-group-item">
-                                                              <div class="w-100">
-                                                                 <a style="margin-left:80px;"><i class="material-icons">not_interested</i> no notification</a>
-                                                              </div>
-                                                           </li>
-                                                        @endif
-                                                    </ul>
+                                                  
                                                     </div>
                                                     <div class="tab-pane fade" id="alerts" role="tabpanel" aria-labelledby="alerts-tab">
                                                     <ul class="list-group list-group-flush">
