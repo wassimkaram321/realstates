@@ -25,6 +25,7 @@ class UserResource extends JsonResource
             'city_id' => $this->city_id,
             'status' => $this->status,
             'image' => $this->image,
+            'role_id' => $this->role_id,
             
            
         ];

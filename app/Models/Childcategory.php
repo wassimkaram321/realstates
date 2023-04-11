@@ -18,4 +18,9 @@ class Childcategory extends Model
     {
         return $this->belongsTo(sub_categories::class, 'sub_id');
     }
+
+    public function realstates()
+    {
+        return $this->hasManyThrough(Realstate::class, Childcategory::class, 'id', 'cat_id')->where('cat_type', Childcategory::class);
+    }
 }

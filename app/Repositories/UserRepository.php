@@ -6,6 +6,8 @@ use App\Models\User;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
+use Spatie\Permission\Models\Role;
+
 //use Your Model
 
 /**
@@ -26,16 +28,17 @@ class UserRepository
     public function all()
     {
         # code...
-        return $this->user->all();
+        return $this->user->active()->get();
     }
     public function find($id)
     {
-        $user = User::whereid($id)->get();
+        $user = User::whereid($id)->active()->get();
         return $user;
     }
     public function create(array $data)
     {
         # code...
+       
         if (isset($data['image'])) {
             
             $file_extension = $data['image']->getClientOriginalExtension();
@@ -44,9 +47,12 @@ class UserRepository
             $data['image']->move($path, $file_name);
             $data['image'] = $file_name;
         }
-       
+
+        $role = Role::find($data['role_id']);
         $data['password'] =  Hash::make($data['password']);
-        return $this->user->create($data);
+        $user =  $this->user->create($data);
+        $user->assignRole($role->name);
+        return $user;
     }
     public function update($id,array $data)
     {
@@ -74,6 +80,14 @@ class UserRepository
         return $user;
 
     }
+    public function user_permission($id)
+    {
+        # code...
+        $user = User::find($id);
+        $role = Role::find($user->role_id);
+        $permissions = $role->permissions()->get();
+        return $permissions;
+    }
     public function rules()
     {
         # code...
@@ -83,6 +97,7 @@ class UserRepository
             'email' => 'required',
             'phone' => 'required',
             'image' => 'nullable',
+            'role_id' => 'required',
         ];
     }
     public function rules_update()
@@ -94,6 +109,7 @@ class UserRepository
             'email' => 'required',
             'phone' => '',
             'image' => 'nullable',
+            'role_id' => 'nullable',
         ];
     }
 }

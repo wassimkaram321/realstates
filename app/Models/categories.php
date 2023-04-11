@@ -18,4 +18,12 @@ class categories extends Model
     {
         return $this->hasMany(sub_categories::class);
     }
+
+    
+    public function realstates()
+    {
+        return $this->hasManyThrough(Realstate::class, categories::class, 'id', 'cat_id')->where('cat_type', categories::class);
+        
+       
+    }
 }
