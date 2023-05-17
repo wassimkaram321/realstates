@@ -21,7 +21,7 @@ class UserRepository
      */
     protected $user;
 
-    public function __construct(User $user)
+    public function __construct(User $user )
     {
         $this->user = $user;
     }
@@ -38,9 +38,9 @@ class UserRepository
     public function create(array $data)
     {
         # code...
-       
+
         if (isset($data['image'])) {
-            
+
             $file_extension = $data['image']->getClientOriginalExtension();
             $file_name = time() . '.' . $file_extension;
             $path = 'images/users';

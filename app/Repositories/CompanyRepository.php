@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Manager\FileManager;
 use App\Models\Company;
 use Illuminate\Support\Facades\Hash;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
@@ -29,68 +30,35 @@ class CompanyRepository
     }
     public function find($id)
     {
-        $user = Company::whereid($id)->get();
+        return $this->company->findOrFail($id);
+    }
+    public function create($request)
+    {
+        $request['password'] =  Hash::make($request['password']);
+        if(isset($request['image']))
+            $request['image'] = FileManager::addFile($request['image'],'images/companies');
+        return $this->company->create($request->all());
+    }
+    public function update($request)
+    {
+        $user = $this->company->findOrFail($request->id);
+
+        $request['password'] =  Hash::make($request['password']);
+        if(isset($request['image']))
+            $request['image'] = FileManager::addFile($request['image'],'images/companies');
+        $user->update($request->all());
         return $user;
     }
-    public function create(array $data)
+    public function delete($request)
     {
-        # code...
-        $data['password'] =  Hash::make($data['password']);
-        if (isset($data['image'])) {
-            $file_extension = $data['image']->getClientOriginalExtension();
-            $file_name = time() . '.' . $file_extension;
-            $path = 'images/companies';
-            $data['image']->move($path, $file_name);
-            $data['image'] = $file_name;
-        }
-        return $this->company->create($data);
+        return $this->company->destroy($request->id);
     }
-    public function update($id,array $data)
+    public function changeStatus($request)
     {
-        $user = $this->company->find($id);
-        $data['password'] =  Hash::make($data['password']);
-        if (isset($data['image'])) {
-            $file_extension = $data['image']->getClientOriginalExtension();
-            $file_name = time() . '.' . $file_extension;
-            $path = 'images/companies';
-            $data['image']->move($path, $file_name);
-            $data['image'] = $file_name;
-        }
-        return $user->update($data);
-    }
-    public function delete($id)
-    {
-        return $this->company->destroy($id);
-    }
-    public function change_status($status , $user_id)
-    {
-        # code...
-        $user = Company::whereid($user_id)->update([
-            'status'=>$status
-        ]);
+        $user = $this->company->findOrFail($request->id);
+        $user->update(['status'=>$request->status]);
         return $user;
 
     }
-    public function rules()
-    {
-        # code...
-        return [
-            'password' => 'required',
-            'name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-            'image' => 'nullable',
-        ];
-    }
-    public function rules_update()
-    {
-        # code...
-        return [
-            'password' => '',
-            'name' => 'required',
-            'email' => 'required',
-            'phone' => 'required',
-            'image' => 'nullable',
-        ];
-    }
+
 }

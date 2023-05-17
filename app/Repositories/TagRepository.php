@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Manager\TagManager;
 use App\Models\Tag;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
@@ -46,10 +47,9 @@ class TagRepository
      * @param int $id
      * @return mixed
      */
-    public function find($id)
+    public function find($request)
     {
-        $tag = Tag::whereid($id)->get();
-        return $tag;
+        return $this->tag->findOrFail($request->id);
     }
 
     /**
@@ -58,12 +58,10 @@ class TagRepository
      * @param array $data
      * @return mixed
      */
-    public function create(array $data)
+    public function create($request)
     {
-        $tag = Tag::create($data);
-        $tag->setTranslation('title', 'en', $data['title']);
-        $tag->setTranslation('title', 'ar', $data['title_ar']);
-        $tag->save();
+        $tag = $this->tag->create($request->all());
+        TagManager::setTranslation($tag,$request);
         return $tag;
     }
 
@@ -74,13 +72,11 @@ class TagRepository
      * @param array $data
      * @return mixed
      */
-    public function update($id, array $data)
+    public function update($request)
     {
-        $tag = Tag::find($id);
-        $tag->update($data);
-        $tag->setTranslation('title', 'en', $data['title']);
-        $tag->setTranslation('title', 'ar', $data['title_ar']);
-        $tag->save();
+        $tag = $this->tag->findOrFail($request->id);
+        $tag->update($request->all());
+        TagManager::setTranslation($tag,$request);
         return $tag;
     }
 
@@ -90,10 +86,9 @@ class TagRepository
      * @param int $id
      * @return mixed
      */
-    public function delete($id)
+    public function delete($request)
     {
-        $tag = Tag::Find($id);
-        return $this->tag->destroy($id);
+        $this->tag->findorFail($request->id)->delete();
     }
 
     /**
@@ -102,9 +97,9 @@ class TagRepository
      * @param int $id
      * @return mixed
      */
-    public function tag_real_states($id)
+    public function tag_real_states($request)
     {
-        $tag = Tag::findOrFail($id);
+        $tag = $this->tag->findOrFail($request->id);
         $real_states = $tag->realstates()->with(['attributes','images','tags'])->get();
         return $real_states;
     }

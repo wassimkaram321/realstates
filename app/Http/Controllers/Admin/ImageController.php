@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ImageRequest;
 use App\Models\Image;
 use App\Repositories\ImageRepository;
 use Illuminate\Http\Request;
@@ -45,16 +46,11 @@ class ImageController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(ImageRequest $request)
     {
-        //
-        try {
-            $data = $this->validate($request, $this->repository->rules());
-            $this->repository->create($data);
-            return $this->success('success', $data);
-        } catch (Exception $ex) {
-            return $this->error();
-        }
+
+        $data = $this->repository->create($request);
+        return $this->success('success', $data);
     }
 
     /**
@@ -86,17 +82,12 @@ class ImageController extends Controller
      * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Image $image)
+    public function update(ImageRequest $request, Image $image)
     {
-        //
-        try {
-            $data = $this->validate($request, $this->repository->rules_update());
-            $this->repository->update($request->id, $data);
-            return $this->success('success', []);
-        } 
-        catch (Exception $ex) {
-            return $this->error();
-        }
+
+        $data = $this->repository->update($request);
+        return $this->success('success', $data);
+
     }
 
     /**
@@ -105,15 +96,9 @@ class ImageController extends Controller
      * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy(ImageRequest $request)
     {
-        //
-        try {
-            $id = $request->id;
-            $this->repository->delete($id);
-            return $this->success('success', []);
-        } catch (Exception $ex) {
-            return $this->error();
-        }
+        $this->repository->delete($request);
+        return $this->success('success', []);
     }
 }

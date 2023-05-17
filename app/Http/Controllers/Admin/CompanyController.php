@@ -3,9 +3,11 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\CompanyRequest;
 use App\Http\Resources\CompanyResourse;
 use App\Models\Company;
 use App\Repositories\CompanyRepository;
+use App\Repositories\AuthorizationHandler;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use Exception;
@@ -14,11 +16,13 @@ class CompanyController extends Controller
 {
     use ResponseTrait;
     protected $repository;
+    protected $authorizationHandler;
 
 
-    public function __construct(CompanyRepository $repository)
+    public function __construct(CompanyRepository $repository , AuthorizationHandler $authorizationHandler)
     {
         $this->repository = $repository;
+        $this->authorizationHandler = $authorizationHandler;
     }
     /**
      * Display a listing of the resource.
@@ -29,7 +33,7 @@ class CompanyController extends Controller
     {
         //
         $data = $this->repository->all();
-        return $this->success('success', CompanyResourse::collection($data));
+        return $this->success('success', $data);
     }
 
     /**
@@ -48,17 +52,10 @@ class CompanyController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(CompanyRequest $request)
     {
-        //
-
-        try {
-            $data = $this->validate($request, $this->repository->rules());
-            $this->repository->create($data);
-            return $this->success('success', []);
-        } catch (Exception $ex) {
-            return $this->error();
-        }
+        $data = $this->repository->create($request);
+        return $this->success('success', $data);
     }
 
     /**
@@ -67,20 +64,10 @@ class CompanyController extends Controller
      * @param  \App\Models\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show(CompanyRequest $request)
     {
-        //
-
-        try {
-            $id = $request->id;
-
-            $data = $this->repository->find($id);
-
-            return $this->success('success', CompanyResourse::collection($data));
-        } catch (Exception $ex) {
-            return $this->error();
-           
-        }
+        $data = $this->repository->find($request);
+        return $this->success('success', $data);
     }
 
     /**
@@ -101,17 +88,10 @@ class CompanyController extends Controller
      * @param  \App\Models\Company  $company
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Company $company)
+    public function update(CompanyRequest $request, Company $company)
     {
-        //
-        try {
-            $data = $this->validate($request, $this->repository->rules_update());
-            $this->repository->update($request->id, $data);
-            return $this->success('success', []);
-        } 
-        catch (Exception $ex) {
-            return $this->error();
-        }
+        $data = $this->repository->update($request);
+        return $this->success('success', $data);
     }
 
     /**
@@ -121,25 +101,14 @@ class CompanyController extends Controller
      * @return \Illuminate\Http\Response
      */
 
-    public function change_status(Request $request)
+    public function change_status(CompanyRequest $request)
     {
-        # code...
-        try {
-            $this->repository->change_status($request->status, $request->id);
-            return $this->success('success', []);
-        } catch (Exception $ex) {
-            return $this->error();
-        }
+        $data = $this->repository->changeStatus($request);
+        return $this->success('success', $data);
     }
-    public function destroy(Request $request)
+    public function destroy(CompanyRequest $request)
     {
-        //
-        try {
-            $id = $request->id;
-            $this->repository->delete($id);
-            return $this->success('success', []);
-        } catch (Exception $ex) {
-            return $this->error();
-        }
+        $data = $this->repository->delete($request);
+        return $this->success('success', $data);
     }
 }

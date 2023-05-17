@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\TagRequest;
 use App\Models\Image;
 use App\Repositories\TagRepository;
 use Illuminate\Http\Request;
@@ -45,19 +46,10 @@ class TagController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(TagRequest $request)
     {
-        //
-        try {
-            $data = $this->validate($request, $this->repository->rules());
-          
-            $this->repository->create($data);
-          
-            return $this->success('success', $data);
-        } catch (Exception $ex) {
-            // return $this->error();
-            return $ex->getMessage();
-        }
+        $data = $this->repository->create($request);
+        return $this->success('success', $data);
     }
 
     /**
@@ -66,19 +58,10 @@ class TagController extends Controller
      * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function show(Request $request)
+    public function show(TagRequest $request)
     {
-        //
-        try {
-            
-           
-           $data =  $this->repository->find($request->id);
-          
-            return $this->success('success', $data);
-        } catch (Exception $ex) {
-            // return $this->error();
-            return $ex->getMessage();
-        }
+        $data = $this->repository->find($request);
+        return $this->success('success', $data);
     }
 
     /**
@@ -99,18 +82,10 @@ class TagController extends Controller
      * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Image $image)
+    public function update(TagRequest $request, Image $image)
     {
-        //
-        
-        try {
-            $data = $this->validate($request, $this->repository->rules_update());
-            $this->repository->update($request->id, $data);
-            return $this->success('success', []);
-        } 
-        catch (Exception $ex) {
-            return $this->error();
-        }
+        $data = $this->repository->update($request);
+        return $this->success('success', $data);
     }
 
     /**
@@ -119,27 +94,14 @@ class TagController extends Controller
      * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function destroy(Request $request)
+    public function destroy(TagRequest $request)
     {
-        //
-        try {
-            $id = $request->id;
-            $this->repository->delete($id);
-            return $this->success('success', []);
-        } catch (Exception $ex) {
-            return $this->error();
-        }
+        $data = $this->repository->delete($request);
+        return $this->success('success', []);
     }
-    public function tag_real_states(Request $request)
+    public function tag_real_states(TagRequest $request)
     {
-        //
-        try {
-            $id = $request->id;
-            $data = $this->repository->tag_real_states($id);
-            return $this->success('success', $data);
-        } catch (Exception $ex) {
-            // return $this->error();
-            return $ex->getMessage();
-        }
+        $data = $this->repository->tag_real_states($request);
+        return $this->success('success', $data);
     }
 }

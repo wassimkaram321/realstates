@@ -32,43 +32,22 @@ class ImageRepository
     }
     public function find($id)
     {
-        $image = Image::whereid($id)->get();
-        return $image;
+        return $this->image->whereid($id)->get();
     }
-    public function create(array $data)
+    public function create($request)
     {
         # code...
-        return $this->create($data);
+        return $this->create($request->all());
     }
-    public function update($id,array $data)
+    public function update($request)
     {
-        $image = Image::find($id);
-        return $image->update($data);
+        $image = $this->image->find($request->id);
+        $image->update($request->all());
+        return $image;
     }
     public function delete($id)
     {
-        $image = Image::Find($id);
-        return $this->image->destroy($id);
+        return $this->image->findOrFail($id)->delete();
     }
-    
-   
-    public function rules()
-    {
-        # code...
-        return [
-            'title' => 'required',
-            'alt' => 'nullable',
-            'real_state_id' => 'required',
-           
-        ];
-    }
-    public function rules_update()
-    {
-        # code...
-        return [
-            'title' => 'nullable',
-            'alt' => 'nullable',
-            'real_state_id' => 'nullable',
-        ];
-    }
+
 }

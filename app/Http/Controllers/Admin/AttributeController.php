@@ -3,8 +3,10 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Requests\AttributeRequest;
 use App\Models\Image;
 use App\Repositories\AttributeRepository;
+use App\Repositories\AuthorizationHandler;
 use Illuminate\Http\Request;
 use App\Traits\ResponseTrait;
 use Exception;
@@ -13,14 +15,17 @@ class AttributeController extends Controller
 {
     use ResponseTrait;
     protected $repository;
+    protected $authorizationHandler;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct(AttributeRepository $repository)
+    public function __construct(AttributeRepository $repository , AuthorizationHandler $authorizationHandler)
     {
         $this->repository = $repository;
+        $this->authorizationHandler = $authorizationHandler;
+        $this->authorize('attributes');
     }
     public function index()
     {
@@ -45,16 +50,10 @@ class AttributeController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(AttributeRequest $request)
     {
-        //
-        try {
-            $data = $this->validate($request, $this->repository->rules());
-            $this->repository->create($data);
-            return $this->success('success', $data);
-        } catch (Exception $ex) {
-            return $this->error();
-        }
+        $data = $this->repository->create($request);
+        return $this->success('success', $data);
     }
 
     /**
@@ -88,15 +87,8 @@ class AttributeController extends Controller
      */
     public function update(Request $request, Image $image)
     {
-        //
-        try {
-            $data = $this->validate($request, $this->repository->rules_update());
-            $this->repository->update($request->id, $data);
-            return $this->success('success', []);
-        } 
-        catch (Exception $ex) {
-            return $this->error();
-        }
+        $data = $this->repository->update($request);
+        return $this->success('success', $data);
     }
 
     /**
@@ -108,12 +100,7 @@ class AttributeController extends Controller
     public function destroy(Request $request)
     {
         //
-        try {
-            $id = $request->id;
-            $this->repository->delete($id);
-            return $this->success('success', []);
-        } catch (Exception $ex) {
-            return $this->error();
-        }
+        $data = $this->repository->delete($request);
+        return $this->success('success', $data);
     }
 }

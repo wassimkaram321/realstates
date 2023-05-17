@@ -2,6 +2,7 @@
 
 namespace App\Repositories;
 
+use App\Http\Requests\AttributeManager;
 use App\Models\Attribute;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
@@ -20,10 +21,12 @@ class AttributeRepository
      *  Return the model
      */
     protected $attribute;
+    protected $attributeManager;
 
-    public function __construct(Attribute $attribute)
+    public function __construct(Attribute $attribute , AttributeManager $attributeManager)
     {
         $this->attribute = $attribute;
+        $this->attributeManager = $attributeManager;
     }
     public function all()
     {
@@ -32,59 +35,27 @@ class AttributeRepository
     }
     public function find($id)
     {
-        $attribute = Attribute::whereid($id)->get();
-        return $attribute;
+        return $this->attribute->whereid($id)->get();
     }
-    public function create(array $data)
+    public function create($request)
     {
         # code...
-        $attributes = Attribute::create($data);
-        $attributes->setTranslation('title', 'en', $data['title']);
-        $attributes->setTranslation('title', 'ar', $data['title_ar']);
-        $attributes->setTranslation('content', 'en', $data['content']);
-        $attributes->setTranslation('content', 'ar', $data['content_ar']);
-        $attributes->save();
+        $attributes = $this->attribute->create($request->all());
+        $this->attributeManager->setTranslation($attributes,$request);
         return $attributes;
     }
-    public function update($id,array $data)
+    public function update($request)
     {
-        $attributes = Attribute::find($id);
-        $attributes->update($data);
-        $attributes->setTranslation('title', 'en', $data['title']);
-        $attributes->setTranslation('title', 'ar', $data['title_ar']);
-        $attributes->setTranslation('content', 'en', $data['content']);
-        $attributes->setTranslation('content', 'ar', $data['content_ar']);
-        $attributes->save();
+        $attributes =  $this->attribute->find($request->id);
+        $attributes->update($request->all());
+        $this->attributeManager->setTranslation($attributes,$request);
         return $attributes;
     }
-    public function delete($id)
+    public function delete($request)
     {
-        
-        return $this->attribute->destroy($id);
+        return $this->attribute->destroy($request->id);
     }
-    
-   
-    public function rules()
-    {
-        # code...
-        return [
-            'title' => 'required',
-            'title_ar' => 'required',
-            'content' => 'required',
-            'content_ar' => 'required',
-            'real_state_id' => 'required',
-           
-        ];
-    }
-    public function rules_update()
-    {
-        # code...
-        return [
-            'title' => 'nullable',
-            'title_ar' => 'nullable',
-            'content' => 'nullable',
-            'content_ar' => 'nullable',
-            'real_state_id' => 'nullable',
-        ];
-    }
+
+
+
 }
