@@ -149,6 +149,18 @@ class UserController extends Controller
         }
         
     }
+    public function user_permission(Request $request)
+    {
+        # code...
+        try{
+           $data= $this->repository->user_permission($request->id);
+            return $this->success('success',$data);
+        }
+        catch(Exception $ex){
+            return $this->error();
+            
+        }
+    }
     public function destroy(Request $request)
     {
         //

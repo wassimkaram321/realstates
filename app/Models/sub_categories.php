@@ -22,4 +22,9 @@ class sub_categories extends Model
     {
         return $this->hasMany(Childcategory::class);
     }
+
+    public function realstates()
+    {
+        return $this->hasManyThrough(Realstate::class, sub_categories::class, 'id', 'cat_id')->where('cat_type', sub_categories::class);
+    }
 }

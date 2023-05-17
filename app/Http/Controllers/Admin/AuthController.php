@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use App\Traits\ResponseTrait;
+use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
@@ -34,7 +35,7 @@ class AuthController extends Controller
         }
         try {
 
-            $user = User::where('email', $request->email)->first();
+            $user = User::where('status',1)->where('email', $request->email)->first();
             $hash = Hash::check($request->password, $user->password);
 
             $data = ['id' => $user->id, 'name' => $user->name, 'phone' => $user->phone, 'email' => $user->email];
@@ -43,7 +44,7 @@ class AuthController extends Controller
             if ($hash == 0) {
                 return $this->error_message('wrong password');
             } elseif (!$data) {
-                return $this->error_message('not fount');
+                return $this->error_message('not found');
             } else {
                 $token = $user->createToken(time())->plainTextToken;
                 $arr = ['token' => $token];
@@ -52,6 +53,25 @@ class AuthController extends Controller
             }
         } catch (\Exception $ex) {
             return $this->error();
+            // return $ex->getMessage();
         }
+    }
+    public function logout(Request $request)
+    {
+      
+        
+        
+        $user = User::find(Auth::id());
+        if (!empty($user)) {
+            $request->user()->currentAccessToken()->delete();
+        }
+        else{
+            return response()->json([
+                "message" => "User Not Found"
+            ]);
+        }
+        return response()->json([
+            "message" => "Logout successful"
+        ]);
     }
 }
