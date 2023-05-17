@@ -37,34 +37,43 @@ class SubCategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = array(
-            'name_en'  => 'required',
-            'cat_id'   => 'required',
-        );
+        // $rules = array(
+        //     'name_en'  => 'required',
+        //     'cat_id'   => 'required',
+        // );
 
-        $validator = validator($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json([
-                'error'          => 'true',
-                'status_message' => $validator->messages()->first()
-            ]);
-        }
+        // $validator = validator($request->all(), $rules);
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'error'          => 'true',
+        //         'status_message' => $validator->messages()->first()
+        //     ]);
+        // }
        
-        $sub_category = new sub_categories;
-        
-        $array1 = $request->name_en;
-        $array2 = $request->name_ar;
-
-        for($i = 0;  $i< count($array1);$i++)
-        {
-            for($j = 0;  $j< count($array2); $j++)
+       
+        // dd($request);
+        $list = $request->list;
+        for($j = 0;  $j< count($list); $j++)
             {
-                $sub_category->setTranslation('name', 'en', $array1[$i]);
-                $sub_category->setTranslation('name', 'ar', $array2[$j]);
+                $sub_category = new sub_categories;
+                $sub_category->setTranslation('name', 'ar', $list[$j]['name_ar']);
+                $sub_category->setTranslation('name', 'en', $list[$j]['name_en']);
                 $sub_category->cat_id = $request->input('cat_id');
                 $sub_category->save();
             }
-        }
+        // $array1 = $request->name_en;
+        // $array2 = $request->name_ar;
+
+        // for($i = 0;  $i< count($array1);$i++)
+        // {
+        //     for($j = 0;  $j< count($array2); $j++)
+        //     {
+        //         $sub_category->setTranslation('name', 'en', $array1[$i]);
+        //         $sub_category->setTranslation('name', 'ar', $array2[$j]);
+        //         $sub_category->cat_id = $request->input('cat_id');
+        //         $sub_category->save();
+        //     }
+        // }
         return response()->json(['error' => 'false', "message" => "success", 'data' => []]);
     }
 

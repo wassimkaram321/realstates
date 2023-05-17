@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Admin\CategoriesController;
 use App\Http\Controllers\Admin\SubCategoriesController;
 use App\Http\Controllers\Admin\ChildcategoryController;
+use App\Http\Controllers\ChatsController;
 
 /*
 |--------------------------------------------------------------------------
@@ -18,6 +19,10 @@ use App\Http\Controllers\Admin\ChildcategoryController;
 |
 */
 
+Route::get('/chat', [ChatsController::class,'index']);
+Route::get('messages', [ChatsController::class,'fetchMessages']);
+Route::post('messages',[ChatsController::class,'sendMessage']);
+
 Route::group(['middleware' => 'api'], function () {
 
 Route::resource('users', UserController::class);
@@ -26,4 +31,5 @@ Route::resource('users', UserController::class);
 
 Auth::routes();
 
-Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+// Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
