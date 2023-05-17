@@ -4,7 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Http\Resources\RealstateResource;
-
+use App\Models\City;
 use App\Models\Realstate;
 use App\Models\User;
 use App\Repositories\RealstateRepository;
@@ -173,12 +173,55 @@ class RealstateController extends Controller
         # code...
         try{
             // $user_id = $request->user()->id;
-            $data = User::findOrFail(1);
+            $user = User::findOrFail($request->user()->id);
+            $data =$this->repository->get_user_realstates($user->id);
+        
             return $this->success('success',RealstateResource::collection($data));
         }
         catch(Exception $ex){
             return $this->error();
         }
+    
+    }
+    public function get_real_estates_by_city(Request $request)
+    {
+        # code...
+        try{
+            // $user_id = $request->user()->id;
+            $city = City::findOrFail($request->id);
+            $data =$this->repository->get_real_estates_by_city($city);
+            return $this->success('success',RealstateResource::collection($data));
+        }
+        catch(Exception $ex){
+            return $this->error();
+        }
+    
+    }
+    public function get_real_estates_by_state(Request $request)
+    {
+        # code...
+        try{
+            
+            $data =$this->repository->get_real_estates_by_state($request->id);
+            return $this->success('success',RealstateResource::collection($data));
+        }
+        catch(Exception $ex){
+            return $this->error();
+        }
+    
+    }
+    public function nearby_real_estates(Request $request)
+    {
+        # code...
+        try{
+            
+            $data =$this->repository->nearby_real_estates($request->lat,$request->long);
+            return $this->success('success',RealstateResource::collection($data));
+        }
+        catch(Exception $ex){
+            return $this->error();
+        }
+        
     
     }
 }

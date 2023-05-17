@@ -66,9 +66,19 @@ class TagController extends Controller
      * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function show(Image $image)
+    public function show(Request $request)
     {
         //
+        try {
+            
+           
+           $data =  $this->repository->find($request->id);
+          
+            return $this->success('success', $data);
+        } catch (Exception $ex) {
+            // return $this->error();
+            return $ex->getMessage();
+        }
     }
 
     /**

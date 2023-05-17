@@ -18,4 +18,8 @@ class City extends Model
     {
         return $this->belongsTo(State::class, 'state_id');
     }
+    public function real_states()
+    {
+        return $this->hasMany(Realstate::class);
+    }
 }

@@ -92,6 +92,7 @@ Route::post('login', [AuthController::class, 'login']);
     Route::post('delete_tag', [TagController::class,'destroy']);
     Route::post('update_tag', [TagController::class,'update']);
     Route::get('tag_real_states', [TagController::class,'tag_real_states']);
+    Route::get('tag_details', [TagController::class,'show']);
     //realestates
     Route::resource('realstates', RealstateController::class);
     Route::post('delete_real_states', [RealstateController::class,'destroy']);
@@ -100,6 +101,9 @@ Route::post('login', [AuthController::class, 'login']);
     Route::get('real_state', [RealstateController::class, 'show']);
     Route::get('real_state_by_cat', [RealstateController::class, 'get_realstates_by_category']);
     Route::get('user_real_estates', [RealstateController::class, 'get_user_real_estates']);
+    Route::get('city_real_estates', [RealstateController::class, 'get_real_estates_by_city']);
+    Route::get('state_real_estates', [RealstateController::class, 'get_real_estates_by_state']);
+    Route::get('nearby_real_estates', [RealstateController::class, 'nearby_real_estates']);
 
 
 

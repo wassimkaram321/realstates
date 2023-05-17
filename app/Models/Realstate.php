@@ -28,10 +28,17 @@ class Realstate extends Model
         'tags',
         'attributes',
         'images',
+        'address',
+        'rent_time',
+        'ava',
     ];
     public function scopeActive($query)
     {
         return $query->where('status', 1);
+    }
+    public function scopeAva($query)
+    {
+        return $query->where('ava', 1);
     }
     public function attributes()
     {
@@ -48,5 +55,9 @@ class Realstate extends Model
     public function category()
     {
         return $this->morphTo('cat');
+    }
+    public function city()
+    {
+        return $this->hasOne('city_id');
     }
 }

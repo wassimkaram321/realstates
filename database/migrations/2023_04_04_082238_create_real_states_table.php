@@ -19,6 +19,7 @@ class CreateRealStatesTable extends Migration
             $table->text('description');
             $table->unsignedBigInteger('cat_id');
             $table->string('cat_type','191');
+            $table->string('address','191')->nullable();
             $table->unsignedBigInteger('city_id')->nullable();
             $table->unsignedBigInteger('user_id')->nullable();
             $table->float('price')->default('0');
@@ -26,8 +27,10 @@ class CreateRealStatesTable extends Migration
             $table->string('image',191)->default('realestate_default.png');
             $table->text('slug');
             $table->float('latitude')->nullable();
-            $table->float('longitude')->nullable();
+            $table->float('longtitude')->nullable();
             $table->integer('status')->default(1);
+            $table->integer('rent_time')->default(0);
+            $table->integer('ava')->default(1);
             $table->timestamps();
 
 

@@ -4,9 +4,11 @@ namespace App\Repositories;
 
 use App\Models\categories;
 use App\Models\Childcategory;
+use App\Models\City;
 use App\Models\Realstate;
 use App\Models\sub_categories;
 use App\Models\User;
+use Attribute;
 use Exception;
 use Illuminate\Support\Facades\DB;
 
@@ -52,6 +54,7 @@ class RealstateRepository
         $data['user_id'] = null;
         // Get an array of tag IDs from the input data
         $tagIds = collect($tags)->pluck('tag_id')->toArray();
+        // dd($attributes);
         try {
             // Start a database transaction
             DB::beginTransaction();
@@ -62,7 +65,15 @@ class RealstateRepository
             // Attach the real estate object to its tags
             $real_state->tags()->attach($tagIds);
             // Create attributes for the real estate object
-            $real_state->attributes()->createMany($attributes);
+            // $real_state->attributes()->createMany($attributes);
+            foreach ($attributes as $attribute) {
+                $temp = $real_state->attributes()->create($attribute);
+                $temp->setTranslation('title', 'en', $attribute['title']);
+                $temp->setTranslation('title', 'ar', $attribute['title_ar']);
+                $temp->setTranslation('content', 'en', $attribute['content']);
+                $temp->setTranslation('content', 'ar', $attribute['content_ar']);
+                $temp->save();
+            }
             // Create images for the real estate object
             $real_state->images()->createMany($images);
             // Set the translations for the real estate object (if applicable)
@@ -170,6 +181,38 @@ class RealstateRepository
         $user = User::findOrFail($user_id);
         return $user->real_states;
     }
+    public function get_real_estates_by_city($city)
+    {
+        # code...
+       
+        return $city->real_states;
+    }
+    public function nearby_real_estates($lat,$long)
+    {
+        # code...
+        $radius = 5;
+        $array = [];
+        $real_states = Realstate::active()->with(['attributes', 'images', 'category'])->get();
+        foreach ($real_states as $key => $real_state) {
+            # code...
+            $distance = $this->haversineDistance($lat, $long, $real_state->latitude, $real_state->longtitude);
+            if ($distance <= $radius) {
+                $array [] = $real_state;
+            }
+        }
+        return $array;
+        
+        
+    }
+    public function get_real_estates_by_state($state_id)
+    {
+        # code...
+        $realEstates = RealState::whereHas('city', function($query) use ($state_id) {
+            $query->where('state_id', $state_id);
+        })->get();
+        return $realEstates;
+        
+    }
     private function getCategory($id, $type)
     {
         switch ($type) {
@@ -191,6 +234,22 @@ class RealstateRepository
         $real_state->setTranslation('description', 'en', $data['description']);
         $real_state->setTranslation('description', 'ar', $data['description_ar']);
         $real_state->save();
+    }
+    private function haversineDistance($lat1, $lon1, $lat2, $lon2) {
+        $R = 6371; // Earth's radius in kilometers
+
+        $dLat = deg2rad($lat2 - $lat1);
+        $dLon = deg2rad($lon2 - $lon1);
+
+        $a = sin($dLat / 2) * sin($dLat / 2) +
+             cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
+             sin($dLon / 2) * sin($dLon / 2);
+
+        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
+
+        $d = $R * $c;
+
+        return $d;
     }
     public function rules()
     {
