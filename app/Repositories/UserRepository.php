@@ -32,7 +32,7 @@ class UserRepository
     }
     public function find($id)
     {
-        $user = User::whereid($id)->active()->get();
+        $user = $this->user->whereid($id)->active()->get();
         return $user;
     }
     public function create(array $data)
@@ -74,7 +74,7 @@ class UserRepository
     public function change_status($status , $user_id)
     {
         # code...
-        $user = User::whereid($user_id)->update([
+        $user = $this->user->whereid($user_id)->update([
             'status'=>$status
         ]);
         return $user;
@@ -83,7 +83,7 @@ class UserRepository
     public function user_permission($id)
     {
         # code...
-        $user = User::find($id);
+        $user = $this->user->find($id);
         $role = Role::find($user->role_id);
         $permissions = $role->permissions()->get();
         return $permissions;

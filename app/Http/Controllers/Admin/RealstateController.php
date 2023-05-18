@@ -28,7 +28,7 @@ class RealstateController extends Controller
     {
         $this->repository = $repository;
         $this->authorizationHandler = $authorizationHandler;
-        
+
     }
     public function index()
     {

@@ -46,34 +46,25 @@ class RealstateRepository
         $images = $request['images'] ?? [];
         $tags = $request['tags'] ?? [];
         $attributes = $request['attributes'] ?? [];
-        // Get the category for the real estate object based on the cat_id and cat_type in the input request
-        $category = $this->getCategory($request['cat_id'], $request['cat_type']);
 
-        $request['cat_id'] = $category->id;
-        $request['cat_type'] = get_class($category);
+        $category = RealEstateManager::getCategory($request['cat_id'], $request['cat_type']);
 
-        unset($request['images'], $request['tags'], $request['attributes']);
-        // $request['user_id'] = $user_id;
-        $request['user_id'] = null;
-        // Get an array of tag IDs from the input request
+        RealEstateManager::categoryRequest($category, $request);
+        $realEstateData = $request->except(['images', 'tags', 'attributes']);
+
         $tagIds = collect($tags)->pluck('tag_id')->toArray();
-        // Create a new real estate object with the input request
-        $real_state = Realstate::create($request->all());
 
-        // Associate the real estate object with its category
+        $real_state = $this->real_state->create($realEstateData);
         $real_state->category()->associate($category);
-        // Attach the real estate object to its tags
         $real_state->tags()->attach($tagIds);
-        // Create attributes for the real estate object
-        // $real_state->attributes()->createMany($attributes);
+        $real_state->images()->createMany($images);
         foreach ($attributes as $attribute) {
             $temp = $real_state->attributes()->create($attribute);
             AttributeManager::setTranslation($temp, $attribute);
         }
-        // Create images for the real estate object
-        $real_state->images()->createMany($images);
-        // Set the translations for the real estate object (if applicable)
-        // RealEstateManager::setTranslation($real_state, $request);
+
+        RealEstateManager::setTranslation($real_state, $request);
+
 
         return $real_state;
     }
@@ -85,44 +76,34 @@ class RealstateRepository
         $images = $request['images'] ?? [];
         $tags = $request['tags'] ?? [];
         $attributes = $request['attributes'] ?? [];
-        // Get the category object for the given cat_id and cat_type, and set the corresponding fields in $request
 
-        $category = $this->getCategory($request['cat_id'], $request['cat_type']);
-        $request['cat_id'] = $category->id;
-
-        $request['cat_type'] = get_class($category);
-        unset($request['images'], $request['tags'], $request['attributes']);
+        $category = RealEstateManager::getCategory($request['cat_id'], $request['cat_type']);
+        RealEstateManager::categoryRequest($category, $request);
 
         $tagIds = collect($tags)->pluck('tag_id')->toArray();
 
-        // $request['user_id'] = $user_id;
-        $request['user_id'] = null;
-            // Update the real estate object with the remaining fields in $request
-            $real_state->update($request->all());
-            // Sync the tags with the given tag IDs, or detach them if no tags were provided
-            if (count($tags) > 0) {
-                $real_state->tags()->sync($tagIds);
-            } else {
-                $real_state->tags()->detach();
-            }
-            // Update the attributes with the given request, or delete them if no attributes were provided
-            if (count($attributes) > 0) {
-                $attributeIds = collect($attributes)->pluck('id');
-                $real_state->attributes()->whereIn('id', $attributeIds)->delete();
-                $real_state->attributes()->createMany($attributes);
-            } else {
-                $real_state->attributes()->delete();
-            }
-            // Update the images with the given request, or delete them if no images were provided
-            if (count($images) > 0) {
-                $imageIds = collect($images)->pluck('id');
-                $real_state->images()->whereIn('id', $imageIds)->delete();
-                $real_state->images()->createMany($images);
-            } else {
-                $real_state->images()->delete();
-            }
-            // Update the translations of the real estate object
-            // RealEstateManager::setTranslation($real_state,$request);
+
+        $real_state->update($request->all());
+        if (count($tags) > 0) {
+            $real_state->tags()->sync($tagIds);
+        } else {
+            $real_state->tags()->detach();
+        }
+        if (count($attributes) > 0) {
+            $attributeIds = collect($attributes)->pluck('id');
+            $real_state->attributes()->whereIn('id', $attributeIds)->delete();
+            $real_state->attributes()->createMany($attributes);
+        } else {
+            $real_state->attributes()->delete();
+        }
+        if (count($images) > 0) {
+            $imageIds = collect($images)->pluck('id');
+            $real_state->images()->whereIn('id', $imageIds)->delete();
+            $real_state->images()->createMany($images);
+        } else {
+            $real_state->images()->delete();
+        }
+        RealEstateManager::setTranslation($real_state, $request);
         return $real_state;
     }
     public function delete($request)
@@ -171,59 +152,21 @@ class RealstateRepository
     {
         # code...
         $radius = 5;
-        $array = [];
-        $real_states = Realstate::active()->with(['attributes', 'images', 'category'])->get();
-        foreach ($real_states as $key => $real_state) {
-            # code...
-            $distance = $this->haversineDistance($lat, $long, $real_state->latitude, $real_state->longtitude);
-            if ($distance <= $radius) {
-                $array[] = $real_state;
-            }
-        }
-        return $array;
+        $real_states = $this->real_state->active()
+            ->with(['attributes', 'images', 'category'])
+            ->whereRaw("ST_Distance_Sphere(point(longtitude, latitude), point(?, ?)) <= ?", [$long, $lat, $radius * 1609.34])
+            ->get();
+
+        return $real_states;
 
 
     }
     public function get_real_estates_by_state($state_id)
     {
         # code...
-        $realEstates = RealState::whereHas('city', function ($query) use ($state_id) {
+        $realEstates = $this->real_state->whereHas('city', function ($query) use ($state_id) {
             $query->where('state_id', $state_id);
         })->get();
         return $realEstates;
-
     }
-    private function getCategory($id, $type)
-    {
-        switch ($type) {
-            case 'categories':
-                return categories::findOrFail($id);
-            case 'subcategory':
-                return sub_categories::findOrFail($id);
-            case 'childcategory':
-                return Childcategory::findOrFail($id);
-            default:
-                throw new Exception('Invalid category type.');
-        }
-    }
-
-
-    private function haversineDistance($lat1, $lon1, $lat2, $lon2)
-    {
-        $R = 6371; // Earth's radius in kilometers
-
-        $dLat = deg2rad($lat2 - $lat1);
-        $dLon = deg2rad($lon2 - $lon1);
-
-        $a = sin($dLat / 2) * sin($dLat / 2) +
-            cos(deg2rad($lat1)) * cos(deg2rad($lat2)) *
-            sin($dLon / 2) * sin($dLon / 2);
-
-        $c = 2 * atan2(sqrt($a), sqrt(1 - $a));
-
-        $d = $R * $c;
-
-        return $d;
-    }
-
 }
