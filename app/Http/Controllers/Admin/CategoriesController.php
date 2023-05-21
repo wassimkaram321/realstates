@@ -3,11 +3,22 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Repositories\CategoriesRepository;
+use Illuminate\Support\Facades\App;
 use App\Models\categories;
 use Illuminate\Http\Request;
+use App\Traits\ResponseTrait;
+use Exception;
 
 class CategoriesController extends Controller
 {
+    use ResponseTrait;
+    protected $repository;
+
+    public function __construct(CategoriesRepository $repository)
+    {
+        $this->repository = $repository;
+    }
     /**
      * Display a listing of the resource.
      *
@@ -25,7 +36,7 @@ class CategoriesController extends Controller
      */
     public function create()
     {
-        return view('categories.create');
+        // return view('categories.create');
     }
 
     /**
@@ -36,22 +47,8 @@ class CategoriesController extends Controller
      */
     public function store(Request $request)
     {
-        $rules = array(
-            'name_en'         => 'required',
-        );
-
-        $validator = validator($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json([
-                'error'          => 'true',
-                'status_message' => $validator->messages()->first()
-            ]);
-        }
-        $category = new categories;
-        $category->setTranslation('name', 'en', $request->input('name_en'));
-        $category->setTranslation('name', 'ar', $request->input('name_ar'));
-        $category->save();
-        return response()->json(['error' => 'false', "message" => "success", 'data' => []]);
+        $data = $this->repository->create($request);
+        return $this->success('success', $data);
     }
 
     /**
@@ -62,36 +59,9 @@ class CategoriesController extends Controller
      */
     public function show(Request $request)
     {
-            $rules = array(
-                'lang'         => 'required',
-            );
-    
-            $validator = validator($request->all(), $rules);
-            if ($validator->fails()) {
-                return response()->json([
-                    'error'          => 'true',
-                    'status_message' => $validator->messages()->first()
-                ]);
-            }
-            $categorys = categories::get();
-            
-            if ($request->lang == 'ar') {
-                foreach ($categorys as $category) {
-                    $data[] = array(
-                        'id'           => $category->id,
-                        'name'         => $category->getTranslation('name', 'ar') ?? '',
-                    );
-                }
-                return response()->json(['error' => 'false', "message" => "success", 'data' => $data]);
-            } else {
-                foreach ($categorys as $category) {
-                    $data[] = array(
-                        'id'           => $category->id,
-                        'name'         => $category->getTranslation('name', 'en') ?? '',
-                    );
-                }
-                return response()->json(['error' => 'false', "message" => "success", 'data' => $data]);
-            }
+        $lang = $request->lang;
+        $data = $this->repository->all($lang);
+        return $this->success('success', $data);
     }
 
     /**
@@ -100,10 +70,12 @@ class CategoriesController extends Controller
      * @param  \App\Models\categories  $categories
      * @return \Illuminate\Http\Response
      */
-    public function edit(categories $categories)
+    public function edit(Request $request)
     {
-        $category = categories::find($categories);
-        return view('categories.edit',compact('category'));
+        // $data = $this->repository->find($request->id);
+        $data = categories::where('id',$request->id)->first();
+        // dd($data);
+        return response()->json(['error' => 'false', "message" => "success", 'data' => $data]);
     }
 
     /**
@@ -113,30 +85,10 @@ class CategoriesController extends Controller
      * @param  \App\Models\categories  $categories
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, categories $categories)
+    public function update(Request $request)
     {
-        $rules = array(
-            'id'         => 'required',
-        );
-
-        $validator = validator($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json([
-                'error'          => 'true',
-                'status_message' => $validator->messages()->first()
-            ]);
-        }
-        $category = categories::find($request->id);
-
-        if ($request->input('name_en') != null) {
-            $category->setTranslation('name', 'en', $request->input('name_en'));
-        }
-        if ($request->input('name_ar') != null) {
-            $category->setTranslation('name', 'ar', $request->input('name_ar'));
-        }
-        $category->save();
-
-        return response()->json(['error' => 'false', "message" => "success", 'data' => []]);
+        $data = $this->repository->update($request);
+        return $this->success('success', $data);    
     }
 
     /**
@@ -147,20 +99,7 @@ class CategoriesController extends Controller
      */
     public function destroy(Request $request)
     {
-        $rules = array(
-            'id'         => 'required',
-        );
-
-        $validator = validator($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json([
-                'error'          => 'true',
-                'status_message' => $validator->messages()->first()
-            ]);
-        }
-        $categorys = categories::find($request->id);
-        $categorys->delete();
-        return response()->json(['error' => 'false', "message" => "success", 'data' => []]);
+        $data = $this->repository->delete($request);
+        return $this->success('success', []);
     }
-    
 }
