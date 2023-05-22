@@ -29,9 +29,7 @@ use App\Http\Controllers\Admin\TagController;
 //login
 
 Route::post('login', [AuthController::class, 'login']);
-// Route::middleware(['auth:sanctum', 'role'])->group(function () {
-// Route::middleware(['auth:sanctum'])->group(function () {
-    
+// Route::group(['middleware' => 'auth:sanctum'], function () {
     //logout
     Route::post('logout', [AuthController::class, 'logout']);
     
@@ -115,7 +113,5 @@ Route::post('login', [AuthController::class, 'login']);
     Route::get('city_real_estates', [RealstateController::class, 'get_real_estates_by_city']);
     Route::get('state_real_estates', [RealstateController::class, 'get_real_estates_by_state']);
     Route::get('nearby_real_estates', [RealstateController::class, 'nearby_real_estates']);
-
-
 
 // });
