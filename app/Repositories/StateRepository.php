@@ -11,7 +11,7 @@ class StateRepository
     protected $state;
     protected $stateManager;
 
-    public function __construct(State $state , StateManager $stateManager)
+    public function __construct(State $state, StateManager $stateManager)
     {
         $this->state = $state;
         $this->stateManager = $stateManager;
@@ -20,7 +20,7 @@ class StateRepository
     // Add your methods here
     public function all($request)
     {
-       
+
     }
 
     public function find($request)
@@ -31,26 +31,30 @@ class StateRepository
 
     public function create($request)
     {
-        $request->merge(['name' => $request->name_en]);
-        $state = $this->state::create($request->all());
-        $this->stateManager->setTranslation($state,$request);
+        $state = $this->state::create([
+            'name' => $request->name_en,
+            $request->all()
+        ]);
+        $this->stateManager->setTranslation($state, $request);
+
         return $state;
+
     }
 
     public function update($request)
     {
-        $request->merge(['name' => $request->name_en]);
         $state = $this->state::findOrFail($request->id);
-        $state->update($request->all());
-        $this->stateManager->setTranslation($state,$request);
+        $state->update([
+            'name' => $request->name_en,
+            $request->all()
+        ]);
+        $this->stateManager->setTranslation($state, $request);
         return $state;
     }
 
     public function delete($request)
     {
-        $state = $this->state::findOrFail($request->id);
-        $state->delete();
-        return $state;
+        return $this->state::findOrFail($request->id)->delete();
     }
 
 }

@@ -31,17 +31,21 @@ class CityRepository
 
     public function create($request)
     {   
-        $request->merge(['name' => $request->name_en]);
-        $city = $this->city::create($request->all());
+        $city = $this->city::create([
+            'name' => $request->name_en,
+            $request->all()
+        ]);
         $this->cityManager->setTranslation($city,$request);
         return $city;
     }
 
     public function update($request)
     {
-        $request->merge(['name' => $request->name_en]);
         $city = $this->city::findOrFail($request->id);
-        $city->update($request->all());
+        $city->update([
+            'name' => $request->name_en,
+            $request->all()
+        ]);
         $this->cityManager->setTranslation($city,$request);
         return $city;
     }

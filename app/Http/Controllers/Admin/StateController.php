@@ -50,23 +50,24 @@ class StateController extends Controller
     public function store(Request $request)
     {
 
+        $this->repository->create($request);
+        return $this->success('success',[]);
+        // $rules = array(
+        //     'name_en' => 'required',
+        // );
 
-        $rules = array(
-            'name_en' => 'required',
-        );
-
-        $validator = validator($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json([
-                'error' => 'true',
-                'status_message' => $validator->messages()->first()
-            ]);
-        }
-        $state = new State;
-        $state->setTranslation('name', 'en', $request->input('name_en'));
-        $state->setTranslation('name', 'ar', $request->input('name_ar'));
-        $state->save();
-        return response()->json(['error' => 'false', "message" => "success", 'data' => []]);
+        // $validator = validator($request->all(), $rules);
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'error' => 'true',
+        //         'status_message' => $validator->messages()->first()
+        //     ]);
+        // }
+        // $state = new State;
+        // $state->setTranslation('name', 'en', $request->input('name_en'));
+        // $state->setTranslation('name', 'ar', $request->input('name_ar'));
+        // $state->save();
+        // return response()->json(['error' => 'false', "message" => "success", 'data' => []]);
     }
 
     /**
@@ -132,28 +133,30 @@ class StateController extends Controller
      */
     public function update(Request $request, State $state)
     {
-        $rules = array(
-            'id' => 'required',
-        );
+        $this->repository->update($request);
+        return $this->success('success',[]);
+        // $rules = array(
+        //     'id' => 'required',
+        // );
 
-        $validator = validator($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json([
-                'error' => 'true',
-                'status_message' => $validator->messages()->first()
-            ]);
-        }
-        $category = State::find($request->id);
+        // $validator = validator($request->all(), $rules);
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'error' => 'true',
+        //         'status_message' => $validator->messages()->first()
+        //     ]);
+        // }
+        // $category = State::find($request->id);
 
-        if ($request->input('name_en') != null) {
-            $category->setTranslation('name', 'en', $request->input('name_en'));
-        }
-        if ($request->input('name_ar') != null) {
-            $category->setTranslation('name', 'ar', $request->input('name_ar'));
-        }
-        $category->save();
+        // if ($request->input('name_en') != null) {
+        //     $category->setTranslation('name', 'en', $request->input('name_en'));
+        // }
+        // if ($request->input('name_ar') != null) {
+        //     $category->setTranslation('name', 'ar', $request->input('name_ar'));
+        // }
+        // $category->save();
 
-        return response()->json(['error' => 'false', "message" => "success", 'data' => []]);
+        // return response()->json(['error' => 'false', "message" => "success", 'data' => []]);
     }
 
     /**
@@ -164,19 +167,21 @@ class StateController extends Controller
      */
     public function destroy(Request $request)
     {
-        $rules = array(
-            'id' => 'required',
-        );
+        $this->repository->delete($request);
+        $this->success('success',[]);
+        // $rules = array(
+        //     'id' => 'required',
+        // );
 
-        $validator = validator($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json([
-                'error' => 'true',
-                'status_message' => $validator->messages()->first()
-            ]);
-        }
-        $categorys = State::find($request->id);
-        $categorys->delete();
-        return response()->json(['error' => 'false', "message" => "success", 'data' => []]);
+        // $validator = validator($request->all(), $rules);
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'error' => 'true',
+        //         'status_message' => $validator->messages()->first()
+        //     ]);
+        // }
+        // $categorys = State::find($request->id);
+        // $categorys->delete();
+        // return response()->json(['error' => 'false', "message" => "success", 'data' => []]);
     }
 }
