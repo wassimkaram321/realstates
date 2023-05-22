@@ -27,7 +27,14 @@ class CategoriesRepository
     {
         App::setlocale($lang);
         $categorys =  $this->category->get();
-        return $categorys;
+        $data = array();
+        foreach ($categorys as $sub_category) {
+                    $data[] = array(
+                        'id'           => $sub_category->id,
+                        'name'         => $sub_category->getTranslation('name', $lang) ?? '',
+                    );
+                }
+        return $data;
     }
     public function find($id)
     {

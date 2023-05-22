@@ -51,7 +51,7 @@ Route::post('login', [AuthController::class, 'login']);
 
     //child_category
     Route::post('/add_child',   [ChildcategoryController::class, 'store'])->name('add_child');
-    Route::get('/edit_child',   [SubCategoriesController::class, 'edit'])->name('edit_child');
+    Route::get('/edit_child',   [ChildcategoryController::class, 'edit'])->name('edit_child');
     Route::get('/get_child',    [ChildcategoryController::class, 'show'])->name('get_child');
     Route::post('delete_child', [ChildcategoryController::class, 'destroy'])->name('delete_child');
     Route::post('update_child', [ChildcategoryController::class, 'update'])->name('update_child');
@@ -59,6 +59,7 @@ Route::post('login', [AuthController::class, 'login']);
     //state
     Route::post('/add_state',   [StateController::class, 'store'])->name('add_state');
     Route::get('/get_state',    [StateController::class, 'show'])->name('get_state');
+    Route::get('/edit_state',   [StateController::class, 'edit'])->name('edit_state');
     Route::post('delete_state', [StateController::class, 'destroy'])->name('delete_state');
     Route::post('update_state', [StateController::class, 'update'])->name('update_state');
 
