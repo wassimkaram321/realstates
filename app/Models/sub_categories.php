@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 use Spatie\Translatable\HasTranslations;
 
 class sub_categories extends Model
@@ -27,4 +28,13 @@ class sub_categories extends Model
     {
         return $this->hasManyThrough(Realstate::class, sub_categories::class, 'id', 'cat_id')->where('cat_type', sub_categories::class);
     }
+    public function toArray()
+    {
+        $attributes = parent::toArray();
+        foreach ($this->getTranslatableAttributes() as $field) {
+            $attributes[$field] = $this->getTranslation($field, App::getLocale());
+        }
+        return $attributes;
+    }
+
 }
