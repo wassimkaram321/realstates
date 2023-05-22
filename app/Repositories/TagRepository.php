@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use App\Manager\TagManager;
 use App\Models\Tag;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
@@ -36,10 +37,12 @@ class TagRepository
      *
      * @return mixed
      */
-    public function all()
+    public function all($request)
     {
+        App::setlocale($request->lang);
         return $this->tag->get(['id','title']);
     }
+
 
     /**
      * Find a tag by ID.

@@ -30,9 +30,9 @@ class RealstateController extends Controller
         $this->authorizationHandler = $authorizationHandler;
 
     }
-    public function index()
+    public function index(RealEstateRequest $request)
     {
-        $data = $this->repository->all();
+        $data = $this->repository->all($request);
         return $this->success('success',RealstateResource::collection($data));
     }
 

@@ -10,6 +10,11 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Throwable;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use App\Traits\ResponseTrait;
+use BadMethodCallException;
+use Facade\FlareClient\Http\Exceptions\NotFound;
+use Illuminate\Database\Eloquent\ModelNotFoundException;
+use Illuminate\Support\ItemNotFoundException;
+use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 class Handler extends ExceptionHandler
 {
@@ -58,6 +63,9 @@ class Handler extends ExceptionHandler
         } else if ($e instanceof AuthenticationException) {
             $code = 403;
             $msg = 'UnAuthenticated';
+        } else if ($e instanceof ModelNotFoundException) {
+            $code = 403;
+            $msg = 'Not Found';
         }
 
         if (!$code || $code > 599 ||  $code <= 0 || gettype($code) !== "integer") {
@@ -67,7 +75,7 @@ class Handler extends ExceptionHandler
         return response()->json([
             'status' => 'Error',
             'message' => $msg,
-            'returnedCode' => $code
+            'data' => []
         ], $code);
 
     }

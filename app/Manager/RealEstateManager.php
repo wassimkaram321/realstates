@@ -14,9 +14,11 @@ class RealEstateManager
     {
 
         $real_state->setTranslation('name', 'en', $request['name']);
-        $real_state->setTranslation('name', 'ar', $request['name_ar']);
+        if($request->has('name_ar'))
+            $real_state->setTranslation('name', 'ar', $request['name_ar']);
         $real_state->setTranslation('description', 'en', $request['description']);
-        $real_state->setTranslation('description', 'ar', $request['description_ar']);
+        if($request->has('name_ar'))
+            $real_state->setTranslation('description', 'ar', $request['description_ar']);
         $real_state->save();
     }
     public static function categoryRequest($category, $request)

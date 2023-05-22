@@ -27,10 +27,10 @@ class AttributeController extends Controller
         $this->authorizationHandler = $authorizationHandler;
         $this->authorize('attributes');
     }
-    public function index()
+    public function index(AttributeRequest $request)
     {
         //
-        $data = $this->repository->all();
+        $data = $this->repository->all($request);
         return $this->success('success', $data);
     }
 

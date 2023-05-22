@@ -23,10 +23,10 @@ class TagController extends Controller
     {
         $this->repository = $repository;
     }
-    public function index()
+    public function index(Request $request)
     {
         //
-        $data = $this->repository->all();
+        $data = $this->repository->all($request);
         return $this->success('success', $data);
     }
 

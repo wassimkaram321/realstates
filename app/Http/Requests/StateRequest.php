@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class TagRequest extends FormRequest
+class StateRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -33,7 +33,7 @@ class TagRequest extends FormRequest
             case 'show':
                 return $this->show();
             case 'destroy':
-                return $this->show();
+                return $this->destroy();
             default:
                 return [];
         }
@@ -42,7 +42,7 @@ class TagRequest extends FormRequest
     {
         # code...
         return [
-            'id' => 'required',
+            'lang'=>'required'
         ];
     }
     public function index()
@@ -55,14 +55,22 @@ class TagRequest extends FormRequest
     {
         # code...
         return [
-            'title' => 'required',
-            // 'title_ar' => 'nullable',
+            'name_en' => 'required',
+           
         ];
     }
     public function update()
     {
 
         return [
+            'id' => 'required',
+
+        ];
+    }
+    public function destroy()
+    {
+        return [
+            'id' => 'required|exists:states,id,message:Invalid state ID',
         ];
     }
     public function getFunctionName(): string

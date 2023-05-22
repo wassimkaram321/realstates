@@ -3,16 +3,29 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
+use App\Http\Resources\StateResource;
 use App\Models\State;
+use App\Repositories\AuthorizationHandler;
+use App\Repositories\StateRepository;
+use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 
 class StateController extends Controller
 {
+    use ResponseTrait;
+    protected $repository;
+    protected $authorizationHandler;
+    public function __construct(StateRepository $repository, AuthorizationHandler $authorizationHandler)
+    {
+        $this->repository = $repository;
+        $this->authorizationHandler = $authorizationHandler;
+    }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
+
     public function index()
     {
         //
@@ -36,14 +49,16 @@ class StateController extends Controller
      */
     public function store(Request $request)
     {
+
+
         $rules = array(
-            'name_en'         => 'required',
+            'name_en' => 'required',
         );
 
         $validator = validator($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json([
-                'error'          => 'true',
+                'error' => 'true',
                 'status_message' => $validator->messages()->first()
             ]);
         }
@@ -62,37 +77,40 @@ class StateController extends Controller
      */
     public function show(Request $request)
     {
-        $rules = array(
-            'lang'         => 'required',
-        );
+       
+        $states = $this->repository->find($request);
+        return $this->success('success',StateResource::collection($states));
+        // $rules = array(
+        //     'lang' => 'required',
+        // );
 
-        $validator = validator($request->all(), $rules);
-        if ($validator->fails()) {
-            return response()->json([
-                'error'          => 'true',
-                'status_message' => $validator->messages()->first()
-            ]);
-        }
-        $states = State::get();
-        
-        if ($request->lang == 'ar') {
-            foreach ($states as $state) {
-                $data[] = array(
-                    'id'           => $state->id,
-                    'name'         => $state->getTranslation('name', 'ar') ?? '',
-                );
-            }
-            return response()->json(['error' => 'false', "message" => "success", 'data' => $data]);
-        } else {
-            foreach ($states as $state) {
-                $data[] = array(
-                    'id'           => $state->id,
-                    'name'         => $state->getTranslation('name', 'en') ?? '',
-                );
-            }
-            return response()->json(['error' => 'false', "message" => "success", 'data' => $data]);
-        }
-}
+        // $validator = validator($request->all(), $rules);
+        // if ($validator->fails()) {
+        //     return response()->json([
+        //         'error' => 'true',
+        //         'status_message' => $validator->messages()->first()
+        //     ]);
+        // }
+        // $states = State::get();
+
+        // if ($request->lang == 'ar') {
+        //     foreach ($states as $state) {
+        //         $data[] = array(
+        //             'id' => $state->id,
+        //             'name' => $state->getTranslation('name', 'ar') ?? '',
+        //         );
+        //     }
+        //     return response()->json(['error' => 'false', "message" => "success", 'data' => $data]);
+        // } else {
+        //     foreach ($states as $state) {
+        //         $data[] = array(
+        //             'id' => $state->id,
+        //             'name' => $state->getTranslation('name', 'en') ?? '',
+        //         );
+        //     }
+        //     return response()->json(['error' => 'false', "message" => "success", 'data' => $data]);
+        // }
+    }
 
     /**
      * Show the form for editing the specified resource.
@@ -115,13 +133,13 @@ class StateController extends Controller
     public function update(Request $request, State $state)
     {
         $rules = array(
-            'id'         => 'required',
+            'id' => 'required',
         );
 
         $validator = validator($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json([
-                'error'          => 'true',
+                'error' => 'true',
                 'status_message' => $validator->messages()->first()
             ]);
         }
@@ -147,13 +165,13 @@ class StateController extends Controller
     public function destroy(Request $request)
     {
         $rules = array(
-            'id'         => 'required',
+            'id' => 'required',
         );
 
         $validator = validator($request->all(), $rules);
         if ($validator->fails()) {
             return response()->json([
-                'error'          => 'true',
+                'error' => 'true',
                 'status_message' => $validator->messages()->first()
             ]);
         }

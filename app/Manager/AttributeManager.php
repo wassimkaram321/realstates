@@ -9,9 +9,11 @@ class AttributeManager
     public static function setTranslation($attributes , $request){
 
         $attributes->setTranslation('title', 'en', $request['title']);
-        $attributes->setTranslation('title', 'ar', $request['title_ar']);
+        if($request->has('title_ar'))
+            $attributes->setTranslation('title', 'ar', $request['title_ar']);
         $attributes->setTranslation('content', 'en', $request['content']);
-        $attributes->setTranslation('content', 'ar', $request['content_ar']);
+        if($request->has('content_ar'))
+            $attributes->setTranslation('content', 'ar', $request['content_ar']);
         $attributes->save();
     }
 }

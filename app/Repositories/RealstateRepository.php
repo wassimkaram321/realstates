@@ -12,6 +12,7 @@ use App\Models\sub_categories;
 use App\Models\User;
 use Attribute;
 use Exception;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -29,13 +30,15 @@ class RealstateRepository
     {
         $this->real_state = $real_state;
     }
-    public function all()
+    public function all($request)
     {
         # code...
+        App::setlocale($request->lang);
         return $this->real_state->active()->with(['attributes', 'images', 'category'])->get();
     }
     public function find($request)
     {
+        App::setlocale($request->lang);
         return $this->real_state->findOrFail($request->id)->with(['attributes', 'images', 'tags'])->active()->get();
 
     }
@@ -127,6 +130,7 @@ class RealstateRepository
     }
     public function get_realstates_by_category($data)
     {
+        App::setlocale($data->lang);
         $category = "";
         if ($data['cat_type'] === 'category') {
             $category = categories::findOrFail($data['cat_id']);

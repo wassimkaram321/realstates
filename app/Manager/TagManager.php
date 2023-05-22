@@ -9,7 +9,8 @@ class TagManager
     public static function setTranslation($tag , $request){
 
         $tag->setTranslation('title', 'en', $request['title']);
-        $tag->setTranslation('title', 'ar', $request['title_ar']);
+        if($request->has('title_ar'))
+            $tag->setTranslation('title', 'ar', $request['title_ar']);
         $tag->save();
     }
 }

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\App;
 use Spatie\Translatable\HasTranslations;
 
 class Tag extends Model
@@ -18,5 +19,14 @@ class Tag extends Model
     public function realstates()
     {
         return $this->belongsToMany(RealState::class, 'real_state_tags');
+    }
+    public function toArray()
+    {
+       
+        $attributes = parent::toArray();
+        foreach ($this->getTranslatableAttributes() as $field) {
+            $attributes[$field] = $this->getTranslation($field, App::getLocale());
+        }
+        return $attributes;
     }
 }
