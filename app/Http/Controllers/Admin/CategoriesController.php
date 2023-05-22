@@ -60,6 +60,7 @@ class CategoriesController extends Controller
     public function show(Request $request)
     {
         $lang = $request->lang;
+        
         $data = $this->repository->all($lang);
         return $this->success('success', $data);
     }

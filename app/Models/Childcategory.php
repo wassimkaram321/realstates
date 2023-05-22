@@ -26,7 +26,11 @@ class Childcategory extends Model
     }
     public function toArray()
     {
-        $attributes = parent::toArray();
+        if (request()->routeIs('edit_child')) {
+            return parent::toArray();
+        }
+    
+        $attributes = [];
         foreach ($this->getTranslatableAttributes() as $field) {
             $attributes[$field] = $this->getTranslation($field, App::getLocale());
         }
