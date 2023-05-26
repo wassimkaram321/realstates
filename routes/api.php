@@ -14,6 +14,7 @@ use App\Http\Controllers\Admin\RolesController;
 use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\RealstateController;
+use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\TagController;
 
 /*
@@ -29,10 +30,10 @@ use App\Http\Controllers\Admin\TagController;
 //login
 
 Route::post('login', [AuthController::class, 'login']);
-// Route::group(['middleware' => 'auth:sanctum'], function () {
+Route::group(['middleware' => 'auth:sanctum'], function () {
     //logout
     Route::post('logout', [AuthController::class, 'logout']);
-    
+
     //category
     Route::get('/category',        [CategoriesController::class, 'show'])->name('category');
     Route::get('/category_edit',   [CategoriesController::class, 'edit'])->name('category_edit');
@@ -85,7 +86,7 @@ Route::post('login', [AuthController::class, 'login']);
     //roles
     Route::get('roles', [RolesController::class,'index']);
     Route::get('role', [RolesController::class,'show']);
-    Route::post('add_permission_to_role', [RolesController::class,'add_permission_to_role']);
+    Route::post('add_permission_to_role', [RolesController::class,'create']);
     Route::post('revoke_permission', [RolesController::class,'revoke_permission']);
     Route::post('remove_permission', [RolesController::class,'remove_permission']);
 
@@ -113,5 +114,12 @@ Route::post('login', [AuthController::class, 'login']);
     Route::get('city_real_estates', [RealstateController::class, 'get_real_estates_by_city']);
     Route::get('state_real_estates', [RealstateController::class, 'get_real_estates_by_state']);
     Route::get('nearby_real_estates', [RealstateController::class, 'nearby_real_estates']);
+    //reviews
+    Route::post('make_review', [ReviewController::class,'makeRealestateReview']);
+    Route::post('delete_review', [ReviewController::class,'deleteRealestateReview']);
+    Route::get('realestate_reviews', [ReviewController::class,'RealestateReviews']);
+    Route::post('review_change_status', [ReviewController::class,'statusChange']);
 
-// });
+
+
+});

@@ -10,12 +10,11 @@ use App\Models\Realstate;
 use App\Models\User;
 use App\Repositories\RealstateRepository;
 use App\Repositories\AuthorizationHandler;
-use Illuminate\Http\Request;
-use App\Traits\ResponseTrait;
-use Exception;
+use Illuminate\Support\Facades\App;
+
 class RealstateController extends Controller
 {
-    use ResponseTrait;
+
     protected $repository;
     protected $authorizationHandler;
 

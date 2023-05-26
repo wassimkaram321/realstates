@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "008ba2a4611411cea8f3724716a03a30",
+    "content-hash": "2f109a2dd45fdce5ad4971153f919fd3",
     "packages": [
         {
             "name": "asm89/stack-cors",
@@ -281,6 +281,68 @@
                 "source": "https://github.com/dflydev/dflydev-dot-access-data/tree/v3.0.2"
             },
             "time": "2022-10-27T11:44:00+00:00"
+        },
+        {
+            "name": "digikraaft/laravel-review-rating",
+            "version": "v2.3.1",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/digikraaft/laravel-review-rating.git",
+                "reference": "1fbdd717876bb983a0d8fe45fd656d987ad7888f"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/digikraaft/laravel-review-rating/zipball/1fbdd717876bb983a0d8fe45fd656d987ad7888f",
+                "reference": "1fbdd717876bb983a0d8fe45fd656d987ad7888f",
+                "shasum": ""
+            },
+            "require": {
+                "laravel/framework": "^8.0|^9.0",
+                "php": "^7.4|^8.0.2"
+            },
+            "require-dev": {
+                "orchestra/testbench": "^6.0|^7.0",
+                "phpunit/phpunit": "^9.0",
+                "spatie/test-time": "^1.2"
+            },
+            "type": "library",
+            "extra": {
+                "laravel": {
+                    "providers": [
+                        "Digikraaft\\ReviewRating\\ReviewRatingServiceProvider"
+                    ]
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Digikraaft\\ReviewRating\\": "src"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "Tim Oladoyinbo",
+                    "email": "dev@digitalkraaft.com",
+                    "homepage": "https://digitalkraaft.com",
+                    "role": "Developer"
+                }
+            ],
+            "description": "Review & Rating system for Laravel",
+            "homepage": "https://github.com/digikraaft/laravel-review-rating",
+            "keywords": [
+                "digikraaft",
+                "laravel",
+                "ratings",
+                "reviews"
+            ],
+            "support": {
+                "issues": "https://github.com/digikraaft/laravel-review-rating/issues",
+                "source": "https://github.com/digikraaft/laravel-review-rating/tree/v2.3.1"
+            },
+            "time": "2022-10-26T16:49:36+00:00"
         },
         {
             "name": "doctrine/inflector",
@@ -2934,6 +2996,67 @@
                 "source": "https://github.com/bobthecow/psysh/tree/v0.11.14"
             },
             "time": "2023-03-28T03:41:01+00:00"
+        },
+        {
+            "name": "pusher/pusher-php-server",
+            "version": "7.2.3",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/pusher/pusher-http-php.git",
+                "reference": "416e68dd5f640175ad5982131c42a7a666d1d8e9"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/pusher/pusher-http-php/zipball/416e68dd5f640175ad5982131c42a7a666d1d8e9",
+                "reference": "416e68dd5f640175ad5982131c42a7a666d1d8e9",
+                "shasum": ""
+            },
+            "require": {
+                "ext-curl": "*",
+                "ext-json": "*",
+                "guzzlehttp/guzzle": "^7.2",
+                "paragonie/sodium_compat": "^1.6",
+                "php": "^7.3|^8.0",
+                "psr/log": "^1.0|^2.0|^3.0"
+            },
+            "require-dev": {
+                "overtrue/phplint": "^2.3",
+                "phpunit/phpunit": "^9.3"
+            },
+            "type": "library",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "5.0-dev"
+                }
+            },
+            "autoload": {
+                "psr-4": {
+                    "Pusher\\": "src/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "description": "Library for interacting with the Pusher REST API",
+            "keywords": [
+                "events",
+                "messaging",
+                "php-pusher-server",
+                "publish",
+                "push",
+                "pusher",
+                "real time",
+                "real-time",
+                "realtime",
+                "rest",
+                "trigger"
+            ],
+            "support": {
+                "issues": "https://github.com/pusher/pusher-http-php/issues",
+                "source": "https://github.com/pusher/pusher-http-php/tree/7.2.3"
+            },
+            "time": "2023-05-17T16:00:06+00:00"
         },
         {
             "name": "ralouphie/getallheaders",
@@ -8172,5 +8295,5 @@
         "php": "^7.3|^8.0"
     },
     "platform-dev": [],
-    "plugin-api-version": "2.2.0"
+    "plugin-api-version": "2.3.0"
 }

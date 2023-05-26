@@ -8,7 +8,6 @@ use App\Http\Resources\CityResource;
 use App\Models\City;
 use App\Repositories\AuthorizationHandler;
 use App\Repositories\CityRepository;
-use App\Traits\ResponseTrait;
 
 class CityController extends Controller
 {
@@ -17,7 +16,6 @@ class CityController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    use ResponseTrait;
     protected $repository;
     protected $authorizationHandler;
     public function __construct(CityRepository $repository , AuthorizationHandler $authorizationHandler)
@@ -63,9 +61,9 @@ class CityController extends Controller
         //         'status_message' => $validator->messages()->first()
         //     ]);
         // }
-       
+
         // $city = new City;
-        
+
         // $array1 = $request->name_en;
         // $array2 = $request->name_ar;
 

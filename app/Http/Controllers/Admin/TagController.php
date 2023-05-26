@@ -7,12 +7,10 @@ use App\Http\Requests\TagRequest;
 use App\Models\Image;
 use App\Repositories\TagRepository;
 use Illuminate\Http\Request;
-use App\Traits\ResponseTrait;
 use Exception;
 
 class TagController extends Controller
 {
-    use ResponseTrait;
     protected $repository;
     /**
      * Display a listing of the resource.
