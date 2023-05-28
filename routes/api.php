@@ -66,6 +66,7 @@ Route::post('login', [AuthController::class, 'login']);
     //city
     Route::post('/add_city',   [CityController::class, 'store'])->name('add_city');
     Route::get('/get_city',    [CityController::class, 'show'])->name('get_state');
+    Route::get('/edit_city',   [CityController::class, 'edit'])->name('edit_city');
     Route::post('delete_city', [CityController::class, 'destroy'])->name('delete_city');
     Route::post('update_city', [CityController::class, 'update'])->name('update_city');
 
