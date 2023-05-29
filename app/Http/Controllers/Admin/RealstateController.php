@@ -105,6 +105,11 @@ class RealstateController extends Controller
         $this->repository->delete($request);
         return $this->success('success', []);
     }
+    public function create_image(RealEstateRequest $request)
+    {
+        $this->repository->create_image($request);
+        return $this->success('success', []);
+    }
     public function change_status(RealEstateRequest $request)
     {
         $this->repository->change_status($request->status,$request->id);

@@ -24,7 +24,8 @@ class ChildcategoryRepository
             $data[] = array(
                 'id'             => $child->id,
                 'name'           => $child->getTranslation('name', $lang) ?? '',
-                'child_category' => $child->sub->getTranslation('name', $lang)
+                'child_category' => $child->sub->getTranslation('name', $lang),
+                'child_category_id' => $child->sub->id,
             );
         }
         return $data;
@@ -38,7 +39,7 @@ class ChildcategoryRepository
     public function create($request)
     {
         $list = $request->list;
-        
+
         for($j = 0;  $j< count($list); $j++)
             {
                 $Child = new Childcategory;

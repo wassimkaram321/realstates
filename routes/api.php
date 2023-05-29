@@ -16,6 +16,7 @@ use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\RealstateController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\DashboardController;
 
 /*
 |--------------------------------------------------------------------------
@@ -114,12 +115,14 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('city_real_estates', [RealstateController::class, 'get_real_estates_by_city']);
     Route::get('state_real_estates', [RealstateController::class, 'get_real_estates_by_state']);
     Route::get('nearby_real_estates', [RealstateController::class, 'nearby_real_estates']);
+    Route::post('real_estate_images', [RealstateController::class, 'create_image']);
     //reviews
     Route::post('make_review', [ReviewController::class,'makeRealestateReview']);
     Route::post('delete_review', [ReviewController::class,'deleteRealestateReview']);
     Route::get('realestate_reviews', [ReviewController::class,'RealestateReviews']);
     Route::post('review_change_status', [ReviewController::class,'statusChange']);
-
+    //dashboard
+    Route::get('dashboard',[DashboardController::class,'index']);
 
 
 });
