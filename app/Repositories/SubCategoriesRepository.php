@@ -25,7 +25,8 @@ class SubCategoriesRepository
                     $data[] = array(
                         'id'           => $sub_category->id,
                         'name'         => $sub_category->getTranslation('name', $lang) ?? '',
-                        'category'     => $sub_category->category->getTranslation('name', $lang)
+                        'category'     => $sub_category->category->getTranslation('name', $lang),
+                        'category_id'     => $sub_category->category->id
                     );
                 }
         return $data;
@@ -41,7 +42,7 @@ class SubCategoriesRepository
         // $rules = array(
         //       'cat_id'   => 'required|exists:categories,id',
         //   );
-  
+
         //   $validator = validator($request->all(), $rules);
         //   if ($validator->fails()) {
         //       return response()->json([

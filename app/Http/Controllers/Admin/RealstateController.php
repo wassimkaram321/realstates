@@ -10,12 +10,11 @@ use App\Models\Realstate;
 use App\Models\User;
 use App\Repositories\RealstateRepository;
 use App\Repositories\AuthorizationHandler;
-use Illuminate\Http\Request;
-use App\Traits\ResponseTrait;
-use Exception;
+use Illuminate\Support\Facades\App;
+
 class RealstateController extends Controller
 {
-    use ResponseTrait;
+
     protected $repository;
     protected $authorizationHandler;
 
@@ -104,6 +103,11 @@ class RealstateController extends Controller
     public function destroy(RealEstateRequest $request)
     {
         $this->repository->delete($request);
+        return $this->success('success', []);
+    }
+    public function create_image(RealEstateRequest $request)
+    {
+        $this->repository->create_image($request);
         return $this->success('success', []);
     }
     public function change_status(RealEstateRequest $request)

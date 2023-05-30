@@ -60,7 +60,7 @@ class CategoriesRepository
         if ($request->input('name_ar') != null) {
             $category->setTranslation('name', 'ar', $request->input('name_ar'));
         }
-        
+
         $category->save();
         return $category;
     }

@@ -8,12 +8,10 @@ use App\Models\Image;
 use App\Repositories\AttributeRepository;
 use App\Repositories\AuthorizationHandler;
 use Illuminate\Http\Request;
-use App\Traits\ResponseTrait;
-use Exception;
 
 class AttributeController extends Controller
 {
-    use ResponseTrait;
+
     protected $repository;
     protected $authorizationHandler;
     /**
@@ -25,7 +23,7 @@ class AttributeController extends Controller
     {
         $this->repository = $repository;
         $this->authorizationHandler = $authorizationHandler;
-        $this->authorize('attributes');
+
     }
     public function index(AttributeRequest $request)
     {

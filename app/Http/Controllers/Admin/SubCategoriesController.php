@@ -6,12 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Models\categories;
 use App\Models\sub_categories;
 use App\Repositories\SubCategoriesRepository;
-use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 
 class SubCategoriesController extends Controller
 {
-    use ResponseTrait;
+
     protected $repository;
 
     public function __construct(SubCategoriesRepository $repository)

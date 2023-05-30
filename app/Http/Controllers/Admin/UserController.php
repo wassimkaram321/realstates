@@ -7,26 +7,24 @@ use App\Http\Resources\UserCollection;
 use App\Http\Resources\UserResource;
 use App\Models\User;
 use App\Repositories\UserRepository;
-use App\Traits\ResponseTrait;
 use Illuminate\Http\Request;
 
 use Exception;
 
 class UserController extends Controller
 {
-    use ResponseTrait;
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
     protected $repository;
-    
+
 
     public function __construct(UserRepository $repository)
     {
         $this->repository = $repository;
-       
+
     }
     public function index()
     {
@@ -37,10 +35,10 @@ class UserController extends Controller
         }
         catch(Exception $ex){
             return $this->error();
-           
+
         }
-        
-        
+
+
     }
 
     /**
@@ -51,7 +49,7 @@ class UserController extends Controller
     public function create()
     {
         //
-        
+
     }
 
     /**
@@ -72,8 +70,8 @@ class UserController extends Controller
             // return $this->error();
             return $ex->getMessage();
         }
-       
-    
+
+
     }
 
     /**
@@ -117,7 +115,7 @@ class UserController extends Controller
     public function update(Request $request)
     {
         //
-        
+
         try{
              $data = $this->validate($request, $this->repository->rules_update());
             $this->repository->update($request->id, $data);
@@ -126,8 +124,8 @@ class UserController extends Controller
         catch(Exception $ex){
             return $this->error();
         }
-       
-     
+
+
     }
 
     /**
@@ -145,9 +143,9 @@ class UserController extends Controller
         }
         catch(Exception $ex){
             return $this->error();
-            
+
         }
-        
+
     }
     public function user_permission(Request $request)
     {
@@ -158,7 +156,7 @@ class UserController extends Controller
         }
         catch(Exception $ex){
             return $this->error();
-            
+
         }
     }
     public function destroy(Request $request)
@@ -172,8 +170,8 @@ class UserController extends Controller
         catch(Exception $ex){
             return $this->error();
         }
-       
-       
+
+
 
     }
 }

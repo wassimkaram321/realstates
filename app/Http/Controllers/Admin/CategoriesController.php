@@ -7,12 +7,11 @@ use App\Repositories\CategoriesRepository;
 use Illuminate\Support\Facades\App;
 use App\Models\categories;
 use Illuminate\Http\Request;
-use App\Traits\ResponseTrait;
 use Exception;
 
 class CategoriesController extends Controller
 {
-    use ResponseTrait;
+
     protected $repository;
 
     public function __construct(CategoriesRepository $repository)
@@ -60,7 +59,7 @@ class CategoriesController extends Controller
     public function show(Request $request)
     {
         $lang = $request->lang;
-        
+
         $data = $this->repository->all($lang);
         return $this->success('success', $data);
     }
@@ -89,7 +88,7 @@ class CategoriesController extends Controller
     public function update(Request $request)
     {
         $data = $this->repository->update($request);
-        return $this->success('success', $data);    
+        return $this->success('success', $data);
     }
 
     /**

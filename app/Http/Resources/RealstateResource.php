@@ -30,11 +30,12 @@ class RealstateResource extends JsonResource
             'longtitude' => $this->longtitude,
             'address' => $this->address,
             'rent_time' => $this->rent_time,
-            'ava' => $this->ava,
+            'available' => $this->ava,
             'tags' => $this->tags,
             'attributes' => $this->attributes,
             'images' => $this->images,
             'categories' => $this->category()->get(),
+            'avg_rating' => $this->averageRating() ?? 0,
         ];
     }
 }
