@@ -15,6 +15,8 @@ use App\Http\Controllers\Admin\ImageController;
 use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\RealstateController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\RequestController;
+use App\Http\Controllers\Admin\RealestatBookingController;
 
 /*
 |--------------------------------------------------------------------------
@@ -72,11 +74,11 @@ Route::post('login', [AuthController::class, 'login']);
 
     //users
     Route::resource('users', UserController::class);
-    Route::post('update_user', [UserController::class, 'update']);
-    Route::post('delete_user', [UserController::class, 'destroy']);
-    Route::get('user', [UserController::class, 'show']);
+    Route::post('update_user',     [UserController::class, 'update']);
+    Route::post('delete_user',     [UserController::class, 'destroy']);
+    Route::get('user',             [UserController::class, 'show']);
     Route::get('user_permissions', [UserController::class, 'user_permission']);
-    Route::post('user_status', [UserController::class, 'change_status']);
+    Route::post('user_status',     [UserController::class, 'change_status']);
 
     //companies
     Route::resource('companies', CompanyController::class);
@@ -103,7 +105,7 @@ Route::post('login', [AuthController::class, 'login']);
     Route::post('delete_tag', [TagController::class,'destroy']);
     Route::post('update_tag', [TagController::class,'update']);
     Route::get('tag_real_states', [TagController::class,'tag_real_states']);
-    Route::get('tag_details', [TagController::class,'show']);
+    Route::get('tag_details', [TagController::class,'show'])->name('tag_details');
 
     //realestates
     Route::resource('realstates', RealstateController::class);
@@ -117,6 +119,19 @@ Route::post('login', [AuthController::class, 'login']);
     Route::get('state_real_estates', [RealstateController::class, 'get_real_estates_by_state']);
     Route::get('nearby_real_estates', [RealstateController::class, 'nearby_real_estates']);
 
-
-
+    //Request 
+    Route::post('add_request',           [RequestController::class,'create']);
+    Route::post('delete_request ',       [RequestController::class,'destroy']);
+    Route::post('update_request_status', [RequestController::class,'update']);
+    Route::get('get_request',            [RequestController::class, 'index']);
+    
+    //Booking
+    Route::get('get  ',                  [RealestatBookingController::class,'index']);
+    Route::post('delete_request ',       [RealestatBookingController::class,'destroy']);
+    Route::post('update_request_status', [RealestatBookingController::class,'update']);
+    Route::get('get_request',            [RealestatBookingController::class, 'index']);
+    Route::get('user_booking',           [RealestatBookingController::class, 'user_booking']);
+    Route::get('user_bookedup',          [RealestatBookingController::class, 'user_bookedup']);
+    
+    
 // });

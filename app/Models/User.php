@@ -70,5 +70,8 @@ class User extends Authenticatable
     {
         return $this->hasMany(Message::class);
     }
-
+    public function realsestate_booking()
+    {
+        return $this->hasMany(Realestat_booking::class);
+    }
 }

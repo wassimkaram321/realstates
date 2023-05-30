@@ -24,6 +24,11 @@ class Childcategory extends Model
     {
         return $this->hasManyThrough(Realstate::class, Childcategory::class, 'id', 'cat_id')->where('cat_type', Childcategory::class);
     }
+    public function realestate()
+    {
+        return $this->hasMany(Realstate::class,'child_id');
+    }
+
     public function toArray()
     {
         if (request()->routeIs('edit_child')) {

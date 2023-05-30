@@ -9,7 +9,7 @@ use App\Models\City;
 use App\Repositories\AuthorizationHandler;
 use App\Repositories\CityRepository;
 use App\Traits\ResponseTrait;
-
+use Illuminate\Http\Request;
 class CityController extends Controller
 {
     /**
@@ -132,9 +132,10 @@ class CityController extends Controller
      * @param  \App\Models\City  $city
      * @return \Illuminate\Http\Response
      */
-    public function edit(City $city)
+    public function edit(Request $request)
     {
-        //
+      $data = City::where('id',$request->id)->first();
+        return response()->json(['error' => 'false', "message" => "success", 'data' => $data]);
     }
 
     /**
@@ -144,7 +145,7 @@ class CityController extends Controller
      * @param  \App\Models\City  $city
      * @return \Illuminate\Http\Response
      */
-    public function update(CityRequest $request)
+    public function update(Request $request)
     {
         $this->repository->update($request);
         return $this->success('success',[]);
