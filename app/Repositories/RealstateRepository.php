@@ -46,18 +46,14 @@ class RealstateRepository
     public function create($request)
     {
         # code...
+
         $tags = $request['tags'] ?? [];
         $attributes = $request['attributes'] ?? [];
-
-        $category = RealEstateManager::getCategory($request['cat_id'], $request['cat_type']);
-
-        RealEstateManager::categoryRequest($category, $request);
         $realEstateData = $request->except(['images', 'tags', 'attributes']);
 
         $tagIds = collect($tags)->pluck('tag_id')->toArray();
 
         $real_state = $this->real_state->create($realEstateData);
-        $real_state->category()->associate($category);
         $real_state->tags()->attach($tagIds);
         foreach ($attributes as $attribute) {
             $temp = $real_state->attributes()->create($attribute);
@@ -71,6 +67,8 @@ class RealstateRepository
     {
         $images = $request['images'] ?? [];
         $real_state = $this->real_state->findOrFail($request->id);
+        $main_image = (new FileManager())->addFile($request->image,'images/real_estate_images');
+        $real_state->image = $main_image;
         foreach ($images as $i) {
             $file_name = (new FileManager())->addFile($i['name'],'images/real_estate_images');
             $image_data = ['name' => $file_name, 'alt' => $i['alt'], 'realstate_id' => $real_state->id];
@@ -79,7 +77,7 @@ class RealstateRepository
         return $real_state;
     }
     //
-    
+
 
     public function update($request)
     {
@@ -88,13 +86,7 @@ class RealstateRepository
         $images = $request['images'] ?? [];
         $tags = $request['tags'] ?? [];
         $attributes = $request['attributes'] ?? [];
-
-        $category = RealEstateManager::getCategory($request['cat_id'], $request['cat_type']);
-        RealEstateManager::categoryRequest($category, $request);
-
         $tagIds = collect($tags)->pluck('tag_id')->toArray();
-
-
         $real_state->update($request->all());
         if (count($tags) > 0) {
             $real_state->tags()->sync($tagIds);
