@@ -7,13 +7,11 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
-use App\Traits\ResponseTrait;
 use Illuminate\Support\Facades\Auth;
 
 class AuthController extends Controller
 {
     //
-    use ResponseTrait;
     public function login(Request $request)
     {
 
@@ -40,7 +38,7 @@ class AuthController extends Controller
 
             $data = ['id' => $user->id, 'name' => $user->name, 'phone' => $user->phone, 'email' => $user->email];
 
-            
+
             if ($hash == 0) {
                 return $this->error_message('wrong password');
             } elseif (!$data) {
@@ -52,12 +50,13 @@ class AuthController extends Controller
                 return $this->success('success', $data_with_token);
             }
         } catch (\Exception $ex) {
-            return $this->error();
-            // return $ex->getMessage();
+            // return $this->error();
+            return $ex->getMessage();
         }
     }
     public function logout(Request $request)
     {
+
         $user = User::find(Auth::id());
         if (!empty($user)) {
             $request->user()->currentAccessToken()->delete();

@@ -1,7 +1,7 @@
 <?php
 
 namespace App\Models;
-
+use Digikraaft\ReviewRating\Traits\HasReviewRating;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
@@ -9,7 +9,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Realstate extends Model
 {
-    use HasFactory,HasTranslations;
+    use HasFactory,HasTranslations ,HasReviewRating;
     protected $table = 'real_states';
     public $translatable  = ['name','description'];
 
@@ -89,8 +89,8 @@ class Realstate extends Model
     {
         $attributes = parent::toArray();
         foreach ($this->getTranslatableAttributes() as $field) {
-            $attributes[$field] = $this->getTranslation($field, App::getLocale());
-        }
+            $attributes[$field] = $this->getTranslation($field, App::getLocale() ?? 'en');
+            }
         return $attributes;
     }
 }

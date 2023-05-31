@@ -8,13 +8,10 @@ use App\Http\Resources\CompanyResourse;
 use App\Models\Company;
 use App\Repositories\CompanyRepository;
 use App\Repositories\AuthorizationHandler;
-use Illuminate\Http\Request;
-use App\Traits\ResponseTrait;
-use Exception;
+
 
 class CompanyController extends Controller
 {
-    use ResponseTrait;
     protected $repository;
     protected $authorizationHandler;
 

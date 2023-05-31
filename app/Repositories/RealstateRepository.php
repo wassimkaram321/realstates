@@ -3,10 +3,12 @@
 namespace App\Repositories;
 
 use App\Manager\AttributeManager;
+use App\Manager\FileManager;
 use App\Manager\RealEstateManager;
 use App\Models\categories;
 use App\Models\Childcategory;
 use App\Models\City;
+use App\Models\Image;
 use App\Models\Realstate;
 use App\Models\sub_categories;
 use App\Models\User;
@@ -40,13 +42,10 @@ class RealstateRepository
     {
         App::setlocale($request->lang);
         return $this->real_state->findOrFail($request->id)->with(['attributes', 'images', 'tags'])->active()->get();
-
     }
     public function create($request)
     {
         # code...
-
-        $images = $request['images'] ?? [];
         $tags = $request['tags'] ?? [];
         $attributes = $request['attributes'] ?? [];
 
@@ -60,17 +59,27 @@ class RealstateRepository
         $real_state = $this->real_state->create($realEstateData);
         // $real_state->category()->associate($category);
         $real_state->tags()->attach($tagIds);
-        $real_state->images()->createMany($images);
         foreach ($attributes as $attribute) {
             $temp = $real_state->attributes()->create($attribute);
             AttributeManager::setTranslation($temp, $attribute);
         }
-
         RealEstateManager::setTranslation($real_state, $request);
-
-
         return $real_state;
     }
+    //
+    public function create_image($request)
+    {
+        $images = $request['images'] ?? [];
+        $real_state = $this->real_state->findOrFail($request->id);
+        foreach ($images as $i) {
+            $file_name = (new FileManager())->addFile($i['name'],'images/real_estate_images');
+            $image_data = ['name' => $file_name, 'alt' => $i['alt'], 'realstate_id' => $real_state->id];
+            $real_state->images()->create($image_data);
+        }
+        return $real_state;
+    }
+    //
+    
 
     public function update($request)
     {
@@ -162,8 +171,6 @@ class RealstateRepository
             ->get();
 
         return $real_states;
-
-
     }
     public function get_real_estates_by_state($state_id)
     {

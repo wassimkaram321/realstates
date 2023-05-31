@@ -4,15 +4,14 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use App\Repositories\ChildcategoryRepository;
-use App\Traits\ResponseTrait;
 use App\Models\Childcategory;
 use Illuminate\Http\Request;
 
 class ChildcategoryController extends Controller
 {
-    use ResponseTrait;
+
     protected $repository;
-    
+
     public function __construct(ChildcategoryRepository $repository)
     {
         $this->repository = $repository;
@@ -85,7 +84,7 @@ class ChildcategoryController extends Controller
     public function update(Request $request)
     {
         $this->repository->update($request);
-        return $this->success('success',[]);    
+        return $this->success('success',[]);
     }
 
     /**
