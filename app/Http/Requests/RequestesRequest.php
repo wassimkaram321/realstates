@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Foundation\Http\FormRequest; 
 
-class RealEstateRequest extends FormRequest
+class RequestesRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -37,12 +37,14 @@ class RealEstateRequest extends FormRequest
             default:
                 return [];
         }
+        return [
+            //
+        ];
     }
     public function show()
     {
         # code...
         return [
-            'id' => 'required',
         ];
     }
     public function index()
@@ -55,27 +57,8 @@ class RealEstateRequest extends FormRequest
     {
         # code...
         return [
-            'name' => 'required',
-            'name_ar' => 'nullable',
-            'description' => 'required',
-            'description_ar' => 'nullable',
-            'city_id'=> 'nullable',
-            'child_id'=> 'nullable',  
-            'sub_id'=> 'nullable',
-            'price' => 'required',
-            'space' => 'required',
-            'slug' => 'nullable',
-            'latitude' => 'nullable',
-            'longtitude' => 'nullable',
-            'cat_id' => 'nullable',
-            'cat_type' => 'nullable',
-            'user_id' => 'nullable',
-            'image' => 'nullable',
-            'status' => 'nullable',
-            'tags' => 'nullable',
-            'attributes' => 'nullable',
-            'images' => 'nullable',
-            'address' => 'nullable',
+            'user_id'     => 'required',
+            'bookedup_id' => 'nullable',
         ];
     }
     public function update()

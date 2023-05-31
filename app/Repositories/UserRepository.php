@@ -32,7 +32,7 @@ class UserRepository
     }
     public function find($id)
     {
-        $user = $this->user->whereid($id)->active()->get();
+        $user = $this->user->whereid($id)->get();
         return $user;
     }
     public function create(array $data)

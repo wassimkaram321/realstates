@@ -16,6 +16,8 @@ use App\Http\Controllers\Admin\AttributeController;
 use App\Http\Controllers\Admin\RealstateController;
 use App\Http\Controllers\Admin\ReviewController;
 use App\Http\Controllers\Admin\TagController;
+use App\Http\Controllers\Admin\RequestController;
+use App\Http\Controllers\Admin\RealestatBookingController;
 use App\Http\Controllers\Admin\DashboardController;
 
 /*
@@ -66,16 +68,17 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     //city
     Route::post('/add_city',   [CityController::class, 'store'])->name('add_city');
     Route::get('/get_city',    [CityController::class, 'show'])->name('get_state');
+    Route::get('/edit_city',   [CityController::class, 'edit'])->name('edit_city');
     Route::post('delete_city', [CityController::class, 'destroy'])->name('delete_city');
     Route::post('update_city', [CityController::class, 'update'])->name('update_city');
 
     //users
     Route::resource('users', UserController::class);
-    Route::post('update_user', [UserController::class, 'update']);
-    Route::post('delete_user', [UserController::class, 'destroy']);
-    Route::get('user', [UserController::class, 'show']);
+    Route::post('update_user',     [UserController::class, 'update']);
+    Route::post('delete_user',     [UserController::class, 'destroy']);
+    Route::get('user',             [UserController::class, 'show']);
     Route::get('user_permissions', [UserController::class, 'user_permission']);
-    Route::post('user_status', [UserController::class, 'change_status']);
+    Route::post('user_status',     [UserController::class, 'change_status']);
 
     //companies
     Route::resource('companies', CompanyController::class);
@@ -102,7 +105,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('delete_tag', [TagController::class,'destroy']);
     Route::post('update_tag', [TagController::class,'update']);
     Route::get('tag_real_states', [TagController::class,'tag_real_states']);
-    Route::get('tag_details', [TagController::class,'show']);
+    Route::get('tag_details', [TagController::class,'show'])->name('tag_details');
 
     //realestates
     Route::resource('realstates', RealstateController::class);
@@ -124,5 +127,21 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     //dashboard
     Route::get('dashboard',[DashboardController::class,'index']);
 
+    //Request 
+    Route::post('add_request',           [RequestController::class,'create']);
+    Route::post('delete_request ',       [RequestController::class,'destroy']);
+    Route::post('update_request_status', [RequestController::class,'update']);
+    Route::get('get_request',            [RequestController::class, 'index']);
+    
+    //Booking
+    Route::get('get  ',                  [RealestatBookingController::class,'index']);
+    Route::post('delete_request ',       [RealestatBookingController::class,'destroy']);
+    Route::post('update_request_status', [RealestatBookingController::class,'update']);
+    Route::get('get_request',            [RealestatBookingController::class, 'index']);
+    Route::get('user_booking',           [RealestatBookingController::class, 'user_booking']);
+    Route::get('user_bookedup',          [RealestatBookingController::class, 'user_bookedup']);
+    
+    
+// });
 
 });

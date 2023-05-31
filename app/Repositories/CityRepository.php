@@ -31,10 +31,7 @@ class CityRepository
 
     public function create($request)
     {   
-        $city = $this->city::create([
-            'name' => $request->name_en,
-            $request->all()
-        ]);
+        $city = $this->city;
         $this->cityManager->setTranslation($city,$request);
         return $city;
     }
@@ -42,12 +39,14 @@ class CityRepository
     public function update($request)
     {
         $city = $this->city::findOrFail($request->id);
-        $city->update([
-            'name' => $request->name_en,
-            $request->all()
-        ]);
         $this->cityManager->setTranslation($city,$request);
         return $city;
+        // $city->update([
+        //     'name' => $request->name_en,
+        //     $request->all()
+        // ]);
+        // $this->cityManager->setTranslation($city,$request);
+        // return $city;
     }
 
     public function delete($request)

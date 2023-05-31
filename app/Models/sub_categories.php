@@ -28,6 +28,11 @@ class sub_categories extends Model
     {
         return $this->hasManyThrough(Realstate::class, sub_categories::class, 'id', 'cat_id')->where('cat_type', sub_categories::class);
     }
+    public function realestate()
+    {
+        return $this->hasMany(Realstate::class,'sub_id');
+    }
+    
     public function toArray()
     {
         if (request()->routeIs('edit_sub')) {

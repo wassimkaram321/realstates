@@ -45,7 +45,7 @@ class AuthController extends Controller
                 return $this->error_message('not found');
             } else {
                 $token = $user->createToken(time())->plainTextToken;
-                $arr = ['token' => $token];
+                $arr = ['token' => $token,'role_id' => $user->role_id];
                 $data_with_token = array_merge($data, $arr);
                 return $this->success('success', $data_with_token);
             }
@@ -56,8 +56,6 @@ class AuthController extends Controller
     }
     public function logout(Request $request)
     {
-
-
 
         $user = User::find(Auth::id());
         if (!empty($user)) {
