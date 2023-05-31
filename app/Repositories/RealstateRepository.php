@@ -49,14 +49,18 @@ class RealstateRepository
 
         $tags = $request['tags'] ?? [];
         $attributes = $request['attributes'] ?? [];
+
+        // $category = RealEstateManager::getCategory($request['cat_id'], $request['cat_type']);
+
+        // RealEstateManager::categoryRequest($category, $request);
         $realEstateData = $request->except(['images', 'tags', 'attributes']);
 
         $tagIds = collect($tags)->pluck('tag_id')->toArray();
 
         $real_state = $this->real_state->create($realEstateData);
-        $real_state->tags()->attach($tagIds);
+
+        // $real_state->category()->associate($category);
         foreach ($attributes as $attribute) {
-            $temp = $real_state->attributes()->create($attribute);
             AttributeManager::setTranslation($temp, $attribute);
         }
         RealEstateManager::setTranslation($real_state, $request);
@@ -86,6 +90,11 @@ class RealstateRepository
         $images = $request['images'] ?? [];
         $tags = $request['tags'] ?? [];
         $attributes = $request['attributes'] ?? [];
+
+
+        // $category = RealEstateManager::getCategory($request['cat_id'], $request['cat_type']);
+        // RealEstateManager::categoryRequest($category, $request);
+
         $tagIds = collect($tags)->pluck('tag_id')->toArray();
         $real_state->update($request->all());
         if (count($tags) > 0) {

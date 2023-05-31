@@ -29,14 +29,23 @@ class categories extends Model
 
     public function sub_categories()
     {
-        return $this->hasMany(sub_categories::class);
+        return $this->hasMany(sub_categories::class,'cat_id');
     }
 
     
     public function realstates()
     {
-        return $this->hasManyThrough(Realstate::class, categories::class, 'id', 'cat_id')->where('cat_type', categories::class);
+        return $this->hasManyThrough(Realstate::class, categories::class, 'id', 'cat_id');
         
        
+    }
+      public function realestate()
+    {
+        return $this->hasMany(Realstate::class);
+    }
+    
+    public function realsestate_booking()
+    {
+        return $this->hasMany(Realestat_booking::class);
     }
 }

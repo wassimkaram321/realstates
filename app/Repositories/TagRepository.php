@@ -40,7 +40,15 @@ class TagRepository
     public function all($request)
     {
         App::setlocale($request->lang);
-        return $this->tag->get(['id','title']);
+        $tags = $this->tag->get(['id','title']);
+        $data = array();
+        foreach ($tags as $tag) {
+                    $data[] = array(
+                        'id'           => $tag->id,
+                        'title'        => $tag->getTranslation('title', $request->lang) ?? '',
+                    );
+                }
+        return $data;
     }
 
 

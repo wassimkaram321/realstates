@@ -19,9 +19,12 @@ class Realstate extends Model
         'price',
         'space',
         'slug',
+        'child_id',
+        'sub_id',
         'latitude',
         'longitude',
         'cat_id',
+        'city_id',
         'cat_type',
         'user_id',
         'image',
@@ -57,10 +60,31 @@ class Realstate extends Model
     {
         return $this->morphTo('cat');
     }
+    public function categories()
+    {
+        return $this->belongsTo(categories::class,'cat_id');
+    }
+     public function sub()
+    {
+        return $this->belongsTo(sub_categories::class,'sub_id');
+    }
+     public function child()
+    {
+        return $this->belongsTo(Childcategory::class,'child_id');
+    }
     public function city()
     {
-        return $this->hasOne('city_id');
+        return $this->belongsTo(City::class,'city_id');
     }
+    public function realsestate_booking()
+    {
+        return $this->hasMany(Realestat_booking::class);
+    }
+    public function owner()
+    {
+        return $this->belongsTo(User::class,'user_id');
+    }
+    
     public function toArray()
     {
         $attributes = parent::toArray();

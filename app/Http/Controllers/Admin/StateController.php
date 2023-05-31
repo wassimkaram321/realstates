@@ -73,11 +73,11 @@ class StateController extends Controller
      * @param  \App\Models\State  $state
      * @return \Illuminate\Http\Response
      */
-    public function edit(State $state)
+    public function edit(Request $request)
     {
-        //
+        $data = State::where('id',$request->id)->first();
+        return response()->json(['error' => 'false', "message" => "success", 'data' => $data]);
     }
-
     /**
      * Update the specified resource in storage.
      *
@@ -102,7 +102,9 @@ class StateController extends Controller
     {
         // $this->authorizationHandler->authorize('state_permission');
         $this->repository->delete($request);
-        $this->success('success',[]);
+
+        return $this->success('success',[]);
+       
  
     }
 }
