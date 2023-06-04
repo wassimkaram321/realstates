@@ -46,7 +46,6 @@ class RealstateRepository
     public function create($request)
     {
         # code...
-
         $tags = $request['tags'] ?? [];
         $attributes = $request['attributes'] ?? [];
 
@@ -58,9 +57,10 @@ class RealstateRepository
         $tagIds = collect($tags)->pluck('tag_id')->toArray();
 
         $real_state = $this->real_state->create($realEstateData);
-
         // $real_state->category()->associate($category);
+        $real_state->tags()->attach($tagIds);
         foreach ($attributes as $attribute) {
+            $temp = $real_state->attributes()->create($attribute);
             AttributeManager::setTranslation($temp, $attribute);
         }
         RealEstateManager::setTranslation($real_state, $request);
@@ -96,7 +96,8 @@ class RealstateRepository
         // RealEstateManager::categoryRequest($category, $request);
 
         $tagIds = collect($tags)->pluck('tag_id')->toArray();
-        $real_state->update($request->all());
+        $realEstateData = $request->except(['images', 'tags', 'attributes']);
+        $real_state->update($realEstateData );
         if (count($tags) > 0) {
             $real_state->tags()->sync($tagIds);
         } else {
@@ -109,13 +110,13 @@ class RealstateRepository
         } else {
             $real_state->attributes()->delete();
         }
-        if (count($images) > 0) {
-            $imageIds = collect($images)->pluck('id');
-            $real_state->images()->whereIn('id', $imageIds)->delete();
-            $real_state->images()->createMany($images);
-        } else {
-            $real_state->images()->delete();
-        }
+        // if (count($images) > 0) {
+        //     $imageIds = collect($images)->pluck('id');
+        //     $real_state->images()->whereIn('id', $imageIds)->delete();
+        //     $real_state->images()->createMany($images);
+        // } else {
+        //     $real_state->images()->delete();
+        // }
         RealEstateManager::setTranslation($real_state, $request);
         return $real_state;
     }

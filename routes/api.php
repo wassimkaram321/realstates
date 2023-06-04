@@ -93,6 +93,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('add_permission_to_role', [RolesController::class,'create']);
     Route::post('revoke_permission', [RolesController::class,'revoke_permission']);
     Route::post('remove_permission', [RolesController::class,'remove_permission']);
+    Route::get('permissions', [RolesController::class,'permissions']);
 
     //images
     Route::resource('images', ImageController::class);
@@ -127,12 +128,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     //dashboard
     Route::get('dashboard',[DashboardController::class,'index']);
 
-    //Request 
+    //Request
     Route::post('add_request',           [RequestController::class,'create']);
     Route::post('delete_request ',       [RequestController::class,'destroy']);
     Route::post('update_request_status', [RequestController::class,'update']);
     Route::get('get_request',            [RequestController::class, 'index']);
-    
+
     //Booking
     Route::get('get  ',                  [RealestatBookingController::class,'index']);
     Route::post('delete_request ',       [RealestatBookingController::class,'destroy']);
@@ -140,8 +141,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('get_request',            [RealestatBookingController::class, 'index']);
     Route::get('user_booking',           [RealestatBookingController::class, 'user_booking']);
     Route::get('user_bookedup',          [RealestatBookingController::class, 'user_bookedup']);
-    
-    
+
+
 // });
 
 });

@@ -31,6 +31,11 @@ class RolesRepository
         # code...
         return $this->role->get(['id','name']);
     }
+    public function permissions()
+    {
+        # code...
+        return Permission::all();
+    }
     public function find($id)
     {
         $user = Role::with('permissions')->whereid($id)->get();
