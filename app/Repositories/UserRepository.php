@@ -28,7 +28,7 @@ class UserRepository
     public function all()
     {
         # code...
-        return $this->user->active()->get();
+        return $this->user->get();
     }
     public function find($id)
     {

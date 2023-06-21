@@ -67,7 +67,8 @@ class RealstateController extends Controller
     public function show(RealEstateRequest $request)
     {
         $data = $this->repository->find($request);
-        return $this->success('success',RealstateResource::collection($data));
+        // dd($data->attributes[0]->id);
+        return $this->success('success',RealstateResource::make($data));
     }
 
     /**
@@ -110,11 +111,23 @@ class RealstateController extends Controller
         $this->repository->create_image($request);
         return $this->success('success', []);
     }
+    
+    public function update_image(RealEstateRequest $request)
+    {
+        $this->repository->update_image($request);
+        return $this->success('success', []);
+    }
     public function change_status(RealEstateRequest $request)
     {
         $this->repository->change_status($request->status,$request->id);
         return $this->success('success',[]);
     }
+     public function change_feature(RealEstateRequest $request)
+    {
+        $this->repository->change_feature($request->feature,$request->id);
+        return $this->success('success',[]);
+    }
+    
     public function get_realstates_by_category(RealEstateRequest $request)
     {
 
@@ -149,4 +162,10 @@ class RealstateController extends Controller
         $data =$this->repository->nearby_real_estates($request->lat,$request->long);
         return $this->success('success',RealstateResource::collection($data));
     }
+      public function get_feature()
+    {
+        $data =$this->repository->get_feature();
+        return $this->success('success',RealstateResource::collection($data));
+    }
+    
 }

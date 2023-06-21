@@ -13,6 +13,7 @@ class Tag extends Model
     public $timestamps = false;
     public $translatable  = ['title'];
     protected $fillable = [
+        'id',
         'title'
     ];
 

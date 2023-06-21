@@ -19,4 +19,30 @@ class DashboardController extends Controller
         $data =  $this->dashboardRepository->index($request);
         return $this->success('success',$data);
     }
+
+    public function last_booking()
+    {
+        $data =  $this->dashboardRepository->last_booking();
+        return $this->success('success',$data);
+    }
+    
+    public function weekly_booking()
+    {
+        $data =  $this->dashboardRepository->weekly_booking();
+        return $this->success('success',$data);
+    }
+    
+    public function countRealEstatesByCity()
+    {
+        $data =  $this->dashboardRepository->countRealEstatesByCity();
+        return $this->success('success',$data);
+    }
+    
+    public function getTopBookedUsers()
+    {
+        $data =  $this->dashboardRepository->getTopBookedUsers();
+        return $this->success('success',$data);
+    }
+    
+
 }

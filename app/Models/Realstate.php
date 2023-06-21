@@ -9,7 +9,7 @@ use Spatie\Translatable\HasTranslations;
 
 class Realstate extends Model
 {
-    use HasFactory,HasTranslations ,HasReviewRating;
+    use HasFactory,HasTranslations ;
     protected $table = 'real_states';
     public $translatable  = ['name','description'];
 
@@ -22,13 +22,14 @@ class Realstate extends Model
         'child_id',
         'sub_id',
         'latitude',
-        'longitude',
+        'longtitude',
         'cat_id',
         'city_id',
         'cat_type',
         'user_id',
         'image',
         'status',
+        'feature',
         'tags',
         'attributes',
         'images',

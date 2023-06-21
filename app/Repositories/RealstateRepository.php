@@ -36,12 +36,15 @@ class RealstateRepository
     {
         # code...
         App::setlocale($request->lang);
-        return $this->real_state->active()->with(['attributes', 'images', 'category'])->get();
+        // dd($this->real_state->get());
+        // return $this->real_state->active()->with(['attributes', 'images', 'category'])->get();
+        return $this->real_state->with(['attributes', 'images', 'tags'])->get();
     }
     public function find($request)
     {
-        App::setlocale($request->lang);
-        return $this->real_state->findOrFail($request->id)->with(['attributes', 'images', 'tags'])->active()->get();
+        $lang = $request->lang ?? 'en';
+        App::setlocale($lang) ;
+         return $this->real_state->where('id',$request->id)->with(['attributes', 'images', 'tags'])->first();
     }
     public function create($request)
     {
@@ -55,7 +58,7 @@ class RealstateRepository
         $realEstateData = $request->except(['images', 'tags', 'attributes']);
 
         $tagIds = collect($tags)->pluck('tag_id')->toArray();
-
+        // dd($realEstateData);
         $real_state = $this->real_state->create($realEstateData);
         // $real_state->category()->associate($category);
         $real_state->tags()->attach($tagIds);
@@ -68,11 +71,18 @@ class RealstateRepository
     }
     //
     public function create_image($request)
-    {
+    {  
+        $real_state = $this->real_state->where('id',$request->id)->first();
+        
+        if($request->file('image'))
+        {
+            $file_name  = (new FileManager())->addFile($request->file('image'),'images/real_estate_images');
+            $real_state->image = $file_name;
+            $real_state->save();
+        }
+        $real_state->images()->delete();
         $images = $request['images'] ?? [];
-        $real_state = $this->real_state->findOrFail($request->id);
-        $main_image = (new FileManager())->addFile($request->image,'images/real_estate_images');
-        $real_state->image = $main_image;
+
         foreach ($images as $i) {
             $file_name = (new FileManager())->addFile($i['name'],'images/real_estate_images');
             $image_data = ['name' => $file_name, 'alt' => $i['alt'], 'realstate_id' => $real_state->id];
@@ -85,17 +95,17 @@ class RealstateRepository
 
     public function update($request)
     {
-        $real_state = Realstate::findOrFail($request->id);
-
-        $images = $request['images'] ?? [];
+        $real_state = Realstate::find($request->id)->first();
+        
+        // $images = $request['images'] ?? [];
         $tags = $request['tags'] ?? [];
-        $attributes = $request['attributes'] ?? [];
-
+        $attributes = $request['attributes'] ?? [];  
 
         // $category = RealEstateManager::getCategory($request['cat_id'], $request['cat_type']);
         // RealEstateManager::categoryRequest($category, $request);
 
         $tagIds = collect($tags)->pluck('tag_id')->toArray();
+
         $realEstateData = $request->except(['images', 'tags', 'attributes']);
         $real_state->update($realEstateData );
         if (count($tags) > 0) {
@@ -104,8 +114,9 @@ class RealstateRepository
             $real_state->tags()->detach();
         }
         if (count($attributes) > 0) {
-            $attributeIds = collect($attributes)->pluck('id');
-            $real_state->attributes()->whereIn('id', $attributeIds)->delete();
+            // $attributeIds = collect($attributes)->pluck('id');
+            // $real_state->attributes()->whereIn('id', $attributeIds)->delete();
+            $real_state->attributes()->delete();
             $real_state->attributes()->createMany($attributes);
         } else {
             $real_state->attributes()->delete();
@@ -119,6 +130,16 @@ class RealstateRepository
         // }
         RealEstateManager::setTranslation($real_state, $request);
         return $real_state;
+    }
+    
+        public function update_image($request)
+    {
+        $image = Image::findOrFail($request->id);
+        $file_name = (new FileManager())->addFile($request->image, 'images/real_estate_images');
+        $image->name =  $file_name;
+        $image->alt  =  $request->alt;
+        $image->save();
+        return  $image;
     }
     public function delete($request)
     {
@@ -182,4 +203,20 @@ class RealstateRepository
         })->get();
         return $realEstates;
     }
+    
+    public function change_feature($feature, $real_state_id)
+    {
+        $real_state = $this->real_state->findOrFail($real_state_id);
+        $real_state->update([
+            'feature' => $feature
+        ]);
+        return $real_state;
+    }
+    public function get_feature()
+    {
+        $feature = $this->real_state->where('feature','1')->get();
+        return $feature;
+    }
+    
+
 }
