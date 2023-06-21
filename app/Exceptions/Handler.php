@@ -60,7 +60,7 @@ class Handler extends ExceptionHandler
         } else if ($e instanceof NotFoundHttpException) {
             $code = 404;
             $msg = 'Route not found';
-        } 
+        }
         // else if ($e instanceof AuthenticationException) {
         //     $code = 403;
         //     $msg = 'UnAuthenticated';
@@ -82,3 +82,4 @@ class Handler extends ExceptionHandler
 
     }
 }
+
