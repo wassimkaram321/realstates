@@ -29,6 +29,7 @@ class CreateRealStatesTable extends Migration
             $table->float('latitude')->nullable();
             $table->float('longtitude')->nullable();
             $table->integer('status')->default(1);
+            $table->integer('feature')->default(0);  
             $table->integer('rent_time')->default(0);
             $table->integer('ava')->default(1);
             $table->timestamps();

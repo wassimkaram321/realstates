@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\URL;
 
 class RealstateResource extends JsonResource
 {
@@ -14,6 +15,23 @@ class RealstateResource extends JsonResource
      */
     public function toArray($request)
     {
+        $baseURL = URL::to('/');
+        $data  = array();
+        $data1 = array();
+        foreach ($this->images as $image) {
+            $data[]=[ 
+                'id'    => $image->id,
+                'alt'   => $image->alt,
+                'name'  => asset($baseURL . '/'.'public/images/real_estate_images/' . $image->name) ?? '',
+                ];
+             }
+        foreach ($this->tags as $tag) {
+            $data1[]=[ 
+                'id'    => $tag->id,
+                'title' => $tag->title,
+                ];
+             }
+             
         return [
             
             'id'          => $this->id,
@@ -26,10 +44,12 @@ class RealstateResource extends JsonResource
             'sub_category'=> $this->sub ? $this->sub->name: null,
             'category'    => $this->categories ? $this->categories->name : null,
             'cat_type'    => $this->cat_type,
-            'status'      => $this->status,
-            'image'       => $this->image,
+            'status'      => $this->status,  
+            'image'       => asset($baseURL . '/'.'public/images/real_estate_images/' . $this->image) ?? '',//$this->image,
             'city'        => $this->city ? $this->city->name : null,
+            'city_id'     => $this->city ? $this->city->id : null,
             'state'       => ($this->city && $this->city->state) ? $this->city->state->name : null,
+            'state_id'    => ($this->city && $this->city->state) ? $this->city->state->id : null,
             'user_name'   => $this->owner->name,
             'price'       => $this->price,
             'space'       => $this->space,
@@ -38,11 +58,11 @@ class RealstateResource extends JsonResource
             'address'     => $this->address,
             'rent_time'   => $this->rent_time,
             'available'   => $this->ava,
-            'tags'        => $this->tags,
+            'tags'        => $data1,//$this->tags,
             'attributes'  => $this->attributes,
-            'images'      => $this->images,
-            'categories'  => $this->category()->get(),
-            'avg_rating'  => $this->averageRating() ?? 0,
+            'images'      => $data,//$this->images,
+            // 'categories'  => $this->category()->get(),
+            // 'avg_rating'  => $this->averageRating() ?? 0,
 
         ];
     }

@@ -34,6 +34,17 @@ class RolesController extends Controller
             return $this->error();
         }
     }
+    public function permissions(Request $request)
+    {
+        # code...
+        try{
+            $data = $this->repository->permissions();
+            return $this->success('success',$data);
+        }
+        catch(Exception $ex){
+            return $this->error();
+        }
+    }
     public function create(Request $request)
     {
         # code...

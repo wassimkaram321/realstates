@@ -13,7 +13,7 @@ class Message extends Model
  *
  * @var array
  */
-protected $fillable = ['message'];
+protected $fillable = ['id','message','user_id','receiver_id'];
 
 public function user()
 {

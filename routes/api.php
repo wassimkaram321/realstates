@@ -19,6 +19,7 @@ use App\Http\Controllers\Admin\TagController;
 use App\Http\Controllers\Admin\RequestController;
 use App\Http\Controllers\Admin\RealestatBookingController;
 use App\Http\Controllers\Admin\DashboardController;
+use App\Http\Controllers\Admin\AdController;
 
 /*
 |--------------------------------------------------------------------------
@@ -33,9 +34,18 @@ use App\Http\Controllers\Admin\DashboardController;
 //login
 
 Route::post('login', [AuthController::class, 'login']);
+
+Route::get('Ads', [AdController::class, 'index']);
+Route::get('Ad-show',  [AdController::class, 'show']);
+
 Route::group(['middleware' => 'auth:sanctum'], function () {
     //logout
     Route::post('logout', [AuthController::class, 'logout']);
+ 
+
+    Route::get('/chat', [ChatsController::class, 'index']);
+    Route::get('messages', [ChatsController::class, 'fetchMessages']);
+    Route::post('messages',[ChatsController::class,'sendMessage']);
 
     //category
     Route::get('/category',        [CategoriesController::class, 'show'])->name('category');
@@ -93,6 +103,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('add_permission_to_role', [RolesController::class,'create']);
     Route::post('revoke_permission', [RolesController::class,'revoke_permission']);
     Route::post('remove_permission', [RolesController::class,'remove_permission']);
+    Route::get('permissions', [RolesController::class,'permissions']);
 
     //images
     Route::resource('images', ImageController::class);
@@ -112,6 +123,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('delete_real_states', [RealstateController::class,'destroy']);
     Route::post('update_real_state', [RealstateController::class,'update']);
     Route::post('real_state_status', [RealstateController::class, 'change_status']);
+    Route::post('change_feature', [RealstateController::class, 'change_feature']);
+    Route::get('get_feature', [RealstateController::class, 'get_feature']);
     Route::get('real_state', [RealstateController::class, 'show']);
     Route::get('real_state_by_cat', [RealstateController::class, 'get_realstates_by_category']);
     Route::get('user_real_estates', [RealstateController::class, 'get_user_real_estates']);
@@ -119,13 +132,19 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('state_real_estates', [RealstateController::class, 'get_real_estates_by_state']);
     Route::get('nearby_real_estates', [RealstateController::class, 'nearby_real_estates']);
     Route::post('real_estate_images', [RealstateController::class, 'create_image']);
+    Route::post('update_estate_images', [RealstateController::class, 'update_image']);  
+
     //reviews
     Route::post('make_review', [ReviewController::class,'makeRealestateReview']);
     Route::post('delete_review', [ReviewController::class,'deleteRealestateReview']);
     Route::get('realestate_reviews', [ReviewController::class,'RealestateReviews']);
     Route::post('review_change_status', [ReviewController::class,'statusChange']);
     //dashboard
-    Route::get('dashboard',[DashboardController::class,'index']);
+    Route::get('dashboard',        [DashboardController::class,'index']);
+    Route::get('weekly_booking',   [DashboardController::class,'weekly_booking']);
+    Route::get('last_booking',     [DashboardController::class,'last_booking']);
+    Route::get('RealEstatesByCity',[DashboardController::class,'countRealEstatesByCity']);
+    Route::get('getTopBookedUsers',[DashboardController::class,'getTopBookedUsers']);
 
     //Request 
     Route::post('add_request',           [RequestController::class,'create']);
@@ -141,6 +160,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('user_booking',           [RealestatBookingController::class, 'user_booking']);
     Route::get('user_bookedup',          [RealestatBookingController::class, 'user_bookedup']);
     
+    //Ads
+    Route::post('Ad-store',    [AdController::class, 'store']);
+    Route::post('Ad-update',   [AdController::class, 'update']);
+    Route::delete('Ad-delete', [AdController::class, 'destroy']);
+    Route::post('Ad-update-status',   [AdController::class, 'updateStatus']);
+    Route::post('Ad-click-increment', [AdController::class, 'clickIncrement']);
     
 // });
 

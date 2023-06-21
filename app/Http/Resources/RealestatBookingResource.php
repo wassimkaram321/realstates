@@ -17,8 +17,8 @@ class RealestatBookingResource extends JsonResource
         return [
             'id'             => $this->id,
             'client'         => $this->user->name,
-            'property owner' => $this->realestate->owner->name,
-            'realestate'     => $this->realestate,
+            'property owner' => ($this->realestate && $this->realestate->owner) ? $this->realestate->owner->name : null,
+            'realestate'     => $this->realestate??'',
             'cat_type'       => $this->category->name,
         ];
         // return parent::toArray($request);
