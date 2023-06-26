@@ -60,7 +60,7 @@ class RealEstateRequest extends FormRequest
             'description' => 'required',
             'description_ar' => 'nullable',
             'city_id'=> 'nullable',
-            'child_id'=> 'nullable',  
+            'child_id'=> 'nullable',
             'sub_id'=> 'nullable',
             'price' => 'required',
             'space' => 'required',

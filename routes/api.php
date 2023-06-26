@@ -154,12 +154,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('RealEstatesByCity',[DashboardController::class,'countRealEstatesByCity']);
     Route::get('getTopBookedUsers',[DashboardController::class,'getTopBookedUsers']);
 
-    //Request 
+    //Request
     Route::post('add_request',           [RequestController::class,'create']);
     Route::post('delete_request ',       [RequestController::class,'destroy']);
     Route::post('update_request_status', [RequestController::class,'update']);
     Route::get('get_request',            [RequestController::class, 'index']);
-    
+
     //Booking
     Route::get('get  ',                  [RealestatBookingController::class,'index']);
     Route::post('delete_request ',       [RealestatBookingController::class,'destroy']);
@@ -167,6 +167,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('get_request',            [RealestatBookingController::class, 'index']);
     Route::get('user_booking',           [RealestatBookingController::class, 'user_booking']);
     Route::get('user_bookedup',          [RealestatBookingController::class, 'user_bookedup']);
+
     
     //Ads
     Route::post('Ad-store',    [AdController::class, 'store']);
@@ -180,6 +181,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::delete('package-delete', [PackaeController::class, 'destroy']);
     Route::post('package-update',   [PackageController::class, 'update']);
     
+
+    Route::post('Ad-update-status',   [AdController::class, 'updateStatus']);
+    Route::post('Ad-click-increment', [AdController::class, 'clickIncrement']);
+ 
 // });
 
 });
