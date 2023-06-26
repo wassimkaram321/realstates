@@ -143,6 +143,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('real_estate_images', [RealstateController::class, 'create_image']);
     Route::post('update_estate_images', [RealstateController::class, 'update_image']);
 
+    //favorites realestate
+    Route::post('add-favorite-realestate',    [UserController::class, 'addRealEstateToFavorite']);
+    Route::post('remove-favorite-realestate', [UserController::class, 'removeRealEstateToFavorite']);
+    Route::get('get-favorite-realestates',    [UserController::class, 'getFavoriteRealEstate']);
+
     //reviews
     Route::post('make_review', [ReviewController::class,'makeRealestateReview']);
     Route::post('delete_review', [ReviewController::class,'deleteRealestateReview']);

@@ -175,7 +175,24 @@ class UserController extends Controller
     public function changeEnableNotification(Request $request)
     {
         $data = $this->repository->changeEnableNotification($request);
+        return $this->success($data, 'success');
+    }
 
+    public function addRealEstateToFavorite(Request $request)
+    {
+        $data = $this->repository->addRealEstateToFavorite($request);
+        return $this->success($data, 'success');
+    }
+
+    public function removeRealEstateToFavorite(Request $request)
+    {
+        $data = $this->repository->removeRealEstateToFavorite($request);
+        return $this->success($data, 'success');
+    }
+
+    public function getFavoriteRealEstate(Request $request)
+    {
+        $data = $this->repository->getFavoriteRealEstate($request);
         return $this->success($data, 'success');
     }
 }

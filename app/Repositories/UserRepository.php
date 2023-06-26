@@ -2,11 +2,16 @@
 
 namespace App\Repositories;
 
+use App\Models\Realstate;
 use App\Models\User;
+use Exception;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
+use InvalidArgumentException;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
+use Mockery\Expectation;
+use PhpParser\Node\Expr\Throw_;
 use Spatie\Permission\Models\Role;
 
 //use Your Model
@@ -96,6 +101,33 @@ class UserRepository
         $user->enable_notification = $request->enable_notification;
         $user->save();
         return $user;
+    }
+
+    public function addRealEstateToFavorite($request)
+    {
+        $realestate = Realstate::where('id', $request->realestate_id)->first();
+        if ($realestate->ava == 1) {
+            $user = $this->user->findOrFail(Auth::id());
+            $user->favoriteRealEstates()->attach($request->realestate_id);
+            return $user;
+        } else {
+            throw new InvalidArgumentException();
+        }
+    }
+
+    public function removeRealEstateToFavorite($request)
+    {
+        $user = $this->user->findOrFail(Auth::id());
+        $user->favoriteRealEstates()->detach($request->realestate_id);
+        return $user;
+    }
+
+    public function getFavoriteRealEstate($request)
+    {
+        $user = $this->user->findOrFail(Auth::id());
+        $userFavoriteRealestatesIds = $user->favoriteRealEstates()->pluck('realestate_id');
+        $favoriteRealestates = Realstate::whereIn('id', $userFavoriteRealestatesIds)->app();
+        return $favoriteRealestates;
     }
 
     public function rules()
