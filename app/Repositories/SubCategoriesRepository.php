@@ -25,8 +25,8 @@ class SubCategoriesRepository
                     $data[] = array(
                         'id'           => $sub_category->id,
                         'name'         => $sub_category->getTranslation('name', $lang) ?? '',
-                        'category'     => $sub_category->category->getTranslation('name', $lang),
-                        'category_id'     => $sub_category->category->id
+                      //  'category'     => $sub_category->category->getTranslation('name', $lang),
+                       // 'category_id'     => $sub_category->category->id
                     );
                 }
         return $data;
@@ -71,9 +71,9 @@ class SubCategoriesRepository
         if ($request->input('name_ar') != null) {
             $category->setTranslation('name', 'ar', $request->input('name_ar'));
         }
-        if ($request->input('cat_id') != null) {
-            $category->cat_id = $request->cat_id;
-        }
+        // if ($request->input('cat_id') != null) {
+        //     $category->cat_id = $request->cat_id;
+        // }
         $category->save();
         return $category;
     }

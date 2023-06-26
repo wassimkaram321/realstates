@@ -54,6 +54,19 @@ class AdRepository
         return $model;
     }
 
+    public function UpdateStatus($request)
+    {
+        $ad = $this->Ad->findOrFail($request->id);
+        $ad->is_active = $request->is_active;
+        $ad->save();
+        return $ad;
+    }
+    public function AdClick($request)
+    {
+        $ad = $this->Ad->findOrFail($request->id);
+        $ad->increment('click_counts');
+    }
+
     public function delete($id)
     {
         $model = $this->Ad::findOrFail($id);

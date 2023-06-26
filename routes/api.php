@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\RequestController;
 use App\Http\Controllers\Admin\RealestatBookingController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdController;
+use App\Http\Controllers\Admin\PackageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +36,13 @@ use App\Http\Controllers\Admin\AdController;
 
 Route::post('login', [AuthController::class, 'login']);
 
+//Apis for website
+
+//package
+Route::get('packages', [PackageController::class, 'index']);
+Route::get('package-by-id',  [PackageController::class, 'show']);
+
+//ads 
 Route::get('Ads', [AdController::class, 'index']);
 Route::get('Ad-show',  [AdController::class, 'show']);
 
@@ -165,6 +173,15 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('Ad-store',    [AdController::class, 'store']);
     Route::post('Ad-update',   [AdController::class, 'update']);
     Route::delete('Ad-delete', [AdController::class, 'destroy']);
+    Route::post('update-status',   [AdController::class, 'updateStatus']);
+    Route::post('ad-click', [AdController::class, 'AdClick']);
+
+    //package
+    Route::post('pacakge-store',    [PackageController::class, 'store']);
+    Route::delete('package-delete', [PackaeController::class, 'destroy']);
+    Route::post('package-update',   [PackageController::class, 'update']);
+    
+
     Route::post('Ad-update-status',   [AdController::class, 'updateStatus']);
     Route::post('Ad-click-increment', [AdController::class, 'clickIncrement']);
  
