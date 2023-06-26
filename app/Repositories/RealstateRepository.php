@@ -9,9 +9,11 @@ use App\Models\categories;
 use App\Models\Childcategory;
 use App\Models\City;
 use App\Models\Image;
+use App\Models\Notification;
 use App\Models\Realstate;
 use App\Models\sub_categories;
 use App\Models\User;
+use App\Traits\NotificationTrait;
 use Attribute;
 use Exception;
 use Illuminate\Support\Facades\App;
@@ -26,6 +28,7 @@ class RealstateRepository
      * @return string
      *  Return the model
      */
+    use NotificationTrait;
     protected $real_state;
 
     public function __construct(Realstate $real_state)
@@ -43,8 +46,8 @@ class RealstateRepository
     public function find($request)
     {
         $lang = $request->lang ?? 'en';
-        App::setlocale($lang) ;
-         return $this->real_state->where('id',$request->id)->with(['attributes', 'images', 'tags'])->first();
+        App::setlocale($lang);
+        return $this->real_state->where('id', $request->id)->with(['attributes', 'images', 'tags'])->first();
     }
     public function create($request)
     {
@@ -71,34 +74,33 @@ class RealstateRepository
     }
     //
     public function create_image($request)
-    {  
-        $real_state = $this->real_state->where('id',$request->id)->first();
-        
-        if($request->file('image'))
-        {
-            $file_name  = (new FileManager())->addFile($request->file('image'),'images/real_estate_images');
+    {
+        $real_state = $this->real_state->where('id', $request->id)->first();
+
+        if ($request->file('image')) {
+            $file_name  = (new FileManager())->addFile($request->file('image'), 'images/real_estate_images');
             $real_state->image = $file_name;
             $real_state->save();
         }
         $real_state->images()->delete();
         $images = $request['images'] ?? [];
         foreach ($images as $i) {
-            $file_name = (new FileManager())->addFile($i['name'],'images/real_estate_images');
+            $file_name = (new FileManager())->addFile($i['name'], 'images/real_estate_images');
             $image_data = ['name' => $file_name, 'alt' => $i['alt'], 'realstate_id' => $real_state->id];
             $real_state->images()->create($image_data);
         }
         return $real_state;
     }
     //
-    
+
 
     public function update($request)
     {
         $real_state = Realstate::find($request->id)->first();
-        
+
         // $images = $request['images'] ?? [];
         $tags = $request['tags'] ?? [];
-        $attributes = $request['attributes'] ?? [];  
+        $attributes = $request['attributes'] ?? [];
 
         // $category = RealEstateManager::getCategory($request['cat_id'], $request['cat_type']);
         // RealEstateManager::categoryRequest($category, $request);
@@ -106,7 +108,7 @@ class RealstateRepository
         $tagIds = collect($tags)->pluck('tag_id')->toArray();
 
         $realEstateData = $request->except(['images', 'tags', 'attributes']);
-        $real_state->update($realEstateData );
+        $real_state->update($realEstateData);
         if (count($tags) > 0) {
             $real_state->tags()->sync($tagIds);
         } else {
@@ -130,8 +132,8 @@ class RealstateRepository
         RealEstateManager::setTranslation($real_state, $request);
         return $real_state;
     }
-    
-        public function update_image($request)
+
+    public function update_image($request)
     {
         $image = Image::findOrFail($request->id);
         $file_name = (new FileManager())->addFile($request->image, 'images/real_estate_images');
@@ -152,11 +154,25 @@ class RealstateRepository
 
     public function change_status($status, $real_state_id)
     {
-        # code...
         $real_state = $this->real_state->findOrFail($real_state_id);
         $real_state->update([
             'status' => $status
         ]);
+
+        $user = User::where('id', $real_state->user_id)->where('enable_notification', 1)->first();
+
+        if (isset($user)) {
+            $body = $real_state->name . "'s status has been updated.";
+            $notification = Notification::create([
+                'title' => 'real estate',
+                'body'  => $body,
+            ]);
+            $notification->users()->attach(['user_id' => $user->id]);
+            if (isset($user->device_token)) {
+                $this->send_notification($user->device_token, 'real estate', $body);
+            }
+        }
+
         return $real_state;
     }
     public function get_realstates_by_category($data)
@@ -202,7 +218,7 @@ class RealstateRepository
         })->get();
         return $realEstates;
     }
-    
+
     public function change_feature($feature, $real_state_id)
     {
         $real_state = $this->real_state->findOrFail($real_state_id);
@@ -213,9 +229,7 @@ class RealstateRepository
     }
     public function get_feature()
     {
-        $feature = $this->real_state->where('feature','1')->get();
+        $feature = $this->real_state->where('feature', '1')->get();
         return $feature;
     }
-    
-
 }

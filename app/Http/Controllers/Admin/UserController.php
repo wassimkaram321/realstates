@@ -170,8 +170,12 @@ class UserController extends Controller
         catch(Exception $ex){
             return $this->error();
         }
+    }
 
+    public function changeEnableNotification(Request $request)
+    {
+        $data = $this->repository->changeEnableNotification($request);
 
-
+        return $this->success($data, 'success');
     }
 }

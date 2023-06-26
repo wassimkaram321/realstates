@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\User;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
@@ -88,6 +89,15 @@ class UserRepository
         $permissions = $role->permissions()->get();
         return $permissions;
     }
+
+    public function changeEnableNotification($request)
+    {
+        $user = $this->user->findOrFail(Auth::id());
+        $user->enable_notification = $request->enable_notification;
+        $user->save();
+        return $user;
+    }
+
     public function rules()
     {
         # code...

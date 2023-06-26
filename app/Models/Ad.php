@@ -17,11 +17,17 @@ class Ad extends Model
         'click_count',
         'is_active',
         'category_id',
+        'user_id',
         'image',
     ];
     public function category()
     {
         return $this->belongsTo(AdCategory::class, 'category_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
     }
     public static function booted()
     {

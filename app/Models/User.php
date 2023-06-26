@@ -30,6 +30,8 @@ class User extends Authenticatable
         'device_id',
         'status',
         'image',
+        'device_token',
+        'remember_token'
     ];
 
     /**
@@ -73,5 +75,16 @@ class User extends Authenticatable
     public function realsestate_booking()
     {
         return $this->hasMany(Realestat_booking::class);
+    }
+    public function ads()
+    {
+        return $this->hasMany(Ad::class);
+    }
+
+    // many to many
+    public function notifications()
+    {
+        return $this->belongsToMany(Notification::class, 'user_notification', 'user_id', 'notification_id')
+            ->withPivot(['seen', 'seen_at'])->orderBy('created_at', 'desc');
     }
 }

@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAdCategoriesTable extends Migration
+class AddNotificationToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,10 @@ class CreateAdCategoriesTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('ad_categories')) {
-
-            Schema::create('ad_categories', function (Blueprint $table) {
-                $table->id();
-                $table->string('name');
-                $table->timestamps();
-            });
-        }
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('device_token')->nullable();
+            $table->boolean('enable_notification')->default(0)->nullable();
+        });
     }
 
     /**
@@ -30,6 +26,8 @@ class CreateAdCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ad_categories');
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 }
