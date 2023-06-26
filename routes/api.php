@@ -190,6 +190,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('notification-unseen-count', [NotificationController::class, 'unseenCount']);
     Route::post('notification-enable',      [UserController::class, 'changeEnableNotification']);
 
+
+
+    Route::post('Ad-update-status',   [AdController::class, 'updateStatus']);
+    Route::post('Ad-click-increment', [AdController::class, 'clickIncrement']);
+
 // });
 
 });

@@ -35,11 +35,11 @@ class RealEstateManager
     public static function getCategory($cat_id, $cat_type)
     {
         switch ($cat_type) {
-            case 'category':
+            case '1':
                 return categories::findOrFail($cat_id);
-            case 'subcategory':
+            case '2':
                 return sub_categories::findOrFail($cat_id);
-            case 'childcategory':
+            case '3':
                 return Childcategory::findOrFail($cat_id);
             default:
                 throw new Exception('Invalid category type.');
