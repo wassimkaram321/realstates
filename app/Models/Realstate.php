@@ -59,9 +59,13 @@ class Realstate extends Model
     {
         return $this->belongsToMany(Tag::class, 'real_state_tags');
     }
+    // public function category()
+    // {
+    //     return $this->morphTo('cat');
+    // }
     public function category()
     {
-        return $this->morphTo('cat');
+        return $this->belongsTo(categories::class,'cat_id');
     }
     public function categories()
     {
@@ -87,7 +91,7 @@ class Realstate extends Model
     {
         return $this->belongsTo(User::class,'user_id');
     }
-    
+
     public function toArray()
     {
         $attributes = parent::toArray();

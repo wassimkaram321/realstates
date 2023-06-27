@@ -82,6 +82,7 @@ class RealstateRepository
         }
         $real_state->images()->delete();
         $images = $request['images'] ?? [];
+
         foreach ($images as $i) {
             $file_name = (new FileManager())->addFile($i['name'],'images/real_estate_images');
             $image_data = ['name' => $file_name, 'alt' => $i['alt'], 'realstate_id' => $real_state->id];
@@ -90,7 +91,7 @@ class RealstateRepository
         return $real_state;
     }
     //
-    
+
 
     public function update($request)
     {
