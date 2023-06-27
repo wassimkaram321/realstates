@@ -48,7 +48,9 @@ class PackageController extends Controller
     public function store(Request $request)
     {
         $data = $this->repository->create($request);
-        return $this->success('success',$data);
+
+        return $this->success('success',PackageResource::make($data));
+
     }
 
     /**

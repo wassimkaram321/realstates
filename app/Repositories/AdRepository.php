@@ -64,6 +64,7 @@ class AdRepository
         $ad->is_active = $request->is_active;
         $ad->save();
 
+
         $user = User::where('id', $ad->user_id)->where('enable_notification', 1)->first();
 
         if (isset($user)) {

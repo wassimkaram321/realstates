@@ -20,8 +20,10 @@ class PackageResource extends JsonResource
             'description' => $this->description,
             'price'       => $this->price,
             'is_active'   => $this->is_active,
-            'start_date'  => $this->start_date ,
-            'end_date'    => $this->end_date,
+            'deuration'   => $this->deuration ,
+            'color'       => $this->color,
+            'feature'     => $this->features,
+
         ];
         //parent::toArray($request);
     }

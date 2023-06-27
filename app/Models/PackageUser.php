@@ -5,10 +5,8 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class PackageFeature extends Model
+class PackageUser extends Model
 {
     use HasFactory;
-
-    protected $fillable = ['id','package_id','featur_id','feature_value'];
-
+    protected $fillable = ['id', 'package_id','user_id'];
 }

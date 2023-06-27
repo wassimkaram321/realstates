@@ -14,8 +14,21 @@ class Package extends Model
     use HasTranslations;
 
     public $translatable  = ['name','description'];
-    protected $fillable = ['id','name','description','is_active','price','start_date','end_date'];
+    protected $fillable = ['id','name','description','is_active','price','deuration','color'];
 
+    public function features()
+    {
+        return $this->belongsToMany(Feature::class, 'package_features', 'package_id', 'featur_id');
+    }
+
+    public function user()
+    {
+        return $this->belongsToMany(User::class);
+    }
+    public function ads()
+    {
+        return $this->hasMany(Ad::class);
+    }
     public function toArray()
     {
         if (request()->routeIs('edit_package')) {

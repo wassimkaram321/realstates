@@ -119,12 +119,26 @@ class RealstateController extends Controller
     {
         $this->repository->change_status($request->status, $request->id);
         return $this->success('success', []);
+
     }
     public function change_feature(RealEstateRequest $request)
     {
         $this->repository->change_feature($request->feature, $request->id);
         return $this->success('success', []);
     }
+    //Recommended
+    public function change_recommended(RealEstateRequest $request)
+    {
+        $this->repository->change_recommended($request->recommended, $request->id);
+        return $this->success('success', []);
+    }
+    public function get_recommended()
+    {
+        $data = $this->repository->get_recommended();
+        return $this->success('success', RealstateResource::collection($data));
+
+    }
+   
 
     public function get_realstates_by_category(RealEstateRequest $request)
     {
