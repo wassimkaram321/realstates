@@ -23,6 +23,7 @@ class PackageResource extends JsonResource
             'deuration'   => $this->deuration ,
             'color'       => $this->color,
             'feature'     => $this->features,
+
         ];
         //parent::toArray($request);
     }

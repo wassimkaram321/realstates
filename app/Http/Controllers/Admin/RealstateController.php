@@ -119,6 +119,7 @@ class RealstateController extends Controller
     {
         $this->repository->change_status($request->status, $request->id);
         return $this->success('success', []);
+
     }
     public function change_feature(RealEstateRequest $request)
     {
@@ -135,7 +136,9 @@ class RealstateController extends Controller
     {
         $data = $this->repository->get_recommended();
         return $this->success('success', RealstateResource::collection($data));
+
     }
+   
 
     public function get_realstates_by_category(RealEstateRequest $request)
     {

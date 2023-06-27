@@ -1,17 +1,19 @@
 <?php
 
 namespace App\Models;
+
 use Digikraaft\ReviewRating\Traits\HasReviewRating;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Spatie\Translatable\HasTranslations;
 
 class Realstate extends Model
 {
-    use HasFactory,HasTranslations ;
+    use HasFactory, HasTranslations;
     protected $table = 'real_states';
-    public $translatable  = ['name','description'];
+    public $translatable  = ['name', 'description'];
 
     protected $fillable = [
         'name',
@@ -49,7 +51,7 @@ class Realstate extends Model
     }
     public function attributes()
     {
-        return $this->hasMany(Attribute::class);
+        return $this->belongsToMany(Attribute::class, 'realestate_attributes', 'realestate_id', 'attribute_id');
     }
     public function images()
     {
@@ -65,23 +67,23 @@ class Realstate extends Model
     // }
     public function category()
     {
-        return $this->belongsTo(categories::class,'cat_id');
+        return $this->belongsTo(categories::class, 'cat_id');
     }
     public function categories()
     {
-        return $this->belongsTo(categories::class,'cat_id');
+        return $this->belongsTo(categories::class, 'cat_id');
     }
-     public function sub()
+    public function sub()
     {
-        return $this->belongsTo(sub_categories::class,'sub_id');
+        return $this->belongsTo(sub_categories::class, 'sub_id');
     }
-     public function child()
+    public function child()
     {
-        return $this->belongsTo(Childcategory::class,'child_id');
+        return $this->belongsTo(Childcategory::class, 'child_id');
     }
     public function city()
     {
-        return $this->belongsTo(City::class,'city_id');
+        return $this->belongsTo(City::class, 'city_id');
     }
     public function realsestate_booking()
     {
@@ -89,15 +91,45 @@ class Realstate extends Model
     }
     public function owner()
     {
-        return $this->belongsTo(User::class,'user_id');
+        return $this->belongsTo(User::class, 'user_id');
     }
+
+    public function favoriteUsers()
+    {
+        return $this->belongsToMany(User::class, 'favorite_realestate', 'realestate_id', 'user_id');
+    }
+
+    public function attributeValues()
+    {
+        return $this->belongsToMany(AttributeValue::class, 'realestate_attributes', 'realestate_id', 'value_id');
+    }
+
 
     public function toArray()
     {
         $attributes = parent::toArray();
         foreach ($this->getTranslatableAttributes() as $field) {
             $attributes[$field] = $this->getTranslation($field, App::getLocale() ?? 'en');
-            }
+        }
         return $attributes;
+    }
+
+    public function scopeApp($query)
+    {
+        $newQuery = $query->get();
+
+        $user = User::where('id', Auth::guard('api')->id())->first();
+
+        foreach ($newQuery as $realestate) {
+
+            $realestate->favorite_status = 0;
+            if (isset($user)) {
+                $fav  = $user->favoriteRealEstates()->where('realestate_id', $realestate->id)->first();
+                if (isset($fav)) {
+                    $realestate->favorite_status = 1;
+                }
+            }
+        }
+        return $newQuery;
     }
 }

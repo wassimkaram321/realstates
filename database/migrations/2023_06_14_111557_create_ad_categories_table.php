@@ -13,11 +13,14 @@ class CreateAdCategoriesTable extends Migration
      */
     public function up()
     {
-        Schema::create('ad_categories', function (Blueprint $table) {
-            $table->id();
-            $table->string('name');
-            $table->timestamps();
-        });
+        if (!Schema::hasTable('ad_categories')) {
+
+            Schema::create('ad_categories', function (Blueprint $table) {
+                $table->id();
+                $table->string('name');
+                $table->timestamps();
+            });
+        }
     }
 
     /**

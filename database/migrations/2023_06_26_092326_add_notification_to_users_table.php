@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAttributesTable extends Migration
+class AddNotificationToUsersTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,9 @@ class CreateAttributesTable extends Migration
      */
     public function up()
     {
-        Schema::create('attributes', function (Blueprint $table) {
-            $table->id();
-            $table->text('title');
-            $table->string('icon')->nullable();
-            $table->timestamps();
-
-
-
+        Schema::table('users', function (Blueprint $table) {
+            $table->string('device_token')->nullable();
+            $table->boolean('enable_notification')->default(0)->nullable();
         });
     }
 
@@ -31,6 +26,8 @@ class CreateAttributesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('attributes');
+        Schema::table('users', function (Blueprint $table) {
+            //
+        });
     }
 }

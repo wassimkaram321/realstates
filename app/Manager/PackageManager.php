@@ -29,6 +29,7 @@ class PackageManager
             
             $packagefeature->save();
         }
+
         return $package;
     }
 }

@@ -25,8 +25,10 @@ class CreateAdsTable extends Migration
                 $table->string('image');
                 $table->unsignedBigInteger('category_id')->nullable();
                 $table->unsignedBigInteger('package_id')->nullable();
+                $table->unsignedBigInteger('user_id')->nullable();
                 $table->timestamps();
                 $table->foreign('category_id')->references('id')->on('ad_categories');
+                $table->foreign('user_id')->references('id')->on('users');
             });
         }
     }

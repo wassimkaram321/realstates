@@ -25,4 +25,5 @@ class Feature extends Model
         }
         return $attributes;
     }
+
 }
