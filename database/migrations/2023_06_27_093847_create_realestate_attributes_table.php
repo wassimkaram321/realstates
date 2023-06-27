@@ -18,6 +18,7 @@ class CreateRealestateAttributesTable extends Migration
             $table->unsignedBigInteger('attribute_id');
             $table->unsignedBigInteger('realestate_id');
             $table->text('selected_value');
+            $table->integer('value_id');
             $table->foreign('attribute_id')
             ->references('id')
             ->on('attributes');
