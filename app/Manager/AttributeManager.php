@@ -11,9 +11,13 @@ class AttributeManager
         $attributes->setTranslation('title', 'en', $request['title']);
         // if($request->has('title_ar'))
             $attributes->setTranslation('title', 'ar', $request['title_ar']);
-        $attributes->setTranslation('content', 'en', $request['content']);
-        // if($request->has('content_ar'))
-            $attributes->setTranslation('content', 'ar', $request['content_ar']);
         $attributes->save();
+    }
+    public static function setValueTranslation($value , $request){
+
+        $value->setTranslation('value', 'en', $request['value']);
+        // if($request->has('title_ar'))
+            $value->setTranslation('value', 'ar', $request['value_ar']);
+        $value->save();
     }
 }

@@ -49,7 +49,7 @@ class Realstate extends Model
     }
     public function attributes()
     {
-        return $this->hasMany(Attribute::class);
+        return $this->belongsToMany(Attribute::class, 'realestate_attributes', 'realestate_id', 'attribute_id');
     }
     public function images()
     {
@@ -96,6 +96,12 @@ class Realstate extends Model
     {
         return $this->belongsToMany(User::class, 'favorite_realestate', 'realestate_id', 'user_id');
     }
+
+    public function attributeValues()
+    {
+        return $this->belongsToMany(AttributeValue::class, 'realestate_attributes', 'realestate_id', 'value_id');
+    }
+
 
     public function toArray()
     {
