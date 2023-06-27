@@ -13,20 +13,22 @@ class CreateRequestsTable extends Migration
      */
     public function up()
     {
-        Schema::create('requests', function (Blueprint $table) {
-            $table->id();
-            $table->unsignedBigInteger('user_id');
-            $table->unsignedBigInteger('bookedup_id');
-            $table->string('status');
-            $table->string('type');
-            $table->softDeletes();
-            $table->timestamps();
+        if (!Schema::hasTable('requests')) {
+            Schema::create('requests', function (Blueprint $table) {
+                $table->id();
+                $table->unsignedBigInteger('user_id');
+                $table->unsignedBigInteger('bookedup_id');
+                $table->string('status');
+                $table->string('type');
+                $table->softDeletes();
+                $table->timestamps();
 
-            $table->foreign('user_id')
-            ->references('id')
-            ->on('users')
-            ->onDelete('cascade');
-        });
+                $table->foreign('user_id')
+                    ->references('id')
+                    ->on('users')
+                    ->onDelete('cascade');
+            });
+        }
     }
 
     /**

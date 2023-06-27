@@ -27,10 +27,10 @@ class categories extends Model
         return $attributes;
     }
 
-    public function sub_categories()
-    {
-        return $this->hasMany(sub_categories::class,'cat_id');
-    }
+    // public function sub_categories()
+    // {
+    //     return $this->hasMany(sub_categories::class,'cat_id');
+    // }
 
     
     public function realstates()

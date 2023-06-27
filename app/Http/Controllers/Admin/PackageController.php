@@ -3,27 +3,30 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Models\Ad;
-use App\Repositories\AdRepository;
+use App\Http\Resources\PackageResource;
+use App\Manager\PackageManager;
+use App\Models\Package;
+use App\Repositories\PackageRepository;
 use Illuminate\Http\Request;
 
-class AdController extends Controller
+class PackageController extends Controller
 {
     protected $repository;
 
-    public function __construct(AdRepository $repository)
+    public function __construct(PackageRepository $repository)
     {
-        $this->repository = $repository;
+        $this->repository     = $repository;
+       
     }
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function index()
+    public function index(Request $request)
     {
-        $data = $this->repository->all();
-        return $this->success('success',$data);
+        $data = $this->repository->all($request);
+        return $this->success('success', PackageResource::collection($data));
     }
 
     /**
@@ -31,9 +34,9 @@ class AdController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function create(Request $request)
+    public function create()
     {
-       //
+        //
     }
 
     /**
@@ -45,28 +48,28 @@ class AdController extends Controller
     public function store(Request $request)
     {
         $data = $this->repository->create($request);
-        return $this->success('success',$data);
+        return $this->success('success',PackageResource::make($data));
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  \App\Models\Ad  $ad
+     * @param  \App\Models\Package  $package
      * @return \Illuminate\Http\Response
      */
     public function show(Request $request)
     {
         $data = $this->repository->find($request->id);
-        return $this->success('success',$data);
+        return $this->success('success',PackageResource::make($data));
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  \App\Models\Ad  $ad
+     * @param  \App\Models\Package  $package
      * @return \Illuminate\Http\Response
      */
-    public function edit(Ad $ad)
+    public function edit(Package $package)
     {
         //
     }
@@ -75,35 +78,24 @@ class AdController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Ad  $ad
+     * @param  \App\Models\Package  $package
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request)
+    public function update(Request $request, Package $package)
     {
         $data = $this->repository->update($request);
-        return $this->success('success',$data);
+        return $this->success('success',PackageResource::make($data));
     }
-    public function UpdateStatus(Request $request)
-    {
-        $this->repository->UpdateStatus($request);
-        return $this->success([], 'success');
-    }
-    public function AdClick(Request $request)
-    {
-        $this->repository->AdClick($request);
-        return $this->success([], 'success');
-    }
-
 
     /**
      * Remove the specified resource from storage.
      *
-     * @param  \App\Models\Ad  $ad
+     * @param  \App\Models\Package  $package
      * @return \Illuminate\Http\Response
      */
     public function destroy(Request $request)
     {
-        $this->repository->delete($request->id);
-        return $this->success('success','');
+        $data = $this->repository->delete($request->id);
+        return $this->success('success',[]);
     }
 }

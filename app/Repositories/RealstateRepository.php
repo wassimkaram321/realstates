@@ -202,7 +202,6 @@ class RealstateRepository
         })->get();
         return $realEstates;
     }
-    
     public function change_feature($feature, $real_state_id)
     {
         $real_state = $this->real_state->findOrFail($real_state_id);
@@ -215,6 +214,20 @@ class RealstateRepository
     {
         $feature = $this->real_state->where('feature','1')->get();
         return $feature;
+    }
+    //Recommended
+    public function change_recommended($recommended, $real_state_id)
+    {
+        $real_state = $this->real_state->findOrFail($real_state_id);
+        $real_state->update([
+            'Recommended' => $recommended
+        ]);
+        return $real_state;
+    }
+    public function get_recommended()
+    {
+        $Recommended = $this->real_state->where('Recommended','1')->get();
+        return $Recommended;
     }
     
 

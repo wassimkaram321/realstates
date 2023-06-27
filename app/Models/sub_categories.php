@@ -15,10 +15,10 @@ class sub_categories extends Model
     public $translatable  = ['name'];
     protected $fillable = ['id','cat_id','name'];
 
-    public function category()
-    {
-        return $this->belongsTo(categories::class, 'cat_id');
-    }
+    // public function category()
+    // {
+    //     return $this->belongsTo(categories::class, 'cat_id');
+    // }
     public function child()
     {
         return $this->hasMany(Childcategory::class);

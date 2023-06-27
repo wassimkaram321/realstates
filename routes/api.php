@@ -20,6 +20,8 @@ use App\Http\Controllers\Admin\RequestController;
 use App\Http\Controllers\Admin\RealestatBookingController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdController;
+use App\Http\Controllers\Admin\PackageController;
+use App\Http\Controllers\Admin\FeatureController;
 
 /*
 |--------------------------------------------------------------------------
@@ -35,6 +37,13 @@ use App\Http\Controllers\Admin\AdController;
 
 Route::post('login', [AuthController::class, 'login']);
 
+//Apis for website
+
+//package
+Route::get('packages', [PackageController::class, 'index']);
+Route::get('package-by-id',  [PackageController::class, 'show']);
+
+//ads 
 Route::get('Ads', [AdController::class, 'index']);
 Route::get('Ad-show',  [AdController::class, 'show']);
 
@@ -125,6 +134,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('real_state_status', [RealstateController::class, 'change_status']);
     Route::post('change_feature', [RealstateController::class, 'change_feature']);
     Route::get('get_feature', [RealstateController::class, 'get_feature']);
+    Route::get('get_recommended', [RealstateController::class, 'get_recommended']);
+    Route::post('change_recommended', [RealstateController::class, 'change_recommended']);
     Route::get('real_state', [RealstateController::class, 'show']);
     Route::get('real_state_by_cat', [RealstateController::class, 'get_realstates_by_category']);
     Route::get('user_real_estates', [RealstateController::class, 'get_user_real_estates']);
@@ -164,8 +175,16 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('Ad-store',    [AdController::class, 'store']);
     Route::post('Ad-update',   [AdController::class, 'update']);
     Route::delete('Ad-delete', [AdController::class, 'destroy']);
-    Route::post('Ad-update-status',   [AdController::class, 'updateStatus']);
-    Route::post('Ad-click-increment', [AdController::class, 'clickIncrement']);
+    Route::post('update-status',   [AdController::class, 'updateStatus']);
+    Route::post('ad-click', [AdController::class, 'AdClick']);
+
+    //package
+    Route::post('pacakge-store',    [PackageController::class, 'store']);
+    Route::delete('package-delete', [PackaeController::class, 'destroy']);
+    Route::post('package-update',   [PackageController::class, 'update']);
+
+    //feature
+    Route::get('get_feature', [FeatureController::class,'index']);
     
 // });
 
