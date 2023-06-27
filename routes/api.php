@@ -20,8 +20,9 @@ use App\Http\Controllers\Admin\RequestController;
 use App\Http\Controllers\Admin\RealestatBookingController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdController;
-use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\PackageController;
+use App\Http\Controllers\Admin\FeatureController;
+use App\Http\Controllers\Admin\NotificationController;
 
 /*
 |--------------------------------------------------------------------------
@@ -118,7 +119,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::resource('images', ImageController::class);
 
     //attributes
-    Route::resource('attributes', AttributeController::class);
+    Route::get('attributes', [AttributeController::class,'index']);
+    Route::get('attribute', [AttributeController::class,'show']);
+    Route::post('attribute-add', [AttributeController::class,'store']);
+    Route::post('attribute-update', [AttributeController::class,'update']);
+    Route::post('attribute-delete', [AttributeController::class,'destroy']);
 
     //tags
     Route::resource('tags', TagController::class);
@@ -134,6 +139,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('real_state_status', [RealstateController::class, 'change_status']);
     Route::post('change_feature', [RealstateController::class, 'change_feature']);
     Route::get('get_feature', [RealstateController::class, 'get_feature']);
+    Route::get('get_recommended', [RealstateController::class, 'get_recommended']);
+    Route::post('change_recommended', [RealstateController::class, 'change_recommended']);
     Route::get('real_state', [RealstateController::class, 'show']);
     Route::get('real_state_by_cat', [RealstateController::class, 'get_realstates_by_category']);
     Route::get('user_real_estates', [RealstateController::class, 'get_user_real_estates']);
@@ -186,6 +193,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::delete('package-delete', [PackaeController::class, 'destroy']);
     Route::post('package-update',   [PackageController::class, 'update']);
 
+    //feature
+    Route::get('get_feature', [FeatureController::class,'index']);
 
     //notifications
     Route::get('notifications',      [NotificationController::class, 'index']);

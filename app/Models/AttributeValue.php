@@ -5,23 +5,20 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\App;
-use Illuminate\Support\Facades\DB;
 use Spatie\Translatable\HasTranslations;
 
-class Attribute extends Model
+class AttributeValue extends Model
 {
-    use HasFactory,HasTranslations;
-    public $translatable  = ['title'];
-    protected $fillable = [
-        'title','icon'
-    ];
-    public function realstate()
+    use HasFactory;
+    use HasTranslations;
+    public $translatable  = ['value'];
+    public $table = 'attribute_values';
+    protected $fillable = ['attribute_id','value'];
+    public $with = 'attribute';
+
+    public function attribute()
     {
-        return $this->belongsToMany(Realstate::class,'realestate_attributes','attribute_id','realestate_id');
-    }
-    public function values()
-    {
-        return $this->hasMany(AttributeValue::class);
+        return $this->belongsTo(Attribute::class);
     }
     public function toArray()
     {
@@ -30,5 +27,9 @@ class Attribute extends Model
             $attributes[$field] = $this->getTranslation($field, App::getLocale() ?? 'en');
         }
         return $attributes;
+    }
+    public function attributeValues()
+    {
+        return $this->belongsToMany(AttributeValue::class, 'realestate_attributes','value_id','realestate_id');
     }
 }

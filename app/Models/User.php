@@ -76,6 +76,10 @@ class User extends Authenticatable
     {
         return $this->hasMany(Realestat_booking::class);
     }
+    public function Package()
+    {
+        return $this->belongsToMany(Package::class);
+    }
     public function ads()
     {
         return $this->hasMany(Ad::class);

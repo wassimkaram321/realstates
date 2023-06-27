@@ -19,8 +19,7 @@ class CreatePackagesTable extends Migration
             $table->string('description');
             $table->integer('is_active')->default(0);
             $table->double('price')->default(0);
-            // $table->date('start_date');
-            // $table->date('end_date');
+            $table->string('colore');
             $table->integer('deuration')->default(0);
             $table->timestamps();
         });

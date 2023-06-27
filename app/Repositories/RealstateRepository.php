@@ -30,44 +30,43 @@ class RealstateRepository
      */
     use NotificationTrait;
     protected $real_state;
+    protected $auth;
 
-    public function __construct(Realstate $real_state)
+    public function __construct(Realstate $real_state , AuthorizationHandler $auth)
     {
         $this->real_state = $real_state;
+        $this->auth = $auth;
     }
     public function all($request)
     {
         # code...
         App::setlocale($request->lang);
-        // dd($this->real_state->get());
-        // return $this->real_state->active()->with(['attributes', 'images', 'category'])->get();
-        return $this->real_state->with(['attributes', 'images', 'tags'])->get();
+        return $this->real_state->with(['attributeValues', 'images', 'tags'])->get();
     }
     public function find($request)
     {
         $lang = $request->lang ?? 'en';
         App::setlocale($lang);
-        return $this->real_state->where('id', $request->id)->with(['attributes', 'images', 'tags'])->first();
+        return $this->real_state->where('id', $request->id)->with(['attributeValues', 'images', 'tags'])->first();
     }
     public function create($request)
     {
         # code...
+        $this->auth->canAdd();
+        
         $tags = $request['tags'] ?? [];
         $attributes = $request['attributes'] ?? [];
-
-        // $category = RealEstateManager::getCategory($request['cat_id'], $request['cat_type']);
-
-        // RealEstateManager::categoryRequest($category, $request);
         $realEstateData = $request->except(['images', 'tags', 'attributes']);
 
         $tagIds = collect($tags)->pluck('tag_id')->toArray();
-        // dd($realEstateData);
+
         $real_state = $this->real_state->create($realEstateData);
-        // $real_state->category()->associate($category);
+
         $real_state->tags()->attach($tagIds);
+
         foreach ($attributes as $attribute) {
-            $temp = $real_state->attributes()->create($attribute);
-            AttributeManager::setTranslation($temp, $attribute);
+            $real_state->attributes()->attach($attribute['id'],[
+                'value_id'=>$attribute['value_id'],]);
         }
         RealEstateManager::setTranslation($real_state, $request);
         return $real_state;
@@ -97,39 +96,30 @@ class RealstateRepository
 
     public function update($request)
     {
-        $real_state = Realstate::find($request->id)->first();
 
-        // $images = $request['images'] ?? [];
+        $real_state = Realstate::whereid($request->id)->first();
+
         $tags = $request['tags'] ?? [];
         $attributes = $request['attributes'] ?? [];
 
-        // $category = RealEstateManager::getCategory($request['cat_id'], $request['cat_type']);
-        // RealEstateManager::categoryRequest($category, $request);
+
 
         $tagIds = collect($tags)->pluck('tag_id')->toArray();
 
         $realEstateData = $request->except(['images', 'tags', 'attributes']);
-        $real_state->update($realEstateData);
+
         if (count($tags) > 0) {
             $real_state->tags()->sync($tagIds);
         } else {
             $real_state->tags()->detach();
         }
-        if (count($attributes) > 0) {
-            // $attributeIds = collect($attributes)->pluck('id');
-            // $real_state->attributes()->whereIn('id', $attributeIds)->delete();
-            $real_state->attributes()->delete();
-            $real_state->attributes()->createMany($attributes);
-        } else {
-            $real_state->attributes()->delete();
+
+        DB::table('realestate_attributes')->where('realestate_id',$real_state->id)->delete();
+        foreach ($attributes as $attribute) {
+            $real_state->attributes()->attach($attribute['id'],[
+                'value_id'=>$attribute['value_id'],]);
         }
-        // if (count($images) > 0) {
-        //     $imageIds = collect($images)->pluck('id');
-        //     $real_state->images()->whereIn('id', $imageIds)->delete();
-        //     $real_state->images()->createMany($images);
-        // } else {
-        //     $real_state->images()->delete();
-        // }
+        $real_state->update($realEstateData);
         RealEstateManager::setTranslation($real_state, $request);
         return $real_state;
     }
@@ -146,6 +136,7 @@ class RealstateRepository
     public function delete($request)
     {
         $real_state = $this->real_state->findOrFail($request->id);
+        DB::table('realestate_attributes')->where('realestate_id',$real_state->id)->delete();
         $real_state->tags()->detach();
         $real_state->attributes()->delete();
         $real_state->images()->delete();
@@ -233,4 +224,20 @@ class RealstateRepository
         $feature = $this->real_state->where('feature', '1')->get();
         return $feature;
     }
+    //Recommended
+    public function change_recommended($recommended, $real_state_id)
+    {
+        $real_state = $this->real_state->findOrFail($real_state_id);
+        $real_state->update([
+            'Recommended' => $recommended
+        ]);
+        return $real_state;
+    }
+    public function get_recommended()
+    {
+        $Recommended = $this->real_state->where('Recommended','1')->get();
+        return $Recommended;
+    }
+    
+
 }

@@ -17,6 +17,7 @@ class Ad extends Model
         'click_count',
         'is_active',
         'category_id',
+        'package_id',
         'user_id',
         'image',
     ];
@@ -24,6 +25,9 @@ class Ad extends Model
     {
         return $this->belongsTo(AdCategory::class, 'category_id');
     }
+    public function package()
+    {
+        return $this->belongsTo(Package::class,'package_id');
 
     public function user()
     {
