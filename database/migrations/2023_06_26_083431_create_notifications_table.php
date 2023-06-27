@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateAdCategoriesTable extends Migration
+class CreateNotificationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,14 +13,12 @@ class CreateAdCategoriesTable extends Migration
      */
     public function up()
     {
-        if (!Schema::hasTable('ad_categories')) {
-
-            Schema::create('ad_categories', function (Blueprint $table) {
-                $table->id();
-                $table->string('name');
-                $table->timestamps();
-            });
-        }
+        Schema::create('notifications', function (Blueprint $table) {
+            $table->id();
+            $table->string("title")->nullable();
+            $table->string("body");
+            $table->timestamps();
+        });
     }
 
     /**
@@ -30,6 +28,6 @@ class CreateAdCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('ad_categories');
+        Schema::dropIfExists('notifications');
     }
 }

@@ -20,6 +20,7 @@ use App\Http\Controllers\Admin\RequestController;
 use App\Http\Controllers\Admin\RealestatBookingController;
 use App\Http\Controllers\Admin\DashboardController;
 use App\Http\Controllers\Admin\AdController;
+use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\PackageController;
 
 /*
@@ -42,14 +43,14 @@ Route::post('login', [AuthController::class, 'login']);
 Route::get('packages', [PackageController::class, 'index']);
 Route::get('package-by-id',  [PackageController::class, 'show']);
 
-//ads 
+//ads
 Route::get('Ads', [AdController::class, 'index']);
 Route::get('Ad-show',  [AdController::class, 'show']);
 
 Route::group(['middleware' => 'auth:sanctum'], function () {
     //logout
     Route::post('logout', [AuthController::class, 'logout']);
- 
+
 
     Route::get('/chat', [ChatsController::class, 'index']);
     Route::get('messages', [ChatsController::class, 'fetchMessages']);
@@ -140,7 +141,12 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('state_real_estates', [RealstateController::class, 'get_real_estates_by_state']);
     Route::get('nearby_real_estates', [RealstateController::class, 'nearby_real_estates']);
     Route::post('real_estate_images', [RealstateController::class, 'create_image']);
-    Route::post('update_estate_images', [RealstateController::class, 'update_image']);  
+    Route::post('update_estate_images', [RealstateController::class, 'update_image']);
+
+    //favorites realestate
+    Route::post('add-favorite-realestate',    [UserController::class, 'addRealEstateToFavorite']);
+    Route::post('remove-favorite-realestate', [UserController::class, 'removeRealEstateToFavorite']);
+    Route::get('get-favorite-realestates',    [UserController::class, 'getFavoriteRealEstate']);
 
     //reviews
     Route::post('make_review', [ReviewController::class,'makeRealestateReview']);
@@ -168,7 +174,6 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::get('user_booking',           [RealestatBookingController::class, 'user_booking']);
     Route::get('user_bookedup',          [RealestatBookingController::class, 'user_bookedup']);
 
-    
     //Ads
     Route::post('Ad-store',    [AdController::class, 'store']);
     Route::post('Ad-update',   [AdController::class, 'update']);
@@ -180,11 +185,21 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('pacakge-store',    [PackageController::class, 'store']);
     Route::delete('package-delete', [PackaeController::class, 'destroy']);
     Route::post('package-update',   [PackageController::class, 'update']);
-    
+
+
+    //notifications
+    Route::get('notifications',      [NotificationController::class, 'index']);
+    Route::get('user-notifications', [NotificationController::class, 'userNotifications']);
+    Route::post('notification-send', [NotificationController::class, 'store']);
+    Route::post('notification-seeAll',      [NotificationController::class, 'seeAll']);
+    Route::get('notification-unseen-count', [NotificationController::class, 'unseenCount']);
+    Route::post('notification-enable',      [UserController::class, 'changeEnableNotification']);
+
+
 
     Route::post('Ad-update-status',   [AdController::class, 'updateStatus']);
     Route::post('Ad-click-increment', [AdController::class, 'clickIncrement']);
- 
+
 // });
 
 });
