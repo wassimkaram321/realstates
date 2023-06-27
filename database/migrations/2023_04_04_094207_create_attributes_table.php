@@ -23,7 +23,7 @@ class CreateAttributesTable extends Migration
             $table->foreign('realstate_id')
             ->references('id')
             ->on('real_states');
-           
+
         });
     }
 
