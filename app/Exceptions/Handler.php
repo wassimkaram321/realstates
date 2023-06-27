@@ -14,6 +14,7 @@ use BadMethodCallException;
 use Facade\FlareClient\Http\Exceptions\NotFound;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
 use Illuminate\Support\ItemNotFoundException;
+use Ramsey\Uuid\Exception\NameException;
 use Symfony\Component\Translation\Exception\NotFoundResourceException;
 
 class Handler extends ExceptionHandler

@@ -118,7 +118,11 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::resource('images', ImageController::class);
 
     //attributes
-    Route::resource('attributes', AttributeController::class);
+    Route::get('attributes', [AttributeController::class,'index']);
+    Route::get('attribute', [AttributeController::class,'show']);
+    Route::post('attribute-add', [AttributeController::class,'store']);
+    Route::post('attribute-update', [AttributeController::class,'update']);
+    Route::post('attribute-delete', [AttributeController::class,'destroy']);
 
     //tags
     Route::resource('tags', TagController::class);

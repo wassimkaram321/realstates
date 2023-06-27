@@ -19,19 +19,19 @@ class RealstateResource extends JsonResource
         $data  = array();
         $data1 = array();
         foreach ($this->images as $image) {
-            $data[]=[ 
+            $data[]=[
                 'id'    => $image->id,
                 'alt'   => $image->alt,
                 'name'  => asset($baseURL . '/'.'public/images/real_estate_images/' . $image->name) ?? '',
                 ];
              }
         foreach ($this->tags as $tag) {
-            $data1[]=[ 
+            $data1[]=[
                 'id'    => $tag->id,
                 'title' => $tag->title,
                 ];
              }
-             
+
         return [
 
             'id'          => $this->id,
@@ -44,7 +44,7 @@ class RealstateResource extends JsonResource
             'sub_category'=> $this->sub ? $this->sub->name: null,
             'category'    => $this->categories ? $this->categories->name : null,
             'cat_type'    => $this->cat_type,
-            'status'      => $this->status,  
+            'status'      => $this->status,
             'image'       => asset($baseURL . '/'.'public/images/real_estate_images/' . $this->image) ?? '',//$this->image,
             'city'        => $this->city ? $this->city->name : null,
             'city_id'     => $this->city ? $this->city->id : null,
@@ -59,7 +59,7 @@ class RealstateResource extends JsonResource
             'rent_time'   => $this->rent_time,
             'available'   => $this->ava,
             'tags'        => $data1,//$this->tags,
-            'attributes'  => $this->attributes,
+            'attributes'  => $this->attributeValues,
             'images'      => $data,//$this->images,
             // 'categories'  => $this->category()->get(),
             // 'avg_rating'  => $this->averageRating() ?? 0,
