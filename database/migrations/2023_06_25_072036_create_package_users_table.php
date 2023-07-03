@@ -17,6 +17,8 @@ class CreatePackageUsersTable extends Migration
             $table->id();
             $table->unsignedBigInteger('package_id');
             $table->unsignedBigInteger('user_id');
+            $table->date('expiration_date');
+            $table->float('price');
             $table->timestamps();
 
 

@@ -120,7 +120,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     //attributes
     Route::get('attributes', [AttributeController::class,'index']);
-    Route::get('attribute', [AttributeController::class,'show']);
+    Route::get('attribute', [AttributeController::class,'show'])->name('attribute');
     Route::post('attribute-add', [AttributeController::class,'store']);
     Route::post('attribute-update', [AttributeController::class,'update']);
     Route::post('attribute-delete', [AttributeController::class,'destroy']);
