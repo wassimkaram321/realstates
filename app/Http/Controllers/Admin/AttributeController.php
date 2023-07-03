@@ -60,9 +60,10 @@ class AttributeController extends Controller
      * @param  \App\Models\Image  $image
      * @return \Illuminate\Http\Response
      */
-    public function show(Image $image)
+    public function show(Request $request)
     {
-        //
+        $data = $this->repository->find($request->id);
+        return $this->success('success', $data);
     }
 
     /**

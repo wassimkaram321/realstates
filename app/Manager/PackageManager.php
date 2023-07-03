@@ -18,6 +18,7 @@ class PackageManager
         $package->deuration  =  $request->deuration;
         $package->color      =  $request->color;
         $package->price      =  $request->price;
+        $package->parent_id  =  $request->id;
         $package->save();
         $features = $request->feature;
         for($i = 0 ;$i <sizeof($features) ;$i++)

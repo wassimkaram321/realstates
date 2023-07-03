@@ -10,6 +10,7 @@ use App\Models\Childcategory;
 use App\Models\City;
 use App\Models\Image;
 use App\Models\Notification;
+use App\Models\Package;
 use App\Models\Realstate;
 use App\Models\sub_categories;
 use App\Models\User;
@@ -17,6 +18,7 @@ use App\Traits\NotificationTrait;
 use Attribute;
 use Exception;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 
 /**
@@ -32,7 +34,7 @@ class RealstateRepository
     protected $real_state;
     protected $auth;
 
-    public function __construct(Realstate $real_state , AuthorizationHandler $auth)
+    public function __construct(Realstate $real_state, AuthorizationHandler $auth)
     {
         $this->real_state = $real_state;
         $this->auth = $auth;
@@ -51,9 +53,31 @@ class RealstateRepository
     }
     public function create($request)
     {
-        # code...
-        $this->auth->canAdd();
+        if (Auth::user()->role_id != 1) //user
+        {
+            $packages = Package::where('id', $request->package_id)->with('features')->first();
+
+            $hasFeature = $packages->features->contains('id', 2);
+            if (!$hasFeature) {
+                throw new Exception('Can not Add ');
+            }
+            else {
+
+                //count package real estate
+                $realstatecount = Realstate::where('package_id',  $request->package_id)
+                ->count();
+
+                $realstatevalue = $packages->features->where('id', 2)->first();
+
+                if($realstatecount >= $realstatevalue->pivot->feature_value)
+                {
+                    throw new Exception('Can not Add ');
+                }
         
+            }
+        }
+        $this->auth->canAdd();
+
         $tags = $request['tags'] ?? [];
         $attributes = $request['attributes'] ?? [];
         $realEstateData = $request->except(['images', 'tags', 'attributes']);
@@ -65,8 +89,9 @@ class RealstateRepository
         $real_state->tags()->attach($tagIds);
 
         foreach ($attributes as $attribute) {
-            $real_state->attributes()->attach($attribute['id'],[
-                'value_id'=>$attribute['value_id'],]);
+            $real_state->attributes()->attach($attribute['id'], [
+                'value_id' => $attribute['value_id'],
+            ]);
         }
         RealEstateManager::setTranslation($real_state, $request);
         return $real_state;
@@ -114,10 +139,11 @@ class RealstateRepository
             $real_state->tags()->detach();
         }
 
-        DB::table('realestate_attributes')->where('realestate_id',$real_state->id)->delete();
+        DB::table('realestate_attributes')->where('realestate_id', $real_state->id)->delete();
         foreach ($attributes as $attribute) {
-            $real_state->attributes()->attach($attribute['id'],[
-                'value_id'=>$attribute['value_id'],]);
+            $real_state->attributes()->attach($attribute['id'], [
+                'value_id' => $attribute['value_id'],
+            ]);
         }
         $real_state->update($realEstateData);
         RealEstateManager::setTranslation($real_state, $request);
@@ -136,7 +162,7 @@ class RealstateRepository
     public function delete($request)
     {
         $real_state = $this->real_state->findOrFail($request->id);
-        DB::table('realestate_attributes')->where('realestate_id',$real_state->id)->delete();
+        DB::table('realestate_attributes')->where('realestate_id', $real_state->id)->delete();
         $real_state->tags()->detach();
         $real_state->attributes()->delete();
         $real_state->images()->delete();
@@ -235,9 +261,7 @@ class RealstateRepository
     }
     public function get_recommended()
     {
-        $Recommended = $this->real_state->where('Recommended','1')->get();
+        $Recommended = $this->real_state->where('Recommended', '1')->get();
         return $Recommended;
     }
-    
-
 }
