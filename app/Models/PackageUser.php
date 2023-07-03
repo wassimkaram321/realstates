@@ -8,5 +8,5 @@ use Illuminate\Database\Eloquent\Model;
 class PackageUser extends Model
 {
     use HasFactory;
-    protected $fillable = ['id', 'package_id','user_id'];
+    protected $fillable = ['id', 'package_id','user_id','expiration_date','price'];
 }

@@ -86,6 +86,7 @@ class PackageController extends Controller
     public function update(Request $request, Package $package)
     {
         $data = $this->repository->update($request);
+        // return $data;
         return $this->success('success',PackageResource::make($data));
     }
 

@@ -15,6 +15,7 @@ class CreatePackagesTable extends Migration
     {
         Schema::create('packages', function (Blueprint $table) {
             $table->id();
+            $table->integer('parent_id')->default(0);
             $table->string('name');
             $table->string('description');
             $table->integer('is_active')->default(0);
