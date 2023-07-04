@@ -120,7 +120,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     //attributes
     Route::get('attributes', [AttributeController::class,'index']);
-    Route::get('attribute', [AttributeController::class,'show']);
+    Route::get('attribute', [AttributeController::class,'show'])->name('attribute');
     Route::post('attribute-add', [AttributeController::class,'store']);
     Route::post('attribute-update', [AttributeController::class,'update']);
     Route::post('attribute-delete', [AttributeController::class,'destroy']);
@@ -192,6 +192,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('pacakge-store',    [PackageController::class, 'store']);
     Route::delete('package-delete', [PackaeController::class, 'destroy']);
     Route::post('package-update',   [PackageController::class, 'update']);
+    Route::post('updata_status',    [PackageController::class, 'updata_status']);
+    
 
     //feature
     Route::get('get_feature', [FeatureController::class,'index']);

@@ -14,7 +14,7 @@ class AttributeValue extends Model
     public $translatable  = ['value'];
     public $table = 'attribute_values';
     protected $fillable = ['attribute_id','value'];
-    public $with = 'attribute';
+    // public $with = 'attribute';
 
     public function attribute()
     {
@@ -22,14 +22,18 @@ class AttributeValue extends Model
     }
     public function toArray()
     {
+        if (request()->routeIs('attribute')) {
+            return parent::toArray();
+        }
+    
         $attributes = parent::toArray();
         foreach ($this->getTranslatableAttributes() as $field) {
-            $attributes[$field] = $this->getTranslation($field, App::getLocale() ?? 'en');
+            $attributes[$field] = $this->getTranslation($field, App::getLocale());
         }
         return $attributes;
     }
     public function attributeValues()
     {
-        return $this->belongsToMany(AttributeValue::class, 'realestate_attributes','value_id','realestate_id');
+        return $this->belongsToMany(Attribute::class, 'realestate_attributes','attribute_id','realestate_id');
     }
 }

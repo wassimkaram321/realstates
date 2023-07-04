@@ -86,6 +86,7 @@ class PackageController extends Controller
     public function update(Request $request, Package $package)
     {
         $data = $this->repository->update($request);
+        // return $data;
         return $this->success('success',PackageResource::make($data));
     }
 
@@ -100,4 +101,10 @@ class PackageController extends Controller
         $data = $this->repository->delete($request->id);
         return $this->success('success',[]);
     }
+    public function updata_status(Request $request)
+    {
+        $data = $this->repository->updata_status($request);
+        return $this->success('success',[]);
+    }
+    
 }

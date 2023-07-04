@@ -38,8 +38,8 @@ class RealstateResource extends JsonResource
             'name'        => $this->name,
             'description' => $this->description,
             'cat_id'      => $this->cat_id,
-            'sub_id'      => $this->sub->id ,
-            'child_id'    => $this->child->id,
+            'sub_id'      => $this->sub? $this->sub->id : null,
+            'child_id'    => $this->child ? $this->child->id : null,
             'child'       => $this->child ? $this->child->name : null,
             'sub_category'=> $this->sub ? $this->sub->name: null,
             'category'    => $this->categories ? $this->categories->name : null,
@@ -63,6 +63,7 @@ class RealstateResource extends JsonResource
             'images'      => $data,//$this->images,
             // 'categories'  => $this->category()->get(),
             // 'avg_rating'  => $this->averageRating() ?? 0,
+
 
         ];
     }

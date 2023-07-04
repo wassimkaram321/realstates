@@ -10,25 +10,42 @@ use Spatie\Translatable\HasTranslations;
 
 class Attribute extends Model
 {
-    use HasFactory,HasTranslations;
+    use HasFactory, HasTranslations;
     public $translatable  = ['title'];
     protected $fillable = [
-        'title','icon'
+        'title', 'icon'
     ];
     public function realstate()
     {
-        return $this->belongsToMany(Realstate::class,'realestate_attributes','attribute_id','realestate_id');
+        return $this->belongsToMany(Realstate::class, 'realestate_attributes', 'attribute_id', 'realestate_id');
     }
     public function values()
     {
         return $this->hasMany(AttributeValue::class);
     }
+    
     public function toArray()
     {
+        if (request()->routeIs('attribute')) {
+            return parent::toArray();
+        }
+
         $attributes = parent::toArray();
         foreach ($this->getTranslatableAttributes() as $field) {
-            $attributes[$field] = $this->getTranslation($field, App::getLocale() ?? 'en');
+            $attributes[$field] = $this->getTranslation($field, App::getLocale());
         }
         return $attributes;
+    }
+
+    public static function booted()
+    {
+        static::retrieved(function ($category) {
+            $category->icon = asset('images/attributes/' . $category->icon);
+        });
+        static::updating(function ($category) {
+            if ($category->icon) {
+                $category->icon = basename($category->icon);
+            }
+        });
     }
 }

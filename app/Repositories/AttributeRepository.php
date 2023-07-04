@@ -35,13 +35,12 @@ class AttributeRepository
     }
     public function all($request)
     {
-        # code...
         App::setlocale($request->lang);
-        return $this->attribute->all();
+        return $this->attribute->with('values')->get();
     }
     public function find($id)
     {
-        return $this->attribute->whereid($id)->get();
+        return $this->attribute->with('values')->whereid($id)->first();
     }
     public function create($request)
     {
@@ -111,7 +110,7 @@ class AttributeRepository
     public function checkValues($attribute,$request)
     {
         $old_values = $attribute->values()->pluck('value')->toArray();
-        $new_values = $request->values;
+        $new_values = $request->values[0];
         $diff_values = array_diff($old_values,$new_values);
         $selected_values = $attribute->realstate()->whereIn('selected_value',$diff_values)->get()->count();
         if($selected_values > 0){
