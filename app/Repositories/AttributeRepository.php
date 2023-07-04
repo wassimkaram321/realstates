@@ -35,7 +35,6 @@ class AttributeRepository
     }
     public function all($request)
     {
-        # code...
         App::setlocale($request->lang);
         return $this->attribute->with('values')->get();
     }

@@ -4,25 +4,24 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateSubCategoriesTable extends Migration
+class CreateVehicleChildcategoriesTable extends Migration
 {
     /**
      * Run the migrations.
      *
      * @return void
      */
-
     public function up()
     {
-        Schema::create('sub_categories', function (Blueprint $table) {
+        Schema::create('vehicle_childcategories', function (Blueprint $table) {
             $table->id();
             $table->string('name');
-            $table->unsignedBigInteger('cat_id')->nullable();
+            $table->unsignedBigInteger('sub_id');
             $table->timestamps();
 
-            $table->foreign('cat_id')
+            $table->foreign('sub_id')
                 ->references('id')
-                ->on('categories')
+                ->on('vehicle_subcategories')
                 ->onDelete('cascade');
         });
     }
@@ -34,6 +33,6 @@ class CreateSubCategoriesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('sub_categories');
+        Schema::dropIfExists('vehicle_childcategories');
     }
 }

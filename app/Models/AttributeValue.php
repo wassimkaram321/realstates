@@ -34,6 +34,6 @@ class AttributeValue extends Model
     }
     public function attributeValues()
     {
-        return $this->belongsToMany(AttributeValue::class, 'realestate_attributes','value_id','realestate_id');
+        return $this->belongsToMany(Attribute::class, 'realestate_attributes','attribute_id','realestate_id');
     }
 }

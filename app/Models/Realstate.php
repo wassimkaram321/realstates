@@ -51,7 +51,8 @@ class Realstate extends Model
     }
     public function attributes()
     {
-        return $this->belongsToMany(Attribute::class, 'realestate_attributes', 'realestate_id', 'attribute_id');
+        return $this->belongsToMany(Attribute::class, 'realestate_attributes', 'realestate_id', 'attribute_id')
+            ->withPivot('selected_value');
     }
     public function images()
     {
@@ -101,7 +102,8 @@ class Realstate extends Model
 
     public function attributeValues()
     {
-        return $this->belongsToMany(AttributeValue::class, 'realestate_attributes', 'realestate_id', 'value_id');
+        return $this->belongsToMany(Attribute::class, 'realestate_attributes', 'realestate_id', 'attribute_id')
+            ->withPivot('selected_value');
     }
 
 
