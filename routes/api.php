@@ -192,6 +192,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('pacakge-store',    [PackageController::class, 'store']);
     Route::delete('package-delete', [PackaeController::class, 'destroy']);
     Route::post('package-update',   [PackageController::class, 'update']);
+    Route::post('updata_status',    [PackageController::class, 'updata_status']);
+    
 
     //feature
     Route::get('get_feature', [FeatureController::class,'index']);

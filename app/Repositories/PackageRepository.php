@@ -95,6 +95,15 @@ class PackageRepository
         ]);
         return $model;
     }
+    public function updata_status($request)
+    {
+        $model = $this->Package::where('id',$request->id)->first();
+        $model->update([
+            'is_active' => $request->is_active,
+        ]);
+        return $model;
+    }
+    
 
     public function rules()
     {

@@ -23,6 +23,7 @@ class Attribute extends Model
     {
         return $this->hasMany(AttributeValue::class);
     }
+    
     public function toArray()
     {
         if (request()->routeIs('attribute')) {
