@@ -7,8 +7,11 @@ use App\Manager\FileManager;
 
 use App\Models\Ad;
 use App\Models\Notification;
+use App\Models\Package;
 use App\Models\User;
 use App\Traits\NotificationTrait;
+use Exception;
+use Illuminate\Support\Facades\Auth;
 
 class AdRepository
 {
@@ -24,19 +27,41 @@ class AdRepository
     // Add your methods here
     public function all()
     {
-        return $this->Ad::all();
+        return $this->Ad::with(['package:id,name','user:id,name'])->get();
     }
 
     public function find($id)
     {
-        return $this->Ad::findOrFail($id);
+        return $this->Ad::where('id',$id)->with(['package:id,name','user:id,name'])->first();
     }
 
     public function create($request)
     {
-        $ad = $this->Ad->create($request->all());
+        if (Auth::user()->role_id != 1) //user
+        {
+            $packages = Package::where('id', $request->package_id)->with('features')->first();
+
+            $hasFeature = $packages->features->contains('id', 1);
+            if (!$hasFeature) {
+                throw new Exception('Can not Add.');
+            } else {
+
+                //count package Ads
+                $adsCount = Ad::where('package_id',  $request->package_id)->where('user_id',  Auth::user()->id)
+                    ->count();
+
+                $adsValue = $packages->features->where('id', 1)->first();
+
+                if ($adsCount >= $adsValue->pivot->feature_value) {
+                    throw new Exception('Can not Add');
+                }
+            }
+        }
+        $input = $request->all();
+        $input['user_id'] = Auth::user()->id;
+        $ad = $this->Ad->create($input);
         if ($request->file('image')) {
-            $file_name  = (new FileManager())->addFile($request->file('image'), 'images/ADS');
+            $file_name = (new FileManager())->addFile($request->file('image'), 'images/ADS');
             $ad->image = $file_name;
             $ad->save();
         }
@@ -46,10 +71,9 @@ class AdRepository
 
     public function update($request)
     {
-        $model = $this->Ad::findOrFail($request->id);
+        $model = $this->Ad::where('id', $request->id)->first();
         $input = $request->all();
-        if ($file = $request->file('image')) {
-
+        if ($request->file('image')) {
             $file_name = (new FileManager())->addFile($input['image'], 'images/real_estate_images');
             $input['image'] =  $file_name;
         }

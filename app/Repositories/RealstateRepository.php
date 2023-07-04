@@ -56,29 +56,39 @@ class RealstateRepository
         if (Auth::user()->role_id != 1) //user
         {
             $packages = Package::where('id', $request->package_id)->with('features')->first();
-
             $hasFeature = $packages->features->contains('id', 2);
             if (!$hasFeature) {
                 throw new Exception('Can not Add ');
             }
             else {
 
-                //count package real estate
+                //count user real estate for specific package
                 $realstatecount = Realstate::where('package_id',  $request->package_id)
+                ->where('user_id', Auth::user()->id )
                 ->count();
 
                 $realstatevalue = $packages->features->where('id', 2)->first();
-
-                if($realstatecount >= $realstatevalue->pivot->feature_value)
+                // dd($realstatecount , $realstatevalue->pivot->feature_value);
+                if($realstatecount >= $realstatevalue->pivot->feature_value)//if user used all value 
                 {
                     throw new Exception('Can not Add ');
                 }
-        
             }
+
+            if($packages->features->contains('id', 3))//feature
+            {
+                $request['feature'] = 1;
+            }
+            if($packages->features->contains('id', 4))//recommended
+            {
+                $request['Recommended'] = 1;
+            }
+
         }
         $this->auth->canAdd();
 
         $tags = $request['tags'] ?? [];
+        $request['user_id'] = Auth::user()->id;
         $attributes = $request['attributes'] ?? [];
         $realEstateData = $request->except(['images', 'tags', 'attributes']);
 
@@ -89,8 +99,9 @@ class RealstateRepository
         $real_state->tags()->attach($tagIds);
 
         foreach ($attributes as $attribute) {
+
             $real_state->attributes()->attach($attribute['id'], [
-                'value_id' => $attribute['value_id'],
+                'selected_value' => $attribute['selected_value'],
             ]);
         }
         RealEstateManager::setTranslation($real_state, $request);
@@ -142,7 +153,7 @@ class RealstateRepository
         DB::table('realestate_attributes')->where('realestate_id', $real_state->id)->delete();
         foreach ($attributes as $attribute) {
             $real_state->attributes()->attach($attribute['id'], [
-                'value_id' => $attribute['value_id'],
+                'selected_value' => $attribute['selected_value'],
             ]);
         }
         $real_state->update($realEstateData);

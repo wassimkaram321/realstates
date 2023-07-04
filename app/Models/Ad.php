@@ -38,10 +38,10 @@ class Ad extends Model
         static::retrieved(function ($ad) {
             $ad->image = asset('images/ADS/' . $ad->image);
         });
-        // static::updating(function ($ad) {
-        //     if($ad->image){
-        //         $ad->image = basename($ad->image);
-        //     }
-        // });
+        static::updating(function ($ad) {
+            if($ad->image){
+                $ad->image = basename($ad->image);
+            }
+        });
     }
 }
