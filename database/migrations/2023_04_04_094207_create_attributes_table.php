@@ -16,6 +16,7 @@ class CreateAttributesTable extends Migration
         Schema::create('attributes', function (Blueprint $table) {
             $table->id();
             $table->text('title');
+            $table->unsignedBigInteger('adcategory_id');
             $table->string('icon')->nullable();
             $table->timestamps();
 

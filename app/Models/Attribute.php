@@ -13,8 +13,9 @@ class Attribute extends Model
     use HasFactory, HasTranslations;
     public $translatable  = ['title'];
     protected $fillable = [
-        'title', 'icon'
+        'title', 'icon','adcategory_id'
     ];
+    public $withCount = ['realstate'];
     public function realstate()
     {
         return $this->belongsToMany(Realstate::class, 'realestate_attributes', 'attribute_id', 'realestate_id');
@@ -23,7 +24,11 @@ class Attribute extends Model
     {
         return $this->hasMany(AttributeValue::class);
     }
-    
+    public function type()
+    {
+        return $this->belongsTo(AdCategory::class,'adcategory_id');
+    }
+
     public function toArray()
     {
         if (request()->routeIs('attribute')) {
