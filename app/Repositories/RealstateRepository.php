@@ -120,7 +120,7 @@ class RealstateRepository
         $images = $request['images'] ?? [];
 
         foreach ($images as $i) {
-            $file_name = (new FileManager())->addFile($i['name'], 'images/real_estate_images');
+            $file_name  = (new FileManager())->addFile($i['name'], 'images/real_estate_images');
             $image_data = ['name' => $file_name, 'alt' => $i['alt'], 'realstate_id' => $real_state->id];
             $real_state->images()->create($image_data);
         }

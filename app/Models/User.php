@@ -78,7 +78,7 @@ class User extends Authenticatable
     }
     public function Package()
     {
-        return $this->belongsToMany(Package::class);
+        return $this->belongsToMany(Package::class,'package_users','package_id','user_id');
     }
     public function ads()
     {

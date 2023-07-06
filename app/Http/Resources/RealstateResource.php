@@ -53,6 +53,8 @@ class RealstateResource extends JsonResource
             'user_name'   => $this->owner->name,
             'price'       => $this->price,
             'space'       => $this->space,
+            'feature'     => $this->feature,
+            'Recommended' => $this->Recommended,
             'latitude'    => $this->latitude,
             'longtitude'  => $this->longtitude,
             'address'     => $this->address,

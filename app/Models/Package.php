@@ -20,10 +20,19 @@ class Package extends Model
     {
         return $this->belongsToMany(Feature::class, 'package_features', 'package_id', 'featur_id')->withPivot(['feature_value']);
     }
+    public function parent()
+    {
+        return $this->belongsTo(Package::class, 'parent_id')->with('parent');
+    }
+    
+    public function child()
+    {
+        return $this->belongsTo(Package::class, 'parent_id');
+    }
 
     public function user()
     {
-        return $this->belongsToMany(User::class);
+        return $this->belongsToMany(User::class,'package_users','package_id','user_id');
     }
 
     public function ads()

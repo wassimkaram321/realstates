@@ -21,6 +21,7 @@ class RealEstateManager
             $real_state->setTranslation('description', 'ar', $request['description_ar']);
         $real_state->save();
     }
+    
     public static function categoryRequest($category, $request)
     {
         $request['cat_id'] = $category->id;

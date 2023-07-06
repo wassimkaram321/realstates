@@ -79,6 +79,7 @@ class AttributeRepository
     {
 
         $attribute =  $this->attribute->find($request->id);
+
         $attribute->update($request->all());
 
         if($request->has('title'))
@@ -87,6 +88,7 @@ class AttributeRepository
 
         if ($request->icon != null) {
             (new FileManager())->deleteFile($request->file('icon'), 'images/attributes');
+
             $file_name  = (new FileManager())->addFile($request->file('icon'), 'images/attributes');
             $attribute->icon = $file_name;
             $attribute->save();
