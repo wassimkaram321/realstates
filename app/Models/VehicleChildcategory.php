@@ -16,6 +16,7 @@ class VehicleChildcategory extends Model
         'sub_id',
     ];
 
+
     public function sub()
     {
         return $this->belongsTo(VehicleSubcategory::class, 'sub_id');
@@ -31,5 +32,10 @@ class VehicleChildcategory extends Model
             $attributes[$field] = $this->getTranslation($field, App::getLocale());
         }
         return $attributes;
+
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+
     }
 }

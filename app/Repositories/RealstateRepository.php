@@ -41,8 +41,8 @@ class RealstateRepository
     }
     public function all($request)
     {
-        # code...
-        App::setlocale($request->lang);
+        $lang = $request->lang ?? 'en';
+        App::setlocale($lang);
         return $this->real_state->with(['attributeValues', 'images', 'tags'])->get();
     }
     public function find($request)
@@ -59,31 +59,30 @@ class RealstateRepository
             $hasFeature = $packages->features->contains('id', 2);
             if (!$hasFeature) {
                 throw new Exception('Can not Add ');
-            }
-            else {
+            } else {
 
                 //count user real estate for specific package
                 $realstatecount = Realstate::where('package_id',  $request->package_id)
-                ->where('user_id', Auth::user()->id )
-                ->count();
+                    ->where('user_id', Auth::user()->id)
+                    ->count();
 
                 $realstatevalue = $packages->features->where('id', 2)->first();
                 // dd($realstatecount , $realstatevalue->pivot->feature_value);
-                if($realstatecount >= $realstatevalue->pivot->feature_value)//if user used all value 
+                if ($realstatecount >= $realstatevalue->pivot->feature_value) //if user used all value
+
                 {
                     throw new Exception('Can not Add ');
                 }
             }
 
-            if($packages->features->contains('id', 3))//feature
+            if ($packages->features->contains('id', 3)) //feature
             {
                 $request['feature'] = 1;
             }
-            if($packages->features->contains('id', 4))//recommended
+            if ($packages->features->contains('id', 4)) //recommended
             {
                 $request['Recommended'] = 1;
             }
-
         }
         $this->auth->canAdd();
 
@@ -101,13 +100,13 @@ class RealstateRepository
         foreach ($attributes as $attribute) {
 
             $real_state->attributes()->attach($attribute['id'], [
-                'selected_value' => $attribute['selected_value'],
+                'selected_value' => $attribute['value_id'],
             ]);
         }
         RealEstateManager::setTranslation($real_state, $request);
         return $real_state;
     }
-    //
+
     public function create_image($request)
     {
         $real_state = $this->real_state->where('id', $request->id)->first();
@@ -132,13 +131,10 @@ class RealstateRepository
 
     public function update($request)
     {
-
         $real_state = Realstate::whereid($request->id)->first();
 
         $tags = $request['tags'] ?? [];
         $attributes = $request['attributes'] ?? [];
-
-
 
         $tagIds = collect($tags)->pluck('tag_id')->toArray();
 
@@ -176,6 +172,9 @@ class RealstateRepository
         DB::table('realestate_attributes')->where('realestate_id', $real_state->id)->delete();
         $real_state->tags()->detach();
         $real_state->attributes()->delete();
+        foreach($real_state->images as $image) {
+            (new FileManager())->deleteFile($image->name, 'images/real_estate_images');
+        }
         $real_state->images()->delete();
         $real_state->delete();
         return $real_state;
@@ -204,6 +203,7 @@ class RealstateRepository
 
         return $real_state;
     }
+
     public function get_realstates_by_category($data)
     {
         App::setlocale($data->lang);
@@ -219,15 +219,18 @@ class RealstateRepository
         }
         return $category->realstates()->active()->get();
     }
+
     public function get_user_realstates($user_id)
     {
         $user = User::findOrFail($user_id);
         return $user->real_states;
     }
+
     public function get_real_estates_by_city($city)
     {
         return $city->real_states;
     }
+    
     public function nearby_real_estates($lat, $long)
     {
         # code...
@@ -239,6 +242,7 @@ class RealstateRepository
 
         return $real_states;
     }
+
     public function get_real_estates_by_state($state_id)
     {
         # code...
@@ -256,11 +260,13 @@ class RealstateRepository
         ]);
         return $real_state;
     }
+
     public function get_feature()
     {
         $feature = $this->real_state->where('feature', '1')->get();
         return $feature;
     }
+
     //Recommended
     public function change_recommended($recommended, $real_state_id)
     {
@@ -270,6 +276,7 @@ class RealstateRepository
         ]);
         return $real_state;
     }
+
     public function get_recommended()
     {
         $Recommended = $this->real_state->where('Recommended', '1')->get();

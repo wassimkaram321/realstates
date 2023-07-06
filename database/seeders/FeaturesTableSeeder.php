@@ -41,5 +41,12 @@ class FeaturesTableSeeder extends Seeder
         $recommended->setTranslation('name', 'en','Recommended Realestate') ;
         $recommended->setTranslation('name', 'ar','عقارات مقترحة') ;
         $recommended->save();
+
+        //Vehicles
+        $vehicle = new Feature();
+        $vehicle->id = 5;
+        $vehicle->setTranslation('name', 'en','Add vehicle') ;
+        $vehicle->setTranslation('name', 'ar','اضافة مركبات') ;
+        $vehicle->save();
     }
 }

@@ -24,6 +24,8 @@ use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\NotificationController;
 use App\Http\Controllers\Admin\VehicleCategoryController;
+use App\Http\Controllers\Admin\VehicleController;
+
 
 /*
 |--------------------------------------------------------------------------
@@ -122,6 +124,8 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     //attributes
     Route::get('attributes', [AttributeController::class,'index']);
     Route::get('attribute', [AttributeController::class,'show'])->name('attribute');
+    Route::get('attribute-values', [AttributeController::class,'attributeValues']);
+    Route::post('value-delete', [AttributeController::class,'deleteValue']);
     Route::post('attribute-add', [AttributeController::class,'store']);
     Route::post('attribute-update', [AttributeController::class,'update']);
     Route::post('attribute-delete', [AttributeController::class,'destroy']);
@@ -155,6 +159,27 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('add-favorite-realestate',    [UserController::class, 'addRealEstateToFavorite']);
     Route::post('remove-favorite-realestate', [UserController::class, 'removeRealEstateToFavorite']);
     Route::get('get-favorite-realestates',    [UserController::class, 'getFavoriteRealEstate']);
+
+
+    // Vehicles
+    Route::get('vehicles', [VehicleController::class,'index']);
+    Route::get('vehicle',  [VehicleController::class,'show'])->name('vehicle');
+    Route::post('vehicle-add',     [VehicleController::class,'store']);
+    Route::post('vehicle-update',  [VehicleController::class,'update']);
+    Route::post('vehicle-delete',  [VehicleController::class,'destroy']);
+    Route::post('vehicle-images',  [VehicleController::class, 'create_image']);
+    Route::post('vehicle-status',  [VehicleController::class, 'change_status']);
+    Route::post('vehicle-feature', [VehicleController::class, 'change_feature']);
+    Route::post('vehicle-recommended',    [VehicleController::class, 'change_recommended']);
+    Route::get('vehicle-get-recommended', [VehicleController::class, 'get_recommended']);
+    Route::get('vehicle-get-feature',     [VehicleController::class, 'get_feature']);
+    Route::get('user-vehicles',  [VehicleController::class, 'get_user_vehicles']);
+    Route::get('nearby-vehicle', [RealstateController::class, 'nearby_vehicle']);
+
+
+
+
+
 
     //reviews
     Route::post('make_review', [ReviewController::class,'makeRealestateReview']);
@@ -194,7 +219,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::delete('package-delete', [PackageController::class, 'destroy']);
     Route::post('package-update',   [PackageController::class, 'update']);
     Route::post('updata_status',    [PackageController::class, 'updata_status']);
-    
+
 
     //feature
     Route::get('get_feature', [FeatureController::class,'index']);

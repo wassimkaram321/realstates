@@ -36,6 +36,7 @@ class VehicleCategory extends Model
         return $attributes;
     }
 
+
     public static function booted()
     {
         static::retrieved(function ($cat) {
@@ -47,4 +48,11 @@ class VehicleCategory extends Model
             }
         });
     }
+
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
+
+
 }

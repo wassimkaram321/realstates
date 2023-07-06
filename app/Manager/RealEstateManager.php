@@ -11,7 +11,7 @@ use Illuminate\Foundation\Http\FormRequest;
 class RealEstateManager
 {
     public static function setTranslation($real_state, $request)
-    {
+{
 
         $real_state->setTranslation('name', 'en', $request['name']);
         if($request->has('name_ar'))

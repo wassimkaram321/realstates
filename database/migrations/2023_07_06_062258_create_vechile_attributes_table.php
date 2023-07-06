@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateImagesTable extends Migration
+class CreateVechileAttributesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,21 +13,17 @@ class CreateImagesTable extends Migration
      */
     public function up()
     {
-        Schema::create('images', function (Blueprint $table) {
+        Schema::create('vehicles_attributes', function (Blueprint $table) {
             $table->id();
-            $table->string('name');
-            $table->string('alt');
-            $table->unsignedBigInteger('realstate_id');
+            $table->unsignedBigInteger('attribute_id');
             $table->unsignedBigInteger('vehicle_id');
-
-            $table->foreign('realstate_id')
-                ->references('id')
-                ->on('real_states');
-
+            $table->text('selected_value');
+            $table->foreign('attribute_id')
+            ->references('id')
+            ->on('attributes');
             $table->foreign('vehicle_id')
-                ->references('id')
-                ->on('vehicles');
-
+            ->references('id')
+            ->on('vehicles');
             $table->timestamps();
         });
     }
@@ -39,6 +35,6 @@ class CreateImagesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('images');
+        Schema::dropIfExists('vechile_attributes');
     }
 }

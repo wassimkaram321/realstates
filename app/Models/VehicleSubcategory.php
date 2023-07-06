@@ -36,4 +36,9 @@ class VehicleSubcategory extends Model
         return $attributes;
     }
 
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
+
 }

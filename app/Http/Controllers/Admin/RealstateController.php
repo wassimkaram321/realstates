@@ -10,26 +10,27 @@ use App\Models\Realstate;
 use App\Models\User;
 use App\Repositories\RealstateRepository;
 use App\Repositories\AuthorizationHandler;
+use Exception;
 use Illuminate\Support\Facades\App;
+use Illuminate\Support\Facades\Auth;
 
 class RealstateController extends Controller
 {
 
     protected $repository;
-    protected $authorizationHandler;
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct(RealstateRepository $repository, AuthorizationHandler $authorizationHandler)
+    public function __construct(RealstateRepository $repository)
     {
         $this->repository = $repository;
-        $this->authorizationHandler = $authorizationHandler;
     }
     public function index(RealEstateRequest $request)
     {
+
         $data = $this->repository->all($request);
         return $this->success('success', RealstateResource::collection($data));
     }
@@ -52,6 +53,7 @@ class RealstateController extends Controller
      */
     public function store(RealEstateRequest $request)
     {
+        $this->checkOwner($request->id);
         $data = $this->repository->create($request);
         return $this->success('success', RealstateResource::make($data));
     }
@@ -64,8 +66,8 @@ class RealstateController extends Controller
      */
     public function show(RealEstateRequest $request)
     {
+        $this->checkOwner($request->id);
         $data = $this->repository->find($request);
-        // dd($data->attributes[0]->id);
         return $this->success('success', RealstateResource::make($data));
     }
 
@@ -89,6 +91,10 @@ class RealstateController extends Controller
      */
     public function update(RealEstateRequest $request, Realstate $realstate)
     {
+        if (Auth::user()->role_id != 1){
+            return $this->error_message('only admin can update.');
+        }
+        $this->checkOwner($request->id);
         $data = $this->repository->update($request);
         return $this->success('success', RealstateResource::make($data));
     }
@@ -104,6 +110,7 @@ class RealstateController extends Controller
         $this->repository->delete($request);
         return $this->success('success', []);
     }
+
     public function create_image(RealEstateRequest $request)
     {
         $this->repository->create_image($request);
@@ -115,45 +122,46 @@ class RealstateController extends Controller
         $this->repository->update_image($request);
         return $this->success('success', []);
     }
+
     public function change_status(RealEstateRequest $request)
     {
+        $this->checkOwner($request->id);
         $this->repository->change_status($request->status, $request->id);
         return $this->success('success', []);
-
     }
+
     public function change_feature(RealEstateRequest $request)
     {
         $this->repository->change_feature($request->feature, $request->id);
         return $this->success('success', []);
     }
+
     //Recommended
     public function change_recommended(RealEstateRequest $request)
     {
         $this->repository->change_recommended($request->recommended, $request->id);
         return $this->success('success', []);
     }
+
     public function get_recommended()
     {
         $data = $this->repository->get_recommended();
         return $this->success('success', RealstateResource::collection($data));
-
     }
-   
 
     public function get_realstates_by_category(RealEstateRequest $request)
     {
-
         $data = $this->repository->get_realstates_by_category($request);
         return $this->success('success', RealstateResource::collection($data));
     }
+
     public function get_user_real_estates(RealEstateRequest $request)
     {
-
-
         $user = User::findOrFail($request->user()->id);
         $data = $this->repository->get_user_realstates($user->id);
         return $this->success('success', RealstateResource::collection($data));
     }
+    
     public function get_real_estates_by_city(RealEstateRequest $request)
     {
         $city = City::findOrFail($request->id);
@@ -174,5 +182,15 @@ class RealstateController extends Controller
     {
         $data = $this->repository->get_feature();
         return $this->success('success', RealstateResource::collection($data));
+    }
+    private function checkOwner($real_estate_id)
+    {
+        $user = auth()->user();
+        $user = User::findOrFail($user->id);
+        if($user->role_id != 1){
+            if(!$user->real_states()->where('id', $real_estate_id)->exists()){
+                throw new Exception('Not Authorized');
+            }
+        }
     }
 }

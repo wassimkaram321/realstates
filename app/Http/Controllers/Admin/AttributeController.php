@@ -89,6 +89,16 @@ class AttributeController extends Controller
         $data = $this->repository->update($request);
         return $this->success('success', $data);
     }
+    public function attributeValues(Request $request)
+    {
+        $data = $this->repository->attributeValues($request);
+        return $this->success('success', $data);
+    }
+    public function deleteValue(Request $request)
+    {
+        $data = $this->repository->deleteValue($request);
+        return $this->success('success', $data);
+    }
 
     /**
      * Remove the specified resource from storage.
