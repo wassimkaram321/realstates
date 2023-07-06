@@ -33,6 +33,7 @@ class VehicleRepository
         $lang = $request->lang ?? 'en';
         App::setlocale($lang);
         return $this->Vehicle::with(
+            'attributeValues',
             'package',
             'user:id,name',
             'category:id,name,icon',
@@ -49,6 +50,7 @@ class VehicleRepository
         $vehicle = $this->Vehicle::with(
             'images:id,vehicle_id,name,alt',
             'user:id,name',
+            'attributeValues',
             'package',
             'category:id,name,icon',
             'subcategory:id,name,icon',
@@ -149,9 +151,15 @@ class VehicleRepository
 
     public function delete($id)
     {
-        $model = $this->Vehicle::findOrFail($id);
-        $model->delete();
-        return $model;
+        $vehicle = $this->Vehicle->findOrFail($id);
+        DB::table('vehicles_attributes')->where('vehicle_id', $vehicle->id)->delete();
+        $vehicle->tags()->detach();
+        foreach($vehicle->images as $image) {
+            (new FileManager())->deleteFile($image->name, 'images/Vehicle_images');
+        }
+        $vehicle->images()->delete();
+        $vehicle->delete();
+        return $vehicle;
     }
 
     public function create_image($request)
@@ -222,6 +230,7 @@ class VehicleRepository
         App::setlocale($lang);
         $Recommended = $this->Vehicle->where('Recommended', '1')
             ->with(
+                'attributeValues',
                 'package',
                 'user:id,name',
                 'category:id,name,icon',
@@ -237,6 +246,7 @@ class VehicleRepository
         App::setlocale($lang);
         $feature = $this->Vehicle->where('feature', '1')
             ->with(
+                'attributeValues',
                 'package',
                 'user:id,name',
                 'category:id,name,icon',
@@ -253,6 +263,7 @@ class VehicleRepository
         App::setlocale($lang);
         $vehicles = $this->Vehicle->where('user_id', Auth::user()->id)
             ->with(
+                'attributeValues',
                 'package',
                 'category:id,name,icon',
                 'subcategory:id,name,icon',
@@ -267,6 +278,7 @@ class VehicleRepository
         $radius = 5;
         $vehicle = $this->Vehicle->active()
             ->with(
+                'attributeValues',
                 'package',
                 'category:id,name,icon',
                 'subcategory:id,name,icon',

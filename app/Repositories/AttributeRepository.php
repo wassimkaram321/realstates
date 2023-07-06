@@ -37,10 +37,9 @@ class AttributeRepository
     public function all($request)
     {
         App::setlocale($request->lang);
-        if($request->type == 'realestates')
-            return $this->attribute->where('adcategory_id',1)->with(['values', 'type'])->get();
-        if($request->type == 'vehicles')
-            return $this->attribute->where('adcategory_id',2)->with(['values', 'type'])->get();
+        if (isset($request->adcategory_id))
+            return $this->attribute->where('adcategory_id', $request->adcategory_id)->with(['values', 'type'])->get();
+        else
             return $this->attribute->with(['values', 'type'])->get();
     }
     public function find($id)
@@ -81,7 +80,7 @@ class AttributeRepository
         $attribute =  $this->attribute->find($request->id);
         $attribute->update($request->all());
 
-        if($request->has('title'))
+        if ($request->has('title'))
             $this->attributeManager->setTranslation($attribute, $request);
 
 
@@ -122,6 +121,4 @@ class AttributeRepository
         $attribute->values()->whereid($request->value_id)->first()->delete();
         return $attribute;
     }
-
-
 }

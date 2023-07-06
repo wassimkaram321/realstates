@@ -170,12 +170,10 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('vehicle-feature', [VehicleController::class, 'change_feature']);
     Route::post('vehicle-recommended',    [VehicleController::class, 'change_recommended']);
     Route::get('vehicle-get-recommended', [VehicleController::class, 'get_recommended']);
-    Route::get('vehicle-get-feature',     [VehicleController::class, 'get_feature']);
-    Route::get('user-vehicles',  [VehicleController::class, 'get_user_vehicles']);
-    Route::get('nearby-vehicle', [RealstateController::class, 'nearby_vehicle']);
-
-
-
+    Route::get('vehicle-get-feature', [VehicleController::class, 'get_feature']);
+    Route::get('user-vehicles',       [VehicleController::class, 'get_user_vehicles']);
+    Route::get('nearby-vehicle',      [VehicleController::class, 'nearby_vehicle']);
+    Route::delete('vehicle-delete',   [VehicleController::class,'destroy']);
 
 
 
