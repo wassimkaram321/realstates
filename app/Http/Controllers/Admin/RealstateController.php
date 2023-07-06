@@ -10,26 +10,26 @@ use App\Models\Realstate;
 use App\Models\User;
 use App\Repositories\RealstateRepository;
 use App\Repositories\AuthorizationHandler;
+use Exception;
 use Illuminate\Support\Facades\App;
 
 class RealstateController extends Controller
 {
 
     protected $repository;
-    protected $authorizationHandler;
 
     /**
      * Display a listing of the resource.
      *
      * @return \Illuminate\Http\Response
      */
-    public function __construct(RealstateRepository $repository, AuthorizationHandler $authorizationHandler)
+    public function __construct(RealstateRepository $repository)
     {
         $this->repository = $repository;
-        $this->authorizationHandler = $authorizationHandler;
     }
     public function index(RealEstateRequest $request)
     {
+
         $data = $this->repository->all($request);
         return $this->success('success', RealstateResource::collection($data));
     }
@@ -52,6 +52,7 @@ class RealstateController extends Controller
      */
     public function store(RealEstateRequest $request)
     {
+        $this->checkOwner($request->id);
         $data = $this->repository->create($request);
         return $this->success('success', RealstateResource::make($data));
     }
@@ -64,8 +65,8 @@ class RealstateController extends Controller
      */
     public function show(RealEstateRequest $request)
     {
+        $this->checkOwner($request->id);
         $data = $this->repository->find($request);
-        // dd($data->attributes[0]->id);
         return $this->success('success', RealstateResource::make($data));
     }
 
@@ -89,6 +90,7 @@ class RealstateController extends Controller
      */
     public function update(RealEstateRequest $request, Realstate $realstate)
     {
+        $this->checkOwner($request->id);
         $data = $this->repository->update($request);
         return $this->success('success', RealstateResource::make($data));
     }
@@ -117,6 +119,7 @@ class RealstateController extends Controller
     }
     public function change_status(RealEstateRequest $request)
     {
+        $this->checkOwner($request->id);
         $this->repository->change_status($request->status, $request->id);
         return $this->success('success', []);
 
@@ -138,7 +141,7 @@ class RealstateController extends Controller
         return $this->success('success', RealstateResource::collection($data));
 
     }
-   
+
 
     public function get_realstates_by_category(RealEstateRequest $request)
     {
@@ -174,5 +177,15 @@ class RealstateController extends Controller
     {
         $data = $this->repository->get_feature();
         return $this->success('success', RealstateResource::collection($data));
+    }
+    private function checkOwner($real_estate_id)
+    {
+        $user = auth()->user();
+        $user = User::findOrFail($user->id);
+        if($user->role_id != 1){
+            if(!$user->real_states()->where('id', $real_estate_id)->exists()){
+                throw new Exception('Not Authorized');
+            }
+        }
     }
 }

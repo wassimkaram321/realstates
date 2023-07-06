@@ -69,7 +69,7 @@ class RealstateRepository
 
                 $realstatevalue = $packages->features->where('id', 2)->first();
                 // dd($realstatecount , $realstatevalue->pivot->feature_value);
-                if($realstatecount >= $realstatevalue->pivot->feature_value)//if user used all value 
+                if($realstatecount >= $realstatevalue->pivot->feature_value)//if user used all value
                 {
                     throw new Exception('Can not Add ');
                 }
@@ -101,7 +101,7 @@ class RealstateRepository
         foreach ($attributes as $attribute) {
 
             $real_state->attributes()->attach($attribute['id'], [
-                'selected_value' => $attribute['selected_value'],
+                'selected_value' => $attribute['value_id'],
             ]);
         }
         RealEstateManager::setTranslation($real_state, $request);
