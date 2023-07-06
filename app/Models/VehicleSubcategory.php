@@ -10,4 +10,9 @@ class VehicleSubcategory extends Model
     use HasFactory;
     protected $table = 'vehicle_subcategories';
 
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
+
 }

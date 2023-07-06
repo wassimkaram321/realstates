@@ -13,8 +13,8 @@ class Package extends Model
     use HasFactory;
     use HasTranslations;
 
-    public $translatable  = ['name','description'];
-    protected $fillable = ['id','name','description','is_active','price','deuration','color','parent_id'];
+    public $translatable  = ['name', 'description'];
+    protected $fillable = ['id', 'name', 'description', 'is_active', 'price', 'deuration', 'color', 'parent_id'];
 
     public function features()
     {
@@ -25,16 +25,23 @@ class Package extends Model
     {
         return $this->belongsToMany(User::class);
     }
+
     public function ads()
     {
         return $this->hasMany(Ad::class);
     }
+
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
+
     public function toArray()
     {
         if (request()->routeIs('edit_package')) {
             return parent::toArray();
         }
-    
+
         $attributes = parent::toArray();
         foreach ($this->getTranslatableAttributes() as $field) {
             $attributes[$field] = $this->getTranslation($field, App::getLocale());

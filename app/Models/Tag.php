@@ -21,12 +21,18 @@ class Tag extends Model
     {
         return $this->belongsToMany(RealState::class, 'real_state_tags');
     }
+
+    public function vehicles()
+    {
+        return $this->belongsToMany(Vehicle::class, 'vehicle_tags', 'tag_id', 'vehicle_id');
+    }
+
     public function toArray()
     {
         if (request()->routeIs('tag_details')) {
             return parent::toArray();
         }
-    
+
         $attributes = [];
         foreach ($this->getTranslatableAttributes() as $field) {
             $attributes[$field] = $this->getTranslation($field, App::getLocale());
