@@ -59,7 +59,7 @@ class AttributeRequest extends FormRequest
             'title_ar' => 'required',
             'content' => 'required',
             'content_ar' => 'required',
-            'real_state_id' => 'required',
+            'adcategory_id' => 'required',
         ];
     }
     public function update()

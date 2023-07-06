@@ -102,7 +102,7 @@ class Realstate extends Model
 
     public function attributeValues()
     {
-        return $this->belongsToMany(Attribute::class, 'realestate_attributes', 'realestate_id', 'attribute_id')
+        return $this->belongsToMany(AttributeValue::class, 'realestate_attributes', 'realestate_id', 'selected_value')
             ->withPivot('selected_value');
     }
 

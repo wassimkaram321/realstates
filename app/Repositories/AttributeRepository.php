@@ -11,6 +11,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Request;
 use JasonGuru\LaravelMakeRepository\Repository\BaseRepository;
+use PDO;
 use Ramsey\Uuid\Exception\NameException;
 use Spatie\Permission\Models\Role;
 
@@ -28,7 +29,7 @@ class AttributeRepository
     protected $attribute;
     protected $attributeManager;
 
-    public function __construct(Attribute $attribute , AttributeManager $attributeManager)
+    public function __construct(Attribute $attribute, AttributeManager $attributeManager)
     {
         $this->attribute = $attribute;
         $this->attributeManager = $attributeManager;
@@ -36,7 +37,11 @@ class AttributeRepository
     public function all($request)
     {
         App::setlocale($request->lang);
-        return $this->attribute->with('values')->get();
+        if($request->type == 'realestates')
+            return $this->attribute->where('adcategory_id',1)->with(['values', 'type'])->get();
+        if($request->type == 'vehicles')
+            return $this->attribute->where('adcategory_id',2)->with(['values', 'type'])->get();
+            return $this->attribute->with(['values', 'type'])->get();
     }
     public function find($id)
     {
@@ -45,27 +50,28 @@ class AttributeRepository
     public function create($request)
     {
         # code...
-
         $attribute = $this->attribute->create($request->all());
-        if($request->icon != null){
+        if ($request->icon != null) {
             $file_name  = (new FileManager())->addFile($request->file('icon'), 'images/attributes');
             $attribute->icon = $file_name;
             $attribute->save();
         }
-        $this->attributeManager->setTranslation($attribute,$request);
+        $this->attributeManager->setTranslation($attribute, $request);
 
-        //create attribute values
+        // create attribute values
         $values = $request->values ?? [];
-        foreach($values as $value){
+        foreach ($values as $value) {
             $attribute->values()->create(
                 [
-                    'value'=>$value
+                    'value' => $value
                 ]
             );
         }
-        foreach($attribute->values() as $value){
 
-            $this->attributeManager->setValueTranslation($value,$request);
+
+        foreach ($attribute->values() as $value) {
+
+            $this->attributeManager->setValueTranslation($value, $request);
         }
         return $attribute;
     }
@@ -73,51 +79,49 @@ class AttributeRepository
     {
 
         $attribute =  $this->attribute->find($request->id);
-        $this->checkValues($attribute,$request);
-        if($request->icon != null){
+        $attribute->update($request->all());
+
+        if($request->has('title'))
+            $this->attributeManager->setTranslation($attribute, $request);
+
+
+        if ($request->icon != null) {
             (new FileManager())->deleteFile($request->file('icon'), 'images/attributes');
             $file_name  = (new FileManager())->addFile($request->file('icon'), 'images/attributes');
             $attribute->icon = $file_name;
             $attribute->save();
         }
-        $attribute->update($request->all());
-        $this->attributeManager->setTranslation($attribute,$request);
-
 
         $values = $request->values ?? [];
+        $attribute->values()->whereDoesntHave('realestates')->delete();
 
-
-
-        $attribute->values()->delete();
-        foreach($values as $value){
+        foreach ($values as $value) {
             $attribute->values()->create(
                 [
-                    'value'=>$value
+                    'value' => $value
                 ]
             );
         }
         return $attribute;
+    }
+    public function attributeValues($request)
+    {
+        return $this->attribute->with('values')->findOrFail($request->id);
     }
     public function delete($request)
     {
         $attribute = $this->attribute->findOrFail($request->id);
         $attribute->values()->delete();
         $attribute->realstate()->detach();
-        (new FileManager)->deleteFile($attribute->icon,'images/attributes');
+        (new FileManager)->deleteFile($attribute->icon, 'images/attributes');
         $attribute->delete();
-
     }
-    public function checkValues($attribute,$request)
+    public function deleteValue($request)
     {
-        $old_values = $attribute->values()->pluck('value')->toArray();
-        $new_values = $request->values[0];
-        $diff_values = array_diff($old_values,$new_values);
-        $selected_values = $attribute->realstate()->whereIn('selected_value',$diff_values)->get()->count();
-        if($selected_values > 0){
-            throw new Exception('Can not update , deleted values are linked to realestates : '.implode('',$diff_values));
-        }
+        $attribute = $this->attribute->findOrFail($request->id);
+        $attribute->values()->whereid($request->value_id)->first()->delete();
+        return $attribute;
     }
-
 
 
 }
