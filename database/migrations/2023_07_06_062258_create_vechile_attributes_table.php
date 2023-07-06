@@ -4,7 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-class CreateRealestateAttributesTable extends Migration
+class CreateVechileAttributesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,17 +13,17 @@ class CreateRealestateAttributesTable extends Migration
      */
     public function up()
     {
-        Schema::create('realestate_attributes', function (Blueprint $table) {
+        Schema::create('vehicles_attributes', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('attribute_id');
-            $table->unsignedBigInteger('realestate_id');
+            $table->unsignedBigInteger('vehicle_id');
             $table->text('selected_value');
             $table->foreign('attribute_id')
             ->references('id')
             ->on('attributes');
-            $table->foreign('realestate_id')
+            $table->foreign('vehicle_id')
             ->references('id')
-            ->on('real_states');
+            ->on('vehicles');
             $table->timestamps();
         });
     }
@@ -35,6 +35,6 @@ class CreateRealestateAttributesTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('realestate_attributes');
+        Schema::dropIfExists('vechile_attributes');
     }
 }

@@ -41,4 +41,8 @@ class AttributeValue extends Model
     {
         return $this->belongsToMany(Realstate::class, 'realestate_attributes','selected_value','realestate_id');
     }
+    public function vehicles()
+    {
+        return $this->belongsToMany(Vehicle::class, 'vehicles_attributes','selected_value','vehicle_id');
+    }
 }
