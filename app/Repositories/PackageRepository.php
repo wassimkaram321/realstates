@@ -21,13 +21,14 @@ class PackageRepository
     public function all($request)
     {
         App::setLocale($request->lang);
-        // dd($this->Package::get());
-        return $this->Package::get();
+        $parentIds = $this->Package::where('parent_id','!=', null)->withCount('user')->pluck('parent_id')->all();
+        $Packages = $this->Package::whereNotIn('id', $parentIds)->with('parent')->withCount('user')->get();
+        return $Packages;
     }
 
     public function find($id)
     {
-        return  $this->Package::findOrFail($id);
+        return  $this->Package::where('id',$id)->with('features')->first();
     }
 
     public function create($request)
@@ -89,10 +90,8 @@ class PackageRepository
 
     public function delete($id)
     {
-        $model = $this->Package::findOrFail($id);
-        $model->update([
-            'is_active' => 0,
-        ]);
+        $model = $this->Package::where('id',$id)->first();
+        $model->delete();
         return $model;
     }
     public function updata_status($request)

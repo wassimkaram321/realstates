@@ -75,7 +75,7 @@ class AttributeRepository
         $attribute =  $this->attribute->find($request->id);
         $this->checkValues($attribute,$request);
         if($request->icon != null){
-            (new FileManager())->deleteFile($request->file('icon'), 'images/attributes');
+            (new FileManager())->deleteFile($attribute->icon, 'images/attributes');
             $file_name  = (new FileManager())->addFile($request->file('icon'), 'images/attributes');
             $attribute->icon = $file_name;
             $attribute->save();

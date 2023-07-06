@@ -1,10 +1,11 @@
 <?php
 
 namespace App\Http\Resources;
- 
+
 use Illuminate\Http\Resources\Json\JsonResource;
 use Illuminate\Support\Facades\URL;
 use DB;
+use Illuminate\Support\Facades\DB as FacadesDB;
 
 class UserResource extends JsonResource
 {
@@ -17,7 +18,7 @@ class UserResource extends JsonResource
     public function toArray($request)
     {
         $baseURL = URL::to('/');
-        $role = DB::table('roles')->where('id',$this->role_id)->first();
+        $role = DB::table('roles')->where('id', $this->role_id)->first();
         // dd($role->name);
         return [
             'id' =>      $this->id,
@@ -30,9 +31,9 @@ class UserResource extends JsonResource
             'company_id' => $this->company_id,
             'city_id' => $this->city_id,
             'status' => $this->status,
-            'image' =>  asset($baseURL . '/'.'public/images/users/' . $this->image) ?? '',//$this->image,
+            'image' =>  asset($baseURL . '/' . 'public/images/users/' . $this->image) ?? '', //$this->image,
 
-           
+
         ];
     }
 }

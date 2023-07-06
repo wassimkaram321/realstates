@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\AdController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\VehicleCategoryController;
 
 /*
 |--------------------------------------------------------------------------
@@ -42,7 +43,7 @@ Route::post('login', [AuthController::class, 'login']);
 
 //package
 Route::get('packages', [PackageController::class, 'index']);
-Route::get('package-by-id',  [PackageController::class, 'show']);
+Route::get('package-by-id',  [PackageController::class, 'show'])->name('package-by-id');
 
 //ads
 Route::get('Ads', [AdController::class, 'index']);
@@ -190,7 +191,7 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     //package
     Route::post('pacakge-store',    [PackageController::class, 'store']);
-    Route::delete('package-delete', [PackaeController::class, 'destroy']);
+    Route::delete('package-delete', [PackageController::class, 'destroy']);
     Route::post('package-update',   [PackageController::class, 'update']);
     Route::post('updata_status',    [PackageController::class, 'updata_status']);
     
@@ -210,6 +211,13 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
 
     Route::post('Ad-update-status',   [AdController::class, 'updateStatus']);
     Route::post('Ad-click-increment', [AdController::class, 'clickIncrement']);
+
+    //VehicleCategory
+    Route::get('vehicle-categories',       [VehicleCategoryController::class, 'index']);
+    Route::get('vehicle-category',         [VehicleCategoryController::class, 'show']);
+    Route::post('add-vehicle-category',    [VehicleCategoryController::class, 'store']);
+    Route::post('update-vehicle-category', [VehicleCategoryController::class, 'update']);
+
 
 // });
 

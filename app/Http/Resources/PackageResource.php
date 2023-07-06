@@ -23,6 +23,9 @@ class PackageResource extends JsonResource
             'deuration'   => $this->deuration ,
             'color'       => $this->color,
             'feature'     => $this->features,
+            'user_count'  => $this->user_count,
+            'parent'      => $this->parent,
+
 
         ];
         //parent::toArray($request);

@@ -3,6 +3,7 @@
 namespace App\Http\Resources;
 
 use Illuminate\Http\Resources\Json\JsonResource;
+use Illuminate\Support\Facades\URL;
 
 class VehicleSubcategoryResource extends JsonResource
 {
@@ -14,6 +15,12 @@ class VehicleSubcategoryResource extends JsonResource
      */
     public function toArray($request)
     {
-        return parent::toArray($request);
+        $baseURL = URL::to('/');
+        return [
+            'id'   =>$this->id,
+            'name' => $this->getTranslation('name', $request->lang) ?? '',
+            'icon' => asset($baseURL . '/'.'images/car_images/icon/' . $this->icon) ?? '',
+        ];
+        // return parent::toArray($request);
     }
 }

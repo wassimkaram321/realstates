@@ -62,7 +62,7 @@ class PackageController extends Controller
     public function show(Request $request)
     {
         $data = $this->repository->find($request->id);
-        return $this->success('success',PackageResource::make($data));
+        return $this->success('success',$data);
     }
 
     /**
