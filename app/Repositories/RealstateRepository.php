@@ -171,7 +171,7 @@ class RealstateRepository
         $real_state = $this->real_state->findOrFail($request->id);
         DB::table('realestate_attributes')->where('realestate_id', $real_state->id)->delete();
         $real_state->tags()->detach();
-        $real_state->attributes()->delete();
+        // $real_state->attributes()->delete();
         foreach($real_state->images as $image) {
             (new FileManager())->deleteFile($image->name, 'images/real_estate_images');
         }
