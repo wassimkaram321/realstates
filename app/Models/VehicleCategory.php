@@ -11,4 +11,9 @@ class VehicleCategory extends Model
 
     protected $table = 'vehicle_categories';
 
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicle::class);
+    }
+
 }

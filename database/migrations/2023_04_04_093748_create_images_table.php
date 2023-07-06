@@ -18,10 +18,15 @@ class CreateImagesTable extends Migration
             $table->string('name');
             $table->string('alt');
             $table->unsignedBigInteger('realstate_id');
+            $table->unsignedBigInteger('vehicle_id');
 
             $table->foreign('realstate_id')
-            ->references('id')
-            ->on('real_states');
+                ->references('id')
+                ->on('real_states');
+
+            $table->foreign('vehicle_id')
+                ->references('id')
+                ->on('vehicles');
 
             $table->timestamps();
         });

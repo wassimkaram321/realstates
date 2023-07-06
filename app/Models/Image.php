@@ -9,10 +9,14 @@ class Image extends Model
 {
     use HasFactory;
     protected $fillable = [
-        'name','alt','real_state_id'
+        'name','alt','real_state_id', 'vehicle_id'
     ];
     public function realstate()
     {
         return $this->belongsTo(Realstate::class);
+    }
+    public function vehicle()
+    {
+        return $this->belongsTo(Vehicle::class);
     }
 }

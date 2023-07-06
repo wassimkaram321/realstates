@@ -23,6 +23,7 @@ use App\Http\Controllers\Admin\AdController;
 use App\Http\Controllers\Admin\PackageController;
 use App\Http\Controllers\Admin\FeatureController;
 use App\Http\Controllers\Admin\NotificationController;
+use App\Http\Controllers\Admin\VehicleController;
 
 /*
 |--------------------------------------------------------------------------
@@ -156,6 +157,27 @@ Route::group(['middleware' => 'auth:sanctum'], function () {
     Route::post('add-favorite-realestate',    [UserController::class, 'addRealEstateToFavorite']);
     Route::post('remove-favorite-realestate', [UserController::class, 'removeRealEstateToFavorite']);
     Route::get('get-favorite-realestates',    [UserController::class, 'getFavoriteRealEstate']);
+
+
+    // Vehicles
+    Route::get('vehicles', [VehicleController::class,'index']);
+    Route::get('vehicle',  [VehicleController::class,'show'])->name('vehicle');
+    Route::post('vehicle-add',     [VehicleController::class,'store']);
+    Route::post('vehicle-update',  [VehicleController::class,'update']);
+    Route::post('vehicle-delete',  [VehicleController::class,'destroy']);
+    Route::post('vehicle-images',  [VehicleController::class, 'create_image']);
+    Route::post('vehicle-status',  [VehicleController::class, 'change_status']);
+    Route::post('vehicle-feature', [VehicleController::class, 'change_feature']);
+    Route::post('vehicle-recommended',    [VehicleController::class, 'change_recommended']);
+    Route::get('vehicle-get-recommended', [VehicleController::class, 'get_recommended']);
+    Route::get('vehicle-get-feature',     [VehicleController::class, 'get_feature']);
+    Route::get('user-vehicles',  [VehicleController::class, 'get_user_vehicles']);
+    Route::get('nearby-vehicle', [RealstateController::class, 'nearby_vehicle']);
+
+
+
+
+
 
     //reviews
     Route::post('make_review', [ReviewController::class,'makeRealestateReview']);

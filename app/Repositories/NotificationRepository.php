@@ -18,10 +18,9 @@ class NotificationRepository
         $this->notification = $notification;
     }
 
-    // Add your methods here
     public function all($request)
     {
-        return $this->notification->orderBy('created_at', 'desc')->get();
+        return $this->notification->where('by_admin', 1)->orderBy('created_at', 'desc')->get();
     }
 
     public function userNotifications()
@@ -38,6 +37,7 @@ class NotificationRepository
 
     public function create(array $data)
     {
+        $data['by_admin'] = 1;
         $notification = $this->notification->create($data);
         if (!isset($dara['package_id']) || $dara['package_id'] == null) {
             $users = User::where('enable_notification', 1)->where('role_id', 2)->get();

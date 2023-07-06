@@ -17,6 +17,7 @@ class CreateVehiclesTable extends Migration
             $table->id();
             $table->text('name');
             $table->text('description');
+            $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('cat_id'); //vehicle_categories
             $table->unsignedBigInteger('sub_id')->nullable();
             $table->unsignedBigInteger('child_id')->nullable();
@@ -27,7 +28,7 @@ class CreateVehiclesTable extends Migration
             $table->text('slug');
             $table->float('latitude')->nullable();
             $table->float('longtitude')->nullable();
-            $table->integer('status')->default(1); //for request ,changed when admin accepte it 
+            $table->integer('status')->default(1); //for request ,changed when admin accepte it
             $table->integer('feature')->default(0);
             $table->integer('Recommended')->default(0);
             $table->integer('year')->default(0);
@@ -35,8 +36,6 @@ class CreateVehiclesTable extends Migration
             $table->integer('ava')->default(1);
             $table->timestamps();
 
-
-            
         });
     }
 

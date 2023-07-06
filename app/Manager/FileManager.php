@@ -25,14 +25,14 @@ class FileManager
     public static function deleteFile($image, $path = 'images')
     {
 
-            $imageName = basename($image);
+        $imageName = basename($image);
 
-            $imagePath = public_path($path . $imageName);
+        $imagePath = public_path($path . $imageName);
 
-            if (File::exists($imagePath)) {
-                File::delete($imagePath);
-            }
+        if (File::exists($imagePath)) {
+            File::delete($imagePath);
+        }
 
-            return true;
+        return true;
     }
 }
